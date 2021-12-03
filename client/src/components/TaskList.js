@@ -1,8 +1,17 @@
-import { Box, Text, Heading, Image, Flex, Checkbox, Button, Divider } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Heading,
+  Image,
+  Flex,
+  Checkbox,
+  Button,
+  Divider,
+} from '@chakra-ui/react';
 import Todo from '../assets/todo.svg';
 import Setting from '../assets/setting.svg';
 
-const TodoList = () => {
+const TaskList = () => {
   return (
     <Box bg='gray.700' h='80%' w='70%' py='10px' borderRadius='sm'>
       <Flex
@@ -14,7 +23,7 @@ const TodoList = () => {
       >
         <Image src={Todo} w='30px' />
         <Heading ml='10px' fontSize='24px'>
-          Todo List
+          Task List
         </Heading>
       </Flex>
 
@@ -31,8 +40,12 @@ const TodoList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>13<Divider />20</Text>
-        <Image src={Setting} w='30px' mr='10px' mt='5px' />
+        <Text color='gray.300' mr='10px' fontWeight='600'>
+          13
+          <Divider />
+          20
+        </Text>
+        <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
       <Box bg='gray.500' d='flex' w='95%' mx='auto' my='0.7em' py='10px'>
         <Checkbox
@@ -47,8 +60,11 @@ const TodoList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>7<Divider />11</Text>
-        <Image src={Setting} w='30px' mr='10px' mt='5px' />
+        <Text color='gray.300' mr='10px' fontWeight='600'>
+          7<Divider />
+          11
+        </Text>
+        <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
       <Box bg='gray.500' d='flex' w='95%' mx='auto' my='0.7em' py='10px'>
         <Checkbox
@@ -63,8 +79,11 @@ const TodoList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>4<Divider />12</Text>
-        <Image src={Setting} w='30px' mr='10px' mt='5px' />
+        <Text color='gray.300' mr='10px' fontWeight='600'>
+          4<Divider />
+          12
+        </Text>
+        <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
       <Box bg='gray.500' d='flex' w='95%' mx='auto' my='0.7em' py='10px'>
         <Checkbox
@@ -79,8 +98,12 @@ const TodoList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>21<Divider />30</Text>
-        <Image src={Setting} w='30px' mr='10px' mt='5px' />
+        <Text color='gray.300' mr='10px' fontWeight='600'>
+          21
+          <Divider />
+          30
+        </Text>
+        <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
       <Box bg='gray.500' d='flex' w='95%' mx='auto' my='0.7em' py='10px'>
         <Checkbox
@@ -95,8 +118,12 @@ const TodoList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>20<Divider />40</Text>
-        <Image src={Setting} w='30px' mr='10px' mt='5px' />
+        <Text color='gray.300' mr='10px' fontWeight='600'>
+          20
+          <Divider />
+          40
+        </Text>
+        <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
 
       <Button
@@ -121,4 +148,4 @@ const TodoList = () => {
   );
 };
 
-export default TodoList;
+export default TaskList;

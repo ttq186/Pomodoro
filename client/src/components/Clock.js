@@ -15,28 +15,29 @@ const Clock = () => {
       <Flex
         justify='space-around'
         align='center'
-        mx='30px'
-        my='20px'
+        m='30px'
+        mb='10px'
         fontWeight='500'
       >
         <Text
           fontWeight='700'
           bg='gray.600'
-          w='33%'
+          w='30%'
           textAlign='center'
           py='4px'
           borderRadius='sm'
+          cursor='pointer'
         >
           Start Session
         </Text>
-        <Text w='33%' textAlign='center' py='4px'>
+        <Text w='30%' textAlign='center' py='4px' cursor='pointer'>
           Short Break
         </Text>
-        <Text w='33%' textAlign='center' py='4px'>
+        <Text w='30%' textAlign='center' py='4px' cursor='pointer'>
           Long Break
         </Text>
       </Flex>
-      <Center fontSize='100px'>50:00</Center>
+      <Center fontSize='110px'>31:07</Center>
       <Button
         variant='customize'
         fontSize='22px'

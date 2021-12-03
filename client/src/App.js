@@ -8,7 +8,7 @@ import {
   Image,
 } from '@chakra-ui/react';
 import Clock from './components/Clock';
-import TodoList from './components/TodoList';
+import TaskList from './components/TaskList';
 import Header from './components/Header';
 import Study from './assets/study.svg';
 import Summary from './components/Summary';
@@ -20,7 +20,7 @@ const App = () => {
       <Grid h='90%' templateColumns='repeat(5, 1fr)'>
         <GridItem colSpan='2'>
           <Center h='100%'>
-            <TodoList />
+            <TaskList />
           </Center>
         </GridItem>
         <GridItem colSpan='3'>

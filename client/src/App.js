@@ -3,7 +3,6 @@ import {
   Grid,
   GridItem,
   Center,
-  Container,
   Heading,
   Text,
   Image,
@@ -12,7 +11,7 @@ import Clock from './components/Clock';
 import TodoList from './components/TodoList';
 import Header from './components/Header';
 import Study from './assets/study.svg';
-import Report from './components/Report';
+import Summary from './components/Summary';
 
 const App = () => {
   return (
@@ -31,11 +30,11 @@ const App = () => {
               <Image src={Study} d='inline' w='55px' mb='-24px' /> hard
             </Heading>
           </Center>
-          <Container  mt='40px'>
-            <Report />
-          </Container>
-          <Center color='gray.300' h='60%' mt='-20px'>
+          <Center color='gray.300' h='60%'>
             <Clock />
+          </Center>
+          <Center h='10%'>
+            <Summary />
           </Center>
         </GridItem>
       </Grid>

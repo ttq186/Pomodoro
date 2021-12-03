@@ -1,8 +1,17 @@
-import { Box, Flex, Text, Center, Button } from '@chakra-ui/react';
+import { Box, Flex, Text, Center, Button, Image } from '@chakra-ui/react';
+import Tweak from '../assets/tweak.svg';
 
 const Clock = () => {
   return (
     <Box h='350px' w='500px' bg='gray.700' borderRadius='lg'>
+      <Image
+        src={Tweak}
+        w='25px'
+        float='right'
+        mr='10px'
+        mt='10px'
+        cursor='pointer'
+      />
       <Flex
         justify='space-around'
         align='center'
@@ -34,7 +43,7 @@ const Clock = () => {
         textTransform='uppercase'
         w='50%'
         py='20px'
-        my='30px'
+        mt='30px'
         borderRadius='sm'
         borderWidth='2px'
         borderBottom='6px solid #CBD5E0'
@@ -45,7 +54,7 @@ const Clock = () => {
         }}
         _active={{
           borderBottom: '2px solid #fefefe',
-          my: '35px',
+          mt: '35px',
         }}
       >
         Start

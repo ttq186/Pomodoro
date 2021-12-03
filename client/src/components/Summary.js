@@ -32,8 +32,8 @@ const Summary = () => {
         opacity='0.85'
       >
         <Image
-          // src={Happy}
-          src={Sad}
+          src={Happy}
+          // src={Sad}
           w='25px'
           h='25px'
           mr='5px'

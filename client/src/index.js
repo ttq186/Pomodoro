@@ -19,8 +19,8 @@ const theme = extendTheme({
     },
   },
   shadows: {
-    outline: 'none'
-  }
+    outline: 'none',
+  },
 });
 
 ReactDOM.render(

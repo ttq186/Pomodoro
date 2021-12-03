@@ -1,17 +1,22 @@
-import { Box, Flex, Text, Center, Button, Image } from '@chakra-ui/react';
-import Tweak from '../assets/tweak.svg';
+import {
+  Box,
+  Flex,
+  Text,
+  Center,
+  Button,
+  Image,
+  Portal,
+} from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/hooks';
+import ModalDialog from './ModalDialog';
 
 const Clock = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+
   return (
     <Box h='350px' w='500px' bg='gray.700' borderRadius='lg'>
-      <Image
-        src={Tweak}
-        w='25px'
-        float='right'
-        mr='10px'
-        mt='10px'
-        cursor='pointer'
-      />
+      <ModalDialog />
       <Flex
         justify='space-around'
         align='center'

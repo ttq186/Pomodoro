@@ -12,10 +12,11 @@ import TaskList from './components/TaskList';
 import Header from './components/Header';
 import Study from './assets/study.svg';
 import Summary from './components/Summary';
+import ModalDialog from './components/ModalDialog';
 
 const App = () => {
   return (
-    <Box bg='gray.800' h='100vh' overflowY='hidden'>
+    <Box bg='gray.800' h='100vh' >
       <Header h='10%' />
       <Grid h='90%' templateColumns='repeat(5, 1fr)'>
         <GridItem colSpan='2'>

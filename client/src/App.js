@@ -12,7 +12,6 @@ import TaskList from './components/TaskList';
 import Header from './components/Header';
 import Study from './assets/study.svg';
 import Summary from './components/Summary';
-import ModalDialog from './components/ModalDialog';
 
 const App = () => {
   return (

@@ -1,6 +1,5 @@
 import {
   Box,
-  Text,
   Heading,
   Image,
   Flex,
@@ -40,11 +39,11 @@ const TaskList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>
+        <Box color='gray.300' mr='10px' fontWeight='600'>
           13
           <Divider />
           20
-        </Text>
+        </Box>
         <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
       <Box bg='gray.500' d='flex' w='95%' mx='auto' my='0.7em' py='10px'>
@@ -60,10 +59,11 @@ const TaskList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>
-          7<Divider />
+        <Box color='gray.300' mr='10px' fontWeight='600'>
+          7
+          <Divider />
           11
-        </Text>
+        </Box>
         <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
       <Box bg='gray.500' d='flex' w='95%' mx='auto' my='0.7em' py='10px'>
@@ -79,10 +79,11 @@ const TaskList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>
-          4<Divider />
+        <Box color='gray.300' mr='10px' fontWeight='600'>
+          4
+          <Divider />
           12
-        </Text>
+        </Box>
         <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
       <Box bg='gray.500' d='flex' w='95%' mx='auto' my='0.7em' py='10px'>
@@ -98,11 +99,11 @@ const TaskList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>
+        <Box color='gray.300' mr='10px' fontWeight='600'>
           21
           <Divider />
           30
-        </Text>
+        </Box>
         <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
       <Box bg='gray.500' d='flex' w='95%' mx='auto' my='0.7em' py='10px'>
@@ -118,11 +119,11 @@ const TaskList = () => {
         >
           Coding pomodoro app
         </Checkbox>
-        <Text color='gray.300' mr='10px' fontWeight='600'>
+        <Box color='gray.300' mr='10px' fontWeight='600'>
           20
           <Divider />
           40
-        </Text>
+        </Box>
         <Image src={Setting} w='30px' mr='10px' mt='5px' cursor='pointer' />
       </Box>
 

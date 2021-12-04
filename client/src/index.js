@@ -10,7 +10,6 @@ const theme = extendTheme({
       variants: {
         customize: {
           borderRadius: '4px',
-          _focus: 'none',
           _hover: {
             boxShadow: '0 0 1px 2px #E2E8F0, 0 1px 1px #E2E8F0',
           },

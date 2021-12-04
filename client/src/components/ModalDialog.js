@@ -45,7 +45,7 @@ const ModalDialog = () => {
         onClick={onOpen}
       />
 
-      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} >
+      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
         <ModalOverlay backdropFilter='blur(1px)' />
         <ModalContent bg='gray.700' color='gray.100' mt='7em'>
           <ModalHeader borderBottom='2px solid #f2f2f2' d='flex' py='10px'>
@@ -74,6 +74,7 @@ const ModalDialog = () => {
                 <Box>
                   <Text>Session</Text>
                   <NumberInput
+                    focusBorderColor='gray.500'
                     step={1}
                     size='sm'
                     defaultValue={25}
@@ -92,6 +93,7 @@ const ModalDialog = () => {
                 <Box>
                   <Text>Short Break</Text>
                   <NumberInput
+                    focusBorderColor='gray.500'
                     step={1}
                     size='sm'
                     defaultValue={5}
@@ -109,6 +111,7 @@ const ModalDialog = () => {
                 <Box>
                   <Text>Long Break</Text>
                   <NumberInput
+                    focusBorderColor='gray.500'
                     step={1}
                     size='sm'
                     defaultValue={15}
@@ -139,6 +142,7 @@ const ModalDialog = () => {
                 Long Break Interval
               </Tag>
               <NumberInput
+                focusBorderColor='gray.500'
                 step={1}
                 size='sm'
                 defaultValue={4}
@@ -174,8 +178,6 @@ const ModalDialog = () => {
                   px='10px'
                   py='5px'
                   rightIcon={<ChevronDownIcon />}
-                  _active='none'
-                  _focus='none'
                 >
                   Digital
                 </MenuButton>
@@ -215,8 +217,6 @@ const ModalDialog = () => {
                   px='10px'
                   py='5px'
                   rightIcon={<ChevronDownIcon />}
-                  _active='none'
-                  _focus='none'
                 >
                   None
                 </MenuButton>

@@ -1,19 +1,7 @@
-import {
-  Box,
-  Flex,
-  Text,
-  Center,
-  Button,
-  Image,
-  Portal,
-} from '@chakra-ui/react';
-import { useDisclosure } from '@chakra-ui/hooks';
+import { Box, Flex, Text, Center, Button } from '@chakra-ui/react';
 import ModalDialog from './ModalDialog';
 
 const Clock = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-
   return (
     <Box h='350px' w='500px' bg='gray.700' borderRadius='lg'>
       <ModalDialog />

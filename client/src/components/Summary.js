@@ -15,11 +15,12 @@ const Summary = () => {
   return (
     <Box
       bg='gray.700'
-      h='120px'
-      w='500px'
+      h={{ base: '110px', md: '120px' }}
+      // w='500px'
+      w='lg'
       textAlign='center'
       color='gray.400'
-      mt='3em'
+      my={{base: '20px', md: '30px'}}
       borderRadius='md'
     >
       <Tag
@@ -27,41 +28,41 @@ const Summary = () => {
         bg='gray.800'
         px='13px'
         mt='5px'
-        mb='10px'
+        mb={{base: '7px', md: '10px'}}
         borderRadius='sm'
         opacity='0.85'
       >
         <Image
           src={Happy}
           // src={Sad}
-          w='25px'
-          h='25px'
+          w={{ base: '20px', md: '25px' }}
+          h={{ base: '20px', md: '25px' }}
           mr='5px'
           ml='-5px'
           mt='2px'
         />
-        <TagLabel color='gray.100' textTransform='uppercase' fontWeight='600'>
+        <TagLabel color='gray.100' textTransform='uppercase' fontWeight='600' fontSize={{ base: '13px', md: '16px' }}>
           Today's Progress
         </TagLabel>
       </Tag>
 
       <StatGroup>
         <Stat>
-          <StatLabel color='gray.300' fontWeight='600'>
+          <StatLabel color='gray.300' fontWeight='600' fontSize={{base: '13px', md: '17px'}}>
             Total
           </StatLabel>
           <StatNumber>3h</StatNumber>
         </Stat>
 
         <Stat>
-          <StatLabel color='gray.300' fontWeight='600'>
+          <StatLabel color='gray.300' fontWeight='600' fontSize={{base: '13px', md: '17px'}}>
             Session
           </StatLabel>
           <StatNumber>5</StatNumber>
         </Stat>
 
         <Stat>
-          <StatLabel color='gray.300' fontWeight='600'>
+          <StatLabel color='gray.300' fontWeight='600' fontSize={{base: '13px', md: '17px'}}>
             Task Done
           </StatLabel>
           <StatNumber>1</StatNumber>

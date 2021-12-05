@@ -3,14 +3,23 @@ import ModalDialog from './ModalDialog';
 
 const Clock = () => {
   return (
-    <Box h='350px' w='500px' bg='gray.700' borderRadius='lg'>
+    <Box
+      h={{ base: '240px', md: '350px' }}
+      w='lg'
+      bg='gray.700'
+      borderRadius='md'
+      pos='relative'
+    >
       <ModalDialog />
       <Flex
+        w={{ base: '95%', md: '90%' }}
+        mx='auto'
         justify='space-around'
         align='center'
-        m='30px'
+        mt={{ base: '20px', md: '30px' }}
         mb='10px'
         fontWeight='500'
+        fontSize={{ base: '11px', md: '16px' }}
       >
         <Text
           fontWeight='700'
@@ -30,14 +39,15 @@ const Clock = () => {
           Long Break
         </Text>
       </Flex>
-      <Center fontSize='110px'>31:07</Center>
+      <Center fontSize={{ base: '70px', md: '110px' }}>31:07</Center>
+
       <Button
         variant='customize'
-        fontSize='22px'
+        fontSize={{ sm: '20px', md: '22px' }}
         textTransform='uppercase'
         w='50%'
-        py='20px'
-        mt='30px'
+        py={{ base: '15px', md: '20px' }}
+        mt={{base: '17px', md: '15px'}}  
         borderRadius='sm'
         borderWidth='2px'
         borderBottom='6px solid #CBD5E0'
@@ -48,7 +58,7 @@ const Clock = () => {
         }}
         _active={{
           borderBottom: '2px solid #fefefe',
-          mt: '35px',
+          mt: '20px',
         }}
       >
         Start

@@ -25,6 +25,7 @@ import {
   MenuList,
   MenuButton,
   Switch,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, LockIcon } from '@chakra-ui/icons';
 import Tweak from '../assets/tweak.svg';
@@ -32,34 +33,45 @@ import Clock from '../assets/clock.svg';
 
 const ModalDialog = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const size = useBreakpointValue({ base: 'sm', md: 'md' });
 
   return (
     <>
       <Image
         src={Tweak}
-        w='25px'
-        float='right'
-        mr='10px'
-        mt='10px'
+        w={{ base: '20px', md: '25px' }}
+        pos='absolute'
+        right={{ base: '4px', md: '6px' }}
+        top={{ base: '3px', md: '9px' }}
         cursor='pointer'
         onClick={onOpen}
       />
 
-      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        closeOnOverlayClick={false}
+        size={size}
+      >
         <ModalOverlay backdropFilter='blur(1px)' />
         <ModalContent bg='gray.700' color='gray.100' mt='7em'>
-          <ModalHeader borderBottom='2px solid #f2f2f2' d='flex' py='10px'>
-            <Image src={Clock} w='30px' />
-            <Text fontSize='25px' ml='10px'>
+          <ModalHeader
+            borderBottom='2px solid #f2f2f2'
+            d='flex'
+            py={{ base: '5px', md: '10px' }}
+            mb={{ base: '0px', md: '10px' }}
+          >
+            <Image src={Clock} w={{ base: '20px', md: '30px' }} />
+            <Text fontSize={{ base: '20px', md: '25px' }} ml='10px'>
               Timer Setting
             </Text>
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody px='4%'>
             <Box>
               <Tag
                 bg='gray.200'
-                fontSize='17px'
+                fontSize={{ base: '14px', md: '17px' }}
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -70,6 +82,7 @@ const ModalDialog = () => {
                 justifyContent='space-between'
                 fontWeight='600'
                 color='gray.200'
+                fontSize='14px'
               >
                 <Box>
                   <Text>Session</Text>
@@ -80,7 +93,7 @@ const ModalDialog = () => {
                     defaultValue={25}
                     min={0}
                     max={60}
-                    maxW='24'
+                    maxW={{base: '20', md: '24'}}
                   >
                     <NumberInputField />
                     <NumberInputStepper>
@@ -99,7 +112,7 @@ const ModalDialog = () => {
                     defaultValue={5}
                     min={0}
                     max={20}
-                    maxW='24'
+                    maxW={{base: '20', md: '24'}}
                   >
                     <NumberInputField />
                     <NumberInputStepper>
@@ -117,7 +130,7 @@ const ModalDialog = () => {
                     defaultValue={15}
                     min={0}
                     max={40}
-                    maxW='24'
+                    maxW={{base: '20', md: '24'}}
                   >
                     <NumberInputField />
                     <NumberInputStepper>
@@ -134,7 +147,7 @@ const ModalDialog = () => {
             <Flex justifyContent='space-between' alignItems='center'>
               <Tag
                 bg='gray.200'
-                fontSize='17px'
+                fontSize={{ base: '14px', md: '17px' }}
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -148,7 +161,7 @@ const ModalDialog = () => {
                 defaultValue={4}
                 min={1}
                 max={10}
-                maxW='24'
+                maxW={{base: '20', md: '24'}}
               >
                 <NumberInputField />
                 <NumberInputStepper>
@@ -163,7 +176,7 @@ const ModalDialog = () => {
             <Flex justifyContent='space-between' alignItems='center'>
               <Tag
                 bg='gray.200'
-                fontSize='17px'
+                fontSize={{ base: '14px', md: '17px' }}
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -175,8 +188,7 @@ const ModalDialog = () => {
                   as={Button}
                   variant='customize'
                   bg='gray.600'
-                  px='10px'
-                  py='5px'
+                  size={size}
                   rightIcon={<ChevronDownIcon />}
                 >
                   Digital
@@ -202,7 +214,7 @@ const ModalDialog = () => {
             <Flex justifyContent='space-between' alignItems='center'>
               <Tag
                 bg='gray.200'
-                fontSize='17px'
+                fontSize={{ base: '14px', md: '17px' }}
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -216,6 +228,7 @@ const ModalDialog = () => {
                   bg='gray.600'
                   px='10px'
                   py='5px'
+                  size={size}
                   rightIcon={<ChevronDownIcon />}
                 >
                   None
@@ -240,7 +253,7 @@ const ModalDialog = () => {
             <Flex justifyContent='space-between' alignItems='center'>
               <Tag
                 bg='gray.200'
-                fontSize='17px'
+                fontSize={{ base: '14px', md: '17px' }}
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -256,7 +269,7 @@ const ModalDialog = () => {
             <Button
               variant='customize'
               bg='gray.800'
-              px='5em'
+              px={{base: '4em', md: '5em'}}
               mx='auto'
               opacity='0.9'
               _hover={{

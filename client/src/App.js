@@ -17,22 +17,22 @@ const App = () => {
 
       <Flex
         justifyContent='space-between'
-        px={{ base: '2%', md: '1%', xl: '5%' }}
+        px={{ base: '2%', md: '1%', xl: '8%' }}
         mt='2em'
         mx='auto'
         flexDir={{ base: 'column-reverse', lg: 'row' }}
         alignItems='center'
       >
-        <Center h='100%' w={{ base: '95%', md: '60%', lg: '35%', xl: '30%' }}>
+        <Center h='100%' w={{ base: '95%', sm:'80%', md: '60%', lg: '35%', xl: '30%' }}>
           <TaskList />
         </Center>
 
-        <Box w={{ base: '95%', md: '60%', lg: '55%' }}>
+        <Box w={{ base: '95%', sm: '80%', md: '60%', lg: '55%' }}>
           <Center h='10%' my='1em'>
             <Heading
               color='gray.200'
               textAlign='center'
-              fontSize={{ base: '20px', md: '32px', lg: '37px' }}
+              fontSize={{ base: '20px', sm: '34px', md: '32px', lg: '37px' }}
             >
               Keep calm and <Text as='s'>play</Text>{' '}
               <Image

@@ -46,11 +46,11 @@ const Clock = () => {
         fontSize={{ sm: '20px', md: '22px' }}
         textTransform='uppercase'
         w='50%'
-        py={{ base: '15px', md: '20px' }}
+        py={{ base: '15px', md: '22px' }}
         mt={{base: '17px', md: '15px'}}  
         borderRadius='sm'
         borderWidth='2px'
-        borderBottom='6px solid #CBD5E0'
+        borderBottom='7px solid #CBD5E0'
         mx='25%'
         _hover={{
           bg: 'gray.100',

@@ -9,7 +9,7 @@ import {
 import Pomodoro from '../assets/pomodoro.svg';
 
 const Header = () => {
-  const size = useBreakpointValue({ base: 'xs', md: 'sm', lg: 'md' });
+  const size = useBreakpointValue({ base: 'xs', sm: 'sm', lg: 'md' });
 
   return (
     <Flex

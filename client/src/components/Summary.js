@@ -16,7 +16,6 @@ const Summary = () => {
     <Box
       bg='gray.700'
       h={{ base: '110px', md: '120px' }}
-      // w='500px'
       w='lg'
       textAlign='center'
       color='gray.400'

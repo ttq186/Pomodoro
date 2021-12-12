@@ -2,8 +2,13 @@ import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Flex, Center, Button } from '@chakra-ui/react';
 import ModalDialog from './ModalDialog';
-import { CLOCK_TOGGLE_START } from '../constants/clockConstants';
+import {
+  CLOCK_TOGGLE_START,
+  CLOCK_UPDATE_TIME_LEFT,
+} from '../constants/clockConstants';
 import ClockMod from './ClockMode';
+import { secondsToTime } from '../utils';
+import store from '../store';
 
 const Clock = () => {
   const dispatch = useDispatch();
@@ -19,11 +24,37 @@ const Clock = () => {
     isLongBreak: clockState.mode === 'LONG_BREAK' ? true : false,
   };
 
-  const handleStartClick = () => {
-    dispatch({
-      type: CLOCK_TOGGLE_START,
-      payload: !clockState.isStart,
-    });
+  const startCountdown = async (time) => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    dispatch({ type: CLOCK_TOGGLE_START });
+
+    while (time > 0) {
+      if (!store.getState().clock.isStart) return;
+
+      time--;
+      dispatch({
+        type: CLOCK_UPDATE_TIME_LEFT,
+        payload: time,
+      });
+      await delay(1000);
+    }
+
+    dispatch({ type: CLOCK_TOGGLE_START });
+  };
+
+  const stopCountdown = () => {
+    dispatch({ type: CLOCK_TOGGLE_START });
+  };
+
+  const handleToggleState = async () => {
+    if (!store.getState().clock.isStart) {
+      const time = parseInt(clockState.timeLeft, 10);
+      await startCountdown(time);
+      return;
+    }
+
+    stopCountdown();
   };
 
   return (
@@ -50,31 +81,39 @@ const Clock = () => {
           content='Start Session'
           ref={startSessionRef}
         />
-        <ClockMod isActive={mode.isShortBreak} content='Short Break' ref={shortBreakRef} />
-        <ClockMod isActive={mode.isLongBreak} content='Long Break' ref={longBreakRef} />
+        <ClockMod
+          isActive={mode.isShortBreak}
+          content='Short Break'
+          ref={shortBreakRef}
+        />
+        <ClockMod
+          isActive={mode.isLongBreak}
+          content='Long Break'
+          ref={longBreakRef}
+        />
       </Flex>
-      <Center fontSize={{ base: '70px', md: '110px' }}>31:07</Center>
+      <Center fontSize={{ base: '90px', md: '130px' }} my='-15px'>
+        {secondsToTime(clockState.timeLeft)}
+      </Center>
 
       <Button
         variant='customize'
-        fontSize={{ sm: '20px', md: '25px' }}
+        fontSize={{ base: '19px', md: '25px' }}
         textTransform='uppercase'
-        w='50%'
+        w='44%'
         py={{ base: '15px', md: '23px' }}
         mt={{ base: '17px', md: '15px' }}
         borderRadius='sm'
         borderWidth='2px'
         borderBottom='9px solid #CBD5E0'
-        mx='25%'
-        _hover={{
-          bg: 'gray.100',
-          color: '#171923',
-        }}
+        bg='gray.100'
+        color='#171923'
+        mx='28%'
         _active={{
           borderBottom: '2px solid #fefefe',
           mt: '22px',
         }}
-        onClick={handleStartClick}
+        onClick={handleToggleState}
       >
         {clockState.isStart ? 'STOP' : 'START'}
       </Button>

@@ -21,7 +21,6 @@ const Header = () => {
       pt='20px'
     >
       <Flex
-        fontSize='xl'
         align='center'
         fontWeight='600'
         color='gray.400'

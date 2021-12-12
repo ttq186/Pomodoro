@@ -1,7 +1,31 @@
-import { Box, Flex, Text, Center, Button } from '@chakra-ui/react';
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, Flex, Center, Button } from '@chakra-ui/react';
 import ModalDialog from './ModalDialog';
+import { CLOCK_TOGGLE_START } from '../constants/clockConstants';
+import ClockMod from './ClockMode';
 
 const Clock = () => {
+  const dispatch = useDispatch();
+  const clockState = useSelector((state) => state.clock);
+
+  const startSessionRef = useRef(null);
+  const shortBreakRef = useRef(null);
+  const longBreakRef = useRef(null);
+
+  const mode = {
+    isStartSession: clockState.mode === 'START_SESSION' ? true : false,
+    isShortBreak: clockState.mode === 'SHORT_BREAK' ? true : false,
+    isLongBreak: clockState.mode === 'LONG_BREAK' ? true : false,
+  };
+
+  const handleStartClick = () => {
+    dispatch({
+      type: CLOCK_TOGGLE_START,
+      payload: !clockState.isStart,
+    });
+  };
+
   return (
     <Box
       h={{ base: '240px', md: '350px' }}
@@ -21,36 +45,26 @@ const Clock = () => {
         fontWeight='500'
         fontSize={{ base: '11px', md: '16px' }}
       >
-        <Text
-          fontWeight='700'
-          bg='gray.600'
-          w='30%'
-          textAlign='center'
-          py='4px'
-          borderRadius='sm'
-          cursor='pointer'
-        >
-          Start Session
-        </Text>
-        <Text w='30%' textAlign='center' py='4px' cursor='pointer'>
-          Short Break
-        </Text>
-        <Text w='30%' textAlign='center' py='4px' cursor='pointer'>
-          Long Break
-        </Text>
+        <ClockMod
+          isActive={mode.isStartSession}
+          content='Start Session'
+          ref={startSessionRef}
+        />
+        <ClockMod isActive={mode.isShortBreak} content='Short Break' ref={shortBreakRef} />
+        <ClockMod isActive={mode.isLongBreak} content='Long Break' ref={longBreakRef} />
       </Flex>
       <Center fontSize={{ base: '70px', md: '110px' }}>31:07</Center>
 
       <Button
         variant='customize'
-        fontSize={{ sm: '20px', md: '22px' }}
+        fontSize={{ sm: '20px', md: '25px' }}
         textTransform='uppercase'
         w='50%'
-        py={{ base: '15px', md: '22px' }}
-        mt={{base: '17px', md: '15px'}}  
+        py={{ base: '15px', md: '23px' }}
+        mt={{ base: '17px', md: '15px' }}
         borderRadius='sm'
         borderWidth='2px'
-        borderBottom='7px solid #CBD5E0'
+        borderBottom='9px solid #CBD5E0'
         mx='25%'
         _hover={{
           bg: 'gray.100',
@@ -58,10 +72,11 @@ const Clock = () => {
         }}
         _active={{
           borderBottom: '2px solid #fefefe',
-          mt: '20px',
+          mt: '22px',
         }}
+        onClick={handleStartClick}
       >
-        Start
+        {clockState.isStart ? 'STOP' : 'START'}
       </Button>
     </Box>
   );

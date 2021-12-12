@@ -71,7 +71,8 @@ const ModalDialog = () => {
             <Box>
               <Tag
                 bg='gray.200'
-                fontSize={{ base: '14px', md: '17px' }}
+                fontSize={{ base: '14px', md: '15px' }}
+                py="3px"
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -147,7 +148,8 @@ const ModalDialog = () => {
             <Flex justifyContent='space-between' alignItems='center'>
               <Tag
                 bg='gray.200'
-                fontSize={{ base: '14px', md: '17px' }}
+                fontSize={{ base: '14px', md: '15px' }}
+                py="3px"
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -176,7 +178,8 @@ const ModalDialog = () => {
             <Flex justifyContent='space-between' alignItems='center'>
               <Tag
                 bg='gray.200'
-                fontSize={{ base: '14px', md: '17px' }}
+                fontSize={{ base: '14px', md: '15px' }}
+                py="3px"
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -188,7 +191,7 @@ const ModalDialog = () => {
                   as={Button}
                   variant='customize'
                   bg='gray.600'
-                  size={size}
+                  size="sm"
                   rightIcon={<ChevronDownIcon />}
                 >
                   Digital
@@ -214,7 +217,8 @@ const ModalDialog = () => {
             <Flex justifyContent='space-between' alignItems='center'>
               <Tag
                 bg='gray.200'
-                fontSize={{ base: '14px', md: '17px' }}
+                fontSize={{ base: '14px', md: '15px' }}
+                py="3px"
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -228,7 +232,7 @@ const ModalDialog = () => {
                   bg='gray.600'
                   px='10px'
                   py='5px'
-                  size={size}
+                  size="sm"
                   rightIcon={<ChevronDownIcon />}
                 >
                   None
@@ -253,7 +257,8 @@ const ModalDialog = () => {
             <Flex justifyContent='space-between' alignItems='center'>
               <Tag
                 bg='gray.200'
-                fontSize={{ base: '14px', md: '17px' }}
+                fontSize={{ base: '14px', md: '15px' }}
+                py="3px"
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'

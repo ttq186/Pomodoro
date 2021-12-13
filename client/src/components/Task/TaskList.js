@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Heading, Image, Flex, Button } from '@chakra-ui/react';
+import { Box, Heading, Image, Flex, Button, ScaleFade, SlideFade } from '@chakra-ui/react';
 import Todo from '../../assets/todo.svg';
 import TaskItem from '../../components/Task/TaskItem';
 import NewTaskForm from './NewTaskForm';
@@ -29,12 +29,15 @@ const TaskList = () => {
       </Flex>
 
       {taskListState.isAddTask ? (
-        <NewTaskForm handleAddTask={handleAddTask} />
+        <ScaleFade initialScale={0.9} in={true}>
+          <NewTaskForm handleAddTask={handleAddTask} />
+        </ScaleFade>
       ) : (
+        <SlideFade offsetY='-20px' in={true}>
         <Box
           overflowY='auto'
           mx='3px'
-          h={{ base: '300px', md: '400px' }}
+          h='400px'
           sx={{
             '&::-webkit-scrollbar': {
               width: '7px',
@@ -56,9 +59,10 @@ const TaskList = () => {
           <TaskItem progress={13} target={14} />
           <TaskItem progress={8} target={15} />
         </Box>
+        </SlideFade>
       )}
 
-      {!taskListState.isAddTask  && (
+      {!taskListState.isAddTask && (
         <Button
           variant='customize'
           bg='gray.800'

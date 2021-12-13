@@ -29,6 +29,8 @@ const Clock = () => {
 
     dispatch({ type: CLOCK_TOGGLE_START });
 
+    if (time > 0) await delay(500);
+
     while (time > 0) {
       if (!store.getState().clock.isStart) return;
 

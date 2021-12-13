@@ -23,7 +23,7 @@ const App = () => {
         flexDir={{ base: 'column-reverse', lg: 'row' }}
         alignItems='center'
       >
-        <Center h='100%' w={{ base: '95%', sm:'80%', md: '60%', lg: '35%', xl: '30%' }}>
+        <Center h='100%' w={{ base: '95%', sm:'80%', md: '60%', lg: '35%' }} maxW={{lg: '400px'}}>
           <TaskList />
         </Center>
 

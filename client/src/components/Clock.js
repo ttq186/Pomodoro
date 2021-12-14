@@ -69,7 +69,7 @@ const Clock = () => {
     >
       <ModalDialog />
       <Flex
-        w={{ base: '95%', md: '90%' }}
+        w={{ base: '85%', md: '90%' }}
         mx='auto'
         justify='space-around'
         align='center'
@@ -94,7 +94,7 @@ const Clock = () => {
           ref={longBreakRef}
         />
       </Flex>
-      <Center fontSize={{ base: '90px', md: '130px' }} my='-15px'>
+      <Center fontSize={{ base: '85px', md: '130px' }} my='-15px'>
         {secondsToTime(clockState.timeLeft)}
       </Center>
 

@@ -1,16 +1,25 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Heading, Image, Flex, Button, ScaleFade, SlideFade } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Image,
+  Flex,
+  Button,
+  ScaleFade,
+  SlideFade,
+} from '@chakra-ui/react';
 import Todo from '../../assets/todo.svg';
 import TaskItem from '../../components/Task/TaskItem';
 import NewTaskForm from './NewTaskForm';
-import { TASKLIST_ADD_TASK } from '../../constants/taskListConstants';
+import { TASKLIST_ADD_TASK_TOGGLE } from '../../constants/taskListConstants';
 
 const TaskList = () => {
   const dispatch = useDispatch();
   const taskListState = useSelector((state) => state.taskList);
+  const modifiedTask = taskListState.modifiedTask;
 
   const handleAddTask = () => {
-    dispatch({ type: TASKLIST_ADD_TASK });
+    dispatch({ type: TASKLIST_ADD_TASK_TOGGLE });
   };
 
   return (
@@ -30,39 +39,52 @@ const TaskList = () => {
 
       {taskListState.isAddTask ? (
         <ScaleFade initialScale={0.9} in={true}>
-          <NewTaskForm handleAddTask={handleAddTask} />
+          <NewTaskForm />
+        </ScaleFade>
+      ) : modifiedTask ? (
+        <ScaleFade initialScale={0.9} in={true}>
+          <NewTaskForm
+            title={modifiedTask.title}
+            target={modifiedTask.target}
+            progress={modifiedTask.progress}
+            notes={modifiedTask.notes}
+          />
         </ScaleFade>
       ) : (
         <SlideFade offsetY='-20px' in={true}>
-        <Box
-          overflowY='auto'
-          mx='3px'
-          h='400px'
-          sx={{
-            '&::-webkit-scrollbar': {
-              width: '7px',
-              background: 'gray.600',
-              borderRadius: '2px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: 'gray.800',
-              borderRadius: '2px',
-              marginEnd: '10px',
-            },
-          }}
-        >
-          <TaskItem progress={13} target={20} />
-          <TaskItem progress={5} target={7} />
-          <TaskItem progress={2} target={3} />
-          <TaskItem progress={8} target={10} />
-          <TaskItem progress={10} target={13} />
-          <TaskItem progress={13} target={14} />
-          <TaskItem progress={8} target={15} />
-        </Box>
+          <Box
+            overflowY='auto'
+            mx='3px'
+            h='400px'
+            sx={{
+              '&::-webkit-scrollbar': {
+                width: '7px',
+                background: 'gray.600',
+                borderRadius: '2px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: '#222730',
+                borderRadius: '2px',
+                marginEnd: '10px',
+              },
+            }}
+          >
+            {taskListState.tasks.map((item) => (
+              <TaskItem
+                key={item.id}
+                id={item.id}
+                title={item.title}
+                notes={item.notes}
+                progress={item.progress}
+                target={item.target}
+                isDisabled={item.isDisabled}
+              />
+            ))}
+          </Box>
         </SlideFade>
       )}
 
-      {!taskListState.isAddTask && (
+      {!taskListState.isAddTask && !modifiedTask && (
         <Button
           variant='customize'
           bg='gray.800'
@@ -79,6 +101,7 @@ const TaskList = () => {
             bg: 'gray.100',
             color: '#171923',
           }}
+          isDisabled={taskListState.hasChoseTask}
           onClick={handleAddTask}
         >
           Add Task

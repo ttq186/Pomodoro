@@ -2,7 +2,7 @@ import { Box, Center, Heading, Text, Image, Flex } from '@chakra-ui/react';
 import Clock from './components/Clock';
 import TaskList from './components/Task/TaskList';
 import Header from './components/Header';
-import Study from './assets/study.svg';
+import Study from './assets/icons/study.svg';
 import Summary from './components/Summary';
 
 const App = () => {

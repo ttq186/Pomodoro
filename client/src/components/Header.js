@@ -6,7 +6,7 @@ import {
   Image,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import Pomodoro from '../assets/pomodoro.svg';
+import Pomodoro from '../assets/icons/pomodoro.svg';
 
 const Header = () => {
   const size = useBreakpointValue({ base: 'xs', sm: 'sm', lg: 'md' });

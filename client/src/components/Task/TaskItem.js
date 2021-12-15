@@ -1,6 +1,6 @@
 import { Box, Checkbox, Image, Divider, Flex } from '@chakra-ui/react';
-import Setting from '../../assets/setting.svg';
-import { useDispatch } from 'react-redux';
+import Setting from '../../assets/icons/setting.svg';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   TASKLIST_MODIFY_TASK,
   TASKLIST_CHOOSE_TASK,
@@ -8,6 +8,7 @@ import {
 } from '../../constants/taskListConstants';
 
 const TaskItem = (props) => {
+  const hasChoseTask = useSelector((state) => state.taskList.hasChoseTask);
   const dispatch = useDispatch();
 
   const { id, title, notes, isDisabled, progress, target } = {
@@ -15,7 +16,7 @@ const TaskItem = (props) => {
   };
 
   const handleSettingClick = () => {
-    dispatch({ type: TASKLIST_MODIFY_TASK, payload: id });
+    if (!hasChoseTask) dispatch({ type: TASKLIST_MODIFY_TASK, payload: id });
   };
 
   const handleChooseTask = (e) => {
@@ -64,7 +65,7 @@ const TaskItem = (props) => {
           w='25px'
           mr='5px'
           mt='5px'
-          cursor='pointer'
+          cursor={hasChoseTask ? 'not-allowed' : 'pointer'}
           onClick={handleSettingClick}
         />
       </Flex>

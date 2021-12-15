@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import {
   Tag,
   Box,
+  Text,
   Button,
   Flex,
   Input,
@@ -18,14 +19,15 @@ import {
   TASKLIST_ADD_TASK_TOGGLE,
   TASKLIST_MODIFY_TASK_SUBMIT,
   TASKLIST_MODIFY_TASK_CANCEL,
+  TASKLIST_REMOVE_TASK,
 } from '../../constants/taskListConstants';
 
-const NewTaskForm = ({ title, target, progress, notes }) => {
+const TaskForm = ({ title, target, progress, notes, id }) => {
   const [isValidForm, setValidForm] = useState(true);
 
-  const inputTitleRef = useRef();
-  const inputSessionRef = useRef();
-  const notesRef = useRef();
+  const inputTitleRef = useRef(null);
+  const inputSessionRef = useRef(null);
+  const notesRef = useRef(null);
 
   const dispatch = useDispatch();
 
@@ -54,7 +56,6 @@ const NewTaskForm = ({ title, target, progress, notes }) => {
       notes: newNotes,
     };
 
-    console.log(payload);
     if (title) {
       dispatch({ type: TASKLIST_MODIFY_TASK_SUBMIT, payload });
       return;
@@ -64,8 +65,21 @@ const NewTaskForm = ({ title, target, progress, notes }) => {
     dispatch({ type: TASKLIST_ADD_TASK_TOGGLE });
   };
 
+  const handleRemoveTaskClick = () => {
+    dispatch({ type: TASKLIST_REMOVE_TASK, payload: id });
+    dispatch({ type: TASKLIST_MODIFY_TASK_CANCEL });
+  };
+
   return (
-    <Box as='form' mr='3px' bg='gray.600' mx='0.7em' p='1em' borderRadius='sm'>
+    <Box
+      as='form'
+      h='265px'
+      mr='3px'
+      bg='gray.600'
+      mx='0.7em'
+      p='1em'
+      borderRadius='sm'
+    >
       <Input
         variant='flushed'
         placeholder='What is your target?'
@@ -95,7 +109,6 @@ const NewTaskForm = ({ title, target, progress, notes }) => {
           color='gray.200'
           step={1}
           size='sm'
-          defaultValue={1}
           min={progress ? progress + 1 : 1}
           max={1000}
           maxW='20'
@@ -119,7 +132,21 @@ const NewTaskForm = ({ title, target, progress, notes }) => {
         ref={notesRef}
         defaultValue={notes}
       />
-      <Box textAlign='right' mt='15px'>
+
+      <Text
+        color='gray.200'
+        fontWeight='600'
+        pl='5px'
+        cursor='pointer'
+        _hover={{ color: 'gray.900' }}
+        onClick={handleRemoveTaskClick}
+        float='left'
+        mt='25px'
+        d={id ? 'block' : 'none'}
+      >
+        REMOVE
+      </Text>
+      <Box float='right' mt='20px'>
         <Button
           bg='gray.700'
           mx={{ base: '10px', md: '20px' }}
@@ -145,4 +172,4 @@ const NewTaskForm = ({ title, target, progress, notes }) => {
   );
 };
 
-export default NewTaskForm;
+export default TaskForm;

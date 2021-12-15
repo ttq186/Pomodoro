@@ -1,18 +1,24 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Flex, Center, Button } from '@chakra-ui/react';
-import ModalDialog from './ModalDialog';
+import ModalDialog from '../components/ModalDialog';
 import {
   CLOCK_TOGGLE_START,
   CLOCK_UPDATE_TIME_LEFT,
+  CLOCK_UPDATE_SUMMARY,
 } from '../constants/clockConstants';
-import ClockMod from './ClockMode';
+import { TASKLIST_UPDATE_TASK_PROGRESS } from '../constants/taskListConstants';
+import ClockMod from '../components/ClockMode';
 import { secondsToTime } from '../utils';
 import store from '../store';
 
 const Clock = () => {
   const dispatch = useDispatch();
+
   const clockState = useSelector((state) => state.clock);
+  const { sessionTime, shortBreakTime, longBreakTime } =
+    clockState.timerSetting;
+  const hasChoseTask = useSelector((state) => state.taskList.hasChoseTask);
 
   const startSessionRef = useRef(null);
   const shortBreakRef = useRef(null);
@@ -24,14 +30,32 @@ const Clock = () => {
     isLongBreak: clockState.mode === 'LONG_BREAK' ? true : false,
   };
 
+  useEffect(() => {
+    const time =
+      clockState.mode === 'START_SESSION'
+        ? sessionTime
+        : mode === 'SHORT_BREAK'
+        ? shortBreakTime
+        : longBreakTime;
+
+    dispatch({
+      type: CLOCK_UPDATE_TIME_LEFT,
+      payload: time,
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionTime, shortBreakTime, longBreakTime]);
+
   const startCountdown = async (time) => {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    let isValidSession = false;
 
     dispatch({ type: CLOCK_TOGGLE_START });
 
     if (time > 0) await delay(500);
 
     while (time > 0) {
+      if (time === 1) isValidSession = true;
       if (!store.getState().clock.isStart) return;
 
       time--;
@@ -43,6 +67,14 @@ const Clock = () => {
     }
 
     dispatch({ type: CLOCK_TOGGLE_START });
+
+    if (hasChoseTask) dispatch({ type: TASKLIST_UPDATE_TASK_PROGRESS });
+
+    if (clockState.mode === 'START_SESSION' && isValidSession)
+      dispatch({
+        type: CLOCK_UPDATE_SUMMARY,
+        payload: clockState.timerSetting.sessionTime,
+      });
   };
 
   const stopCountdown = () => {

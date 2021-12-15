@@ -1,18 +1,28 @@
 import { forwardRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Text } from '@chakra-ui/react';
-import { CLOCK_TOGGLE_MODE } from '../constants/clockConstants';
+import {
+  CLOCK_TOGGLE_MODE,
+  CLOCK_UPDATE_TIME_LEFT,
+} from '../constants/clockConstants';
 
 const ClockMod = forwardRef((props, ref) => {
   const dispatch = useDispatch();
+  const timerSettingState = useSelector((state) => state.clock.timerSetting);
 
-  const handleClick = () => {
+  const handleToggleMode = () => {
     const mode = ref.current.innerText.split(' ').join('_').toUpperCase();
 
-    dispatch({
-      type: CLOCK_TOGGLE_MODE,
-      payload: mode,
-    });
+    const time =
+      mode === 'START_SESSION'
+        ? timerSettingState.sessionTime
+        : mode === 'SHORT_BREAK'
+        ? timerSettingState.shortBreakTime
+        : timerSettingState.longBreakTime;
+
+    dispatch({ type: CLOCK_TOGGLE_MODE, payload: { mode, time } });
+
+    dispatch({ type: CLOCK_UPDATE_TIME_LEFT, payload: time });
   };
 
   return props.isActive ? (
@@ -37,7 +47,7 @@ const ClockMod = forwardRef((props, ref) => {
         color: 'gray.100',
       }}
       ref={ref}
-      onClick={handleClick}
+      onClick={handleToggleMode}
     >
       {props.content}
     </Text>

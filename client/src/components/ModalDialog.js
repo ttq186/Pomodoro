@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useDisclosure } from '@chakra-ui/hooks';
 import {
   Button,
@@ -21,19 +23,63 @@ import {
   TagRightIcon,
   Divider,
   Menu,
-  MenuItem,
   MenuList,
   MenuButton,
   Switch,
   useBreakpointValue,
+  MenuOptionGroup,
+  MenuItemOption,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, LockIcon } from '@chakra-ui/icons';
-import Tweak from '../assets/tweak.svg';
-import Clock from '../assets/clock.svg';
+import Tweak from '../assets/icons/tweak.svg';
+import Clock from '../assets/icons/clock.svg';
+import {
+  CLOCK_UPDATE_TIMER_SETTING,
+} from '../constants/clockConstants';
 
 const ModalDialog = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const size = useBreakpointValue({ base: 'sm', md: 'md' });
+
+  const timerSettingState = useSelector((state) => state.clock.timerSetting);
+  const dispatch = useDispatch();
+
+  const [alarmSound, setAlarmSound] = useState(timerSettingState.alarmSound);
+  const [tickingSpeed, setTickingSpeed] = useState(
+    timerSettingState.tickingSpeed
+  );
+
+  const sessionRef = useRef(null);
+  const shortBreakRef = useRef(null);
+  const longBreakRef = useRef(null);
+  const longBreakIntervalRef = useRef(null);
+
+  const handleOkayClick = () => {
+    onClose();
+
+    const updateTimerData = {
+      sessionTime: +sessionRef.current.value * 60,
+      shortBreakTime: +shortBreakRef.current.value * 60,
+      longBreakTime: +longBreakRef.current.value * 60,
+      longBreakInterval: +longBreakIntervalRef.current.value,
+      alarmSound: alarmSound,
+    };
+
+    dispatch({ type: CLOCK_UPDATE_TIMER_SETTING, payload: updateTimerData });
+  };
+
+  const handleChooseSpeed = (value) => {
+    setTickingSpeed(value);
+  };
+
+  const handleChooseSound = (value) => {
+    setAlarmSound(value);
+  };
+
+  const handleCloseClick = () => {
+    setAlarmSound(timerSettingState.alarmSound);
+    setTickingSpeed(timerSettingState.tickingSpeed);
+  };
 
   return (
     <>
@@ -66,13 +112,13 @@ const ModalDialog = () => {
               Timer Setting
             </Text>
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton onClick={handleCloseClick} />
           <ModalBody px='4%'>
             <Box>
               <Tag
                 bg='gray.200'
                 fontSize={{ base: '14px', md: '15px' }}
-                py="3px"
+                py='3px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -91,12 +137,12 @@ const ModalDialog = () => {
                     focusBorderColor='gray.500'
                     step={1}
                     size='sm'
-                    defaultValue={25}
+                    defaultValue={timerSettingState.sessionTime / 60}
                     min={0}
                     max={60}
-                    maxW={{base: '20', md: '24'}}
+                    maxW={{ base: '20', md: '24' }}
                   >
-                    <NumberInputField />
+                    <NumberInputField ref={sessionRef} />
                     <NumberInputStepper>
                       <NumberIncrementStepper border='none' />
                       <NumberDecrementStepper border='none' />
@@ -110,12 +156,12 @@ const ModalDialog = () => {
                     focusBorderColor='gray.500'
                     step={1}
                     size='sm'
-                    defaultValue={5}
+                    defaultValue={timerSettingState.shortBreakTime / 60}
                     min={0}
                     max={20}
-                    maxW={{base: '20', md: '24'}}
+                    maxW={{ base: '20', md: '24' }}
                   >
-                    <NumberInputField />
+                    <NumberInputField ref={shortBreakRef} />
                     <NumberInputStepper>
                       <NumberIncrementStepper border='none' />
                       <NumberDecrementStepper border='none' />
@@ -128,12 +174,12 @@ const ModalDialog = () => {
                     focusBorderColor='gray.500'
                     step={1}
                     size='sm'
-                    defaultValue={15}
+                    defaultValue={timerSettingState.longBreakTime / 60}
                     min={0}
                     max={40}
-                    maxW={{base: '20', md: '24'}}
+                    maxW={{ base: '20', md: '24' }}
                   >
-                    <NumberInputField />
+                    <NumberInputField ref={longBreakRef} />
                     <NumberInputStepper>
                       <NumberIncrementStepper border='none' />
                       <NumberDecrementStepper border='none' />
@@ -149,7 +195,7 @@ const ModalDialog = () => {
               <Tag
                 bg='gray.200'
                 fontSize={{ base: '14px', md: '15px' }}
-                py="3px"
+                py='3px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -160,12 +206,13 @@ const ModalDialog = () => {
                 focusBorderColor='gray.500'
                 step={1}
                 size='sm'
-                defaultValue={4}
+                defaultValue={timerSettingState.longBreakInterval}
+                isInvalid={!Number.isInteger(timerSettingState.longBreakInterval)}
                 min={1}
                 max={10}
-                maxW={{base: '20', md: '24'}}
+                maxW={{ base: '20', md: '24' }}
               >
-                <NumberInputField />
+                <NumberInputField ref={longBreakIntervalRef} />
                 <NumberInputStepper>
                   <NumberIncrementStepper border='none' />
                   <NumberDecrementStepper border='none' />
@@ -179,22 +226,22 @@ const ModalDialog = () => {
               <Tag
                 bg='gray.200'
                 fontSize={{ base: '14px', md: '15px' }}
-                py="3px"
+                py='3px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
               >
                 Alarm Sound
               </Tag>
-              <Menu isLazy autoSelect={false} size='md'>
+              <Menu closeOnSelect={true} autoSelect={false}>
                 <MenuButton
                   as={Button}
                   variant='customize'
                   bg='gray.600'
-                  size="sm"
+                  size='sm'
                   rightIcon={<ChevronDownIcon />}
                 >
-                  Digital
+                  {alarmSound}
                 </MenuButton>
                 <MenuList
                   bg='gray.600'
@@ -204,10 +251,24 @@ const ModalDialog = () => {
                   minW='0'
                   w='150px'
                 >
-                  <MenuItem _hover={{ bg: 'gray.700' }}>Kitchen</MenuItem>
-                  <MenuItem _hover={{ bg: 'gray.700' }}>Chicken</MenuItem>
-                  <MenuItem _hover={{ bg: 'gray.700' }}>Digital</MenuItem>
-                  <MenuItem _hover={{ bg: 'gray.700' }}>Meow Meow</MenuItem>
+                  <MenuOptionGroup
+                    defaultValue={alarmSound}
+                    type='radio'
+                    onChange={(optionValue) => handleChooseSound(optionValue)}
+                  >
+                    <MenuItemOption value='Digital' _hover={{ bg: 'gray.700' }}>
+                      Digital
+                    </MenuItemOption>
+                    <MenuItemOption value='Kitchen' _hover={{ bg: 'gray.700' }}>
+                      Kitchen
+                    </MenuItemOption>
+                    <MenuItemOption value='Bird' _hover={{ bg: 'gray.700' }}>
+                      Bird
+                    </MenuItemOption>
+                    <MenuItemOption value='Meow' _hover={{ bg: 'gray.700' }}>
+                      Meow Meow
+                    </MenuItemOption>
+                  </MenuOptionGroup>
                 </MenuList>
               </Menu>
             </Flex>
@@ -218,24 +279,23 @@ const ModalDialog = () => {
               <Tag
                 bg='gray.200'
                 fontSize={{ base: '14px', md: '15px' }}
-                py="3px"
+                py='3px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
               >
-                Ticking Sound
+                Ticking Sound Speed
               </Tag>
-              <Menu isLazy autoSelect={false} size='md'>
+
+              <Menu closeOnSelect={true} autoSelect={false}>
                 <MenuButton
                   as={Button}
                   variant='customize'
                   bg='gray.600'
-                  px='10px'
-                  py='5px'
-                  size="sm"
+                  size='sm'
                   rightIcon={<ChevronDownIcon />}
                 >
-                  None
+                  {tickingSpeed}
                 </MenuButton>
                 <MenuList
                   bg='gray.600'
@@ -243,11 +303,23 @@ const ModalDialog = () => {
                   borderRadius='4px'
                   _hover={{ bg: 'gray.600' }}
                   minW='0'
-                  w='120px'
+                  w='150px'
                 >
-                  <MenuItem _hover={{ bg: 'gray.700' }}>None</MenuItem>
-                  <MenuItem _hover={{ bg: 'gray.700' }}>Fast</MenuItem>
-                  <MenuItem _hover={{ bg: 'gray.700' }}>Slow</MenuItem>
+                  <MenuOptionGroup
+                    defaultValue={tickingSpeed}
+                    type='radio'
+                    onChange={(optionValue) => handleChooseSpeed(optionValue)}
+                  >
+                    <MenuItemOption value='Normal' _hover={{ bg: 'gray.700' }}>
+                      Normal
+                    </MenuItemOption>
+                    <MenuItemOption value='Fast' _hover={{ bg: 'gray.700' }}>
+                      Fast
+                    </MenuItemOption>
+                    <MenuItemOption value='Slow' _hover={{ bg: 'gray.700' }}>
+                      Slow
+                    </MenuItemOption>
+                  </MenuOptionGroup>
                 </MenuList>
               </Menu>
             </Flex>
@@ -258,7 +330,7 @@ const ModalDialog = () => {
               <Tag
                 bg='gray.200'
                 fontSize={{ base: '14px', md: '15px' }}
-                py="3px"
+                py='3px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -274,14 +346,14 @@ const ModalDialog = () => {
             <Button
               variant='customize'
               bg='gray.800'
-              px={{base: '4em', md: '5em'}}
+              px={{ base: '4em', md: '5em' }}
               mx='auto'
               opacity='0.9'
               _hover={{
                 bg: 'gray.100',
                 color: '#171923',
               }}
-              onClick={onClose}
+              onClick={handleOkayClick}
             >
               Okay
             </Button>

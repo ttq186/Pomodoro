@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import {
   Box,
   Stat,
@@ -8,10 +9,14 @@ import {
   TagLabel,
   Image,
 } from '@chakra-ui/react';
-import Happy from '../assets/happy.svg';
-import Sad from '../assets/sad.svg';
+import Happy from '../assets/icons/happy.svg';
+import Sad from '../assets/icons/sad.svg';
 
 const Summary = () => {
+  const { totalTime, totalSessions, finishedTasks } = useSelector(
+    (state) => state.clock.summary
+  );
+
   return (
     <Box
       bg='gray.700'
@@ -32,7 +37,7 @@ const Summary = () => {
         opacity='0.85'
       >
         <Image
-          src={1 + 1 !== 2 ? Happy : Sad}
+          src={totalTime / 3600 >= 1 ? Happy : Sad}
           w={{ base: '20px', md: '25px' }}
           h={{ base: '20px', md: '25px' }}
           mr='5px'
@@ -58,7 +63,11 @@ const Summary = () => {
           >
             Total
           </StatLabel>
-          <StatNumber>3h</StatNumber>
+          <StatNumber>
+            {(totalTime / 3600).toFixed(1) !== '0.0'
+              ? `${(totalTime / 3600).toFixed(1)}h`
+              : '0h'}
+          </StatNumber>
         </Stat>
 
         <Stat>
@@ -69,7 +78,7 @@ const Summary = () => {
           >
             Session
           </StatLabel>
-          <StatNumber>5</StatNumber>
+          <StatNumber>{totalSessions}</StatNumber>
         </Stat>
 
         <Stat>
@@ -80,7 +89,7 @@ const Summary = () => {
           >
             Task Done
           </StatLabel>
-          <StatNumber>1</StatNumber>
+          <StatNumber>{finishedTasks}</StatNumber>
         </Stat>
       </StatGroup>
     </Box>

@@ -1,11 +1,13 @@
 import {
-  TASKLIST_ADD_TASK_TOGGLE,
   TASKLIST_CHOOSE_TASK,
+  TASKLIST_MODIFY_TASK,
+  TASKLIST_REMOVE_TASK,
   TASKLIST_UNCHOOSE_TASK,
   TASKLIST_ADD_TASK_SUBMIT,
-  TASKLIST_MODIFY_TASK,
-  TASKLIST_MODIFY_TASK_SUBMIT,
+  TASKLIST_ADD_TASK_TOGGLE,
   TASKLIST_MODIFY_TASK_CANCEL,
+  TASKLIST_MODIFY_TASK_SUBMIT,
+  TASKLIST_UPDATE_TASK_PROGRESS,
 } from '../constants/taskListConstants';
 
 const initialState = {
@@ -99,7 +101,6 @@ export const taskListReducer = (state = initialState, action) => {
       };
 
       const newTasks = [newTask, ...state.tasks];
-      console.log(newTasks);
       return { ...state, tasks: newTasks };
     }
 
@@ -116,12 +117,28 @@ export const taskListReducer = (state = initialState, action) => {
         { ...state.modifiedTask, ...action.payload },
         ...state.tasks.filter((item) => item.id !== state.modifiedTask.id),
       ];
-      console.log(newTasks);
+
       return { ...state, modifiedTask: null, tasks: newTasks };
     }
 
     case TASKLIST_MODIFY_TASK_CANCEL:
       return { ...state, modifiedTask: null };
+
+    case TASKLIST_UPDATE_TASK_PROGRESS:
+      const choseTask = state.tasks.find((item) => !item.isDisabled);
+      const updatedChoseTask = {
+        ...choseTask,
+        progress: choseTask.progress + 1,
+      };
+      const newDisabledTaskList = state.tasks.filter((item) => item.isDisabled);
+
+      return { ...state, tasks: [updatedChoseTask, ...newDisabledTaskList] };
+
+    case TASKLIST_REMOVE_TASK: {
+      const newTasks = state.tasks.filter((item) => item.id !== action.payload);
+
+      return { ...state, tasks: newTasks };
+    }
 
     default:
       return state;

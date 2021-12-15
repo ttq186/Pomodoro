@@ -8,9 +8,9 @@ import {
   ScaleFade,
   SlideFade,
 } from '@chakra-ui/react';
-import Todo from '../../assets/todo.svg';
+import Todo from '../../assets/icons/todo.svg';
 import TaskItem from '../../components/Task/TaskItem';
-import NewTaskForm from './NewTaskForm';
+import TaskForm from './TaskForm';
 import { TASKLIST_ADD_TASK_TOGGLE } from '../../constants/taskListConstants';
 
 const TaskList = () => {
@@ -39,11 +39,12 @@ const TaskList = () => {
 
       {taskListState.isAddTask ? (
         <ScaleFade initialScale={0.9} in={true}>
-          <NewTaskForm />
+          <TaskForm />
         </ScaleFade>
       ) : modifiedTask ? (
         <ScaleFade initialScale={0.9} in={true}>
-          <NewTaskForm
+          <TaskForm
+            id={modifiedTask.id}
             title={modifiedTask.title}
             target={modifiedTask.target}
             progress={modifiedTask.progress}

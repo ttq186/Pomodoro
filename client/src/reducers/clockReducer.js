@@ -1,6 +1,6 @@
 import {
   CLOCK_TOGGLE_START,
-  CLOCK_TOGGLE_MODE,
+  CLOCK_SWITCH_MODE,
   CLOCK_UPDATE_TIME_LEFT,
   CLOCK_UPDATE_TIMER_SETTING,
   CLOCK_UPDATE_SUMMARY,
@@ -16,7 +16,7 @@ const initialState = {
     longBreakTime: 1200,
     longBreakInterval: 4,
     alarmSound: 'Digital',
-    tickingSpeed: 'Normal',
+    tickingSpeed: 'None',
     lightMode: false,
   },
   summary: {
@@ -31,7 +31,7 @@ export const clockReducer = (state = initialState, action) => {
     case CLOCK_TOGGLE_START:
       return { ...state, isStart: !state.isStart };
 
-    case CLOCK_TOGGLE_MODE: {
+    case CLOCK_SWITCH_MODE: {
       if (action.payload === state.mode) return state;
 
       return {

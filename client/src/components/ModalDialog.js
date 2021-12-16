@@ -31,11 +31,12 @@ import {
   MenuItemOption,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, LockIcon } from '@chakra-ui/icons';
+import useSound from 'use-sound';
 import Tweak from '../assets/icons/tweak.svg';
 import Clock from '../assets/icons/clock.svg';
-import {
-  CLOCK_UPDATE_TIMER_SETTING,
-} from '../constants/clockConstants';
+import alarm from '../assets/sounds/alarm-sound.mp3';
+import ticking from '../assets/sounds/ticking-sound.mp3';
+import { CLOCK_UPDATE_TIMER_SETTING } from '../constants/clockConstants';
 
 const ModalDialog = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,6 +55,23 @@ const ModalDialog = () => {
   const longBreakRef = useRef(null);
   const longBreakIntervalRef = useRef(null);
 
+  const [playAlarmSound] = useSound(alarm, {
+    sprite: {
+      bell: [0, 2000],
+      digital: [2600, 2000],
+      doorbell: [4300, 2000],
+      kitchen: [10000, 2000],
+    },
+    interrupt: true,
+  });
+  const [playTickingSpeed] = useSound(ticking, {
+    sprite: {
+      fast: [0, 2000],
+      slow: [5000, 2000],
+    },
+    interrupt: true,
+  });
+
   const handleOkayClick = () => {
     onClose();
 
@@ -62,17 +80,22 @@ const ModalDialog = () => {
       shortBreakTime: +shortBreakRef.current.value * 60,
       longBreakTime: +longBreakRef.current.value * 60,
       longBreakInterval: +longBreakIntervalRef.current.value,
-      alarmSound: alarmSound,
+      alarmSound,
+      tickingSpeed,
     };
 
     dispatch({ type: CLOCK_UPDATE_TIMER_SETTING, payload: updateTimerData });
   };
 
   const handleChooseSpeed = (value) => {
+    const speedValue = value.toLowerCase().split(' ').join('');
+    playTickingSpeed({ id: speedValue });
     setTickingSpeed(value);
   };
 
   const handleChooseSound = (value) => {
+    const soundValue = value.toLowerCase().split(' ').join('');
+    playAlarmSound({ id: soundValue });
     setAlarmSound(value);
   };
 
@@ -207,7 +230,9 @@ const ModalDialog = () => {
                 step={1}
                 size='sm'
                 defaultValue={timerSettingState.longBreakInterval}
-                isInvalid={!Number.isInteger(timerSettingState.longBreakInterval)}
+                isInvalid={
+                  !Number.isInteger(timerSettingState.longBreakInterval)
+                }
                 min={1}
                 max={10}
                 maxW={{ base: '20', md: '24' }}
@@ -256,17 +281,20 @@ const ModalDialog = () => {
                     type='radio'
                     onChange={(optionValue) => handleChooseSound(optionValue)}
                   >
+                    <MenuItemOption value='Bell' _hover={{ bg: 'gray.700' }}>
+                      Bell
+                    </MenuItemOption>
                     <MenuItemOption value='Digital' _hover={{ bg: 'gray.700' }}>
                       Digital
                     </MenuItemOption>
+                    <MenuItemOption
+                      value='Door Bell'
+                      _hover={{ bg: 'gray.700' }}
+                    >
+                      Door Bell
+                    </MenuItemOption>
                     <MenuItemOption value='Kitchen' _hover={{ bg: 'gray.700' }}>
                       Kitchen
-                    </MenuItemOption>
-                    <MenuItemOption value='Bird' _hover={{ bg: 'gray.700' }}>
-                      Bird
-                    </MenuItemOption>
-                    <MenuItemOption value='Meow' _hover={{ bg: 'gray.700' }}>
-                      Meow Meow
                     </MenuItemOption>
                   </MenuOptionGroup>
                 </MenuList>
@@ -284,7 +312,7 @@ const ModalDialog = () => {
                 borderRadius='sm'
                 my='8px'
               >
-                Ticking Sound Speed
+                Ticking Sound
               </Tag>
 
               <Menu closeOnSelect={true} autoSelect={false}>
@@ -310,8 +338,8 @@ const ModalDialog = () => {
                     type='radio'
                     onChange={(optionValue) => handleChooseSpeed(optionValue)}
                   >
-                    <MenuItemOption value='Normal' _hover={{ bg: 'gray.700' }}>
-                      Normal
+                    <MenuItemOption value='None' _hover={{ bg: 'gray.700' }}>
+                      None
                     </MenuItemOption>
                     <MenuItemOption value='Fast' _hover={{ bg: 'gray.700' }}>
                       Fast

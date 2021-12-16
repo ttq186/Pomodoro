@@ -66,6 +66,9 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
   };
 
   const handleRemoveTaskClick = () => {
+    const confirmRemove = window.confirm('Are you sure you want to remove this task?');
+    if (!confirmRemove) return;
+
     dispatch({ type: TASKLIST_REMOVE_TASK, payload: id });
     dispatch({ type: TASKLIST_MODIFY_TASK_CANCEL });
   };

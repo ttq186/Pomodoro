@@ -11,6 +11,10 @@ import { TASKLIST_UPDATE_TASK_PROGRESS } from '../constants/taskListConstants';
 import ClockMod from '../components/ClockMode';
 import { secondsToTime } from '../utils';
 import store from '../store';
+import useSound from 'use-sound';
+import drumKick from '../assets/sounds/drum-kick.mp3';
+import alarm from '../assets/sounds/alarm-sound.mp3';
+import ticking from '../assets/sounds/ticking-sound.mp3';
 
 const Clock = () => {
   const dispatch = useDispatch();
@@ -19,6 +23,8 @@ const Clock = () => {
   const { sessionTime, shortBreakTime, longBreakTime } =
     clockState.timerSetting;
   const hasChoseTask = useSelector((state) => state.taskList.hasChoseTask);
+
+  const [playSound] = useSound(drumKick);
 
   const startSessionRef = useRef(null);
   const shortBreakRef = useRef(null);
@@ -29,6 +35,23 @@ const Clock = () => {
     isShortBreak: clockState.mode === 'SHORT_BREAK' ? true : false,
     isLongBreak: clockState.mode === 'LONG_BREAK' ? true : false,
   };
+
+  const [playAlarmSound] = useSound(alarm, {
+    sprite: {
+      bell: [0, 2000],
+      digital: [2600, 2000],
+      doorbell: [4300, 2000],
+      kitchen: [10000, 2000],
+    },
+    interrupt: true,
+  });
+  const [playTickingSpeed, { stop }] = useSound(ticking, {
+    sprite: {
+      fast: [0, 2000],
+      slow: [5000, 2000],
+    },
+    interrupt: true,
+  });
 
   useEffect(() => {
     const time =
@@ -55,6 +78,12 @@ const Clock = () => {
     if (time > 0) await delay(500);
 
     while (time > 0) {
+      let tickingSpeedValue = clockState.timerSetting.tickingSpeed
+        .toLowerCase()
+        .split(' ')
+        .join('');
+      playTickingSpeed({ id: tickingSpeedValue });
+
       if (time === 1) isValidSession = true;
       if (!store.getState().clock.isStart) return;
 
@@ -66,6 +95,12 @@ const Clock = () => {
       await delay(1000);
     }
 
+    stop();
+    let alarmSoundValue = clockState.timerSetting.alarmSound
+      .toLowerCase()
+      .split(' ')
+      .join('');
+    playAlarmSound({ id: alarmSoundValue });
     dispatch({ type: CLOCK_TOGGLE_START });
 
     if (hasChoseTask) dispatch({ type: TASKLIST_UPDATE_TASK_PROGRESS });
@@ -82,6 +117,8 @@ const Clock = () => {
   };
 
   const handleToggleState = async () => {
+    playSound();
+
     if (!store.getState().clock.isStart) {
       const time = parseInt(clockState.timeLeft, 10);
       await startCountdown(time);

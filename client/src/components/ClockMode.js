@@ -2,13 +2,15 @@ import { forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text } from '@chakra-ui/react';
 import {
-  CLOCK_TOGGLE_MODE,
+  CLOCK_SWITCH_MODE,
   CLOCK_UPDATE_TIME_LEFT,
+  CLOCK_TOGGLE_START,
 } from '../constants/clockConstants';
 
 const ClockMod = forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const timerSettingState = useSelector((state) => state.clock.timerSetting);
+  const isStart = useSelector((state) => state.clock.isStart);
 
   const handleToggleMode = () => {
     const mode = ref.current.innerText.split(' ').join('_').toUpperCase();
@@ -20,8 +22,14 @@ const ClockMod = forwardRef((props, ref) => {
         ? timerSettingState.shortBreakTime
         : timerSettingState.longBreakTime;
 
-    dispatch({ type: CLOCK_TOGGLE_MODE, payload: { mode, time } });
-
+    if (isStart) {
+      const confirm = window.confirm(
+        'Be careful! The timer is still running. Are you sure you want to switch to this mode?'
+      );
+      if (confirm) dispatch({ type: CLOCK_TOGGLE_START });
+      else return;
+    }
+    dispatch({ type: CLOCK_SWITCH_MODE, payload: { mode, time } });
     dispatch({ type: CLOCK_UPDATE_TIME_LEFT, payload: time });
   };
 

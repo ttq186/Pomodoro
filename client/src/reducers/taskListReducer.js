@@ -3,23 +3,27 @@ import {
   TASKLIST_MODIFY_TASK,
   TASKLIST_REMOVE_TASK,
   TASKLIST_UNCHOOSE_TASK,
-  TASKLIST_ADD_TASK_SUBMIT,
-  TASKLIST_ADD_TASK_TOGGLE,
-  TASKLIST_MODIFY_TASK_CANCEL,
-  TASKLIST_MODIFY_TASK_SUBMIT,
+  TASKLIST_SUBMIT_ADD_TASK,
+  TASKLIST_TOGGLE_ADD_TASK,
+  TASKLIST_UPDATE_TASK_FINISH,
+  TASKLIST_CANCEL_MODIFY_TASK,
+  TASKLIST_SUBMIT_MODIFY_TASK,
   TASKLIST_UPDATE_TASK_PROGRESS,
+  TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK,
 } from '../constants/taskListConstants';
 
 const initialState = {
   isAddTask: false,
   hasChoseTask: false,
   isModifyTask: false,
+  hasJustFinishedTask: false,
   tasks: [
     {
       id: 1,
       title: 'Coding pomodoro app',
       notes: 'Hoan thanh project nay trong 2 tuan nua',
       isDisabled: false,
+      isFinished: false,
       progress: 13,
       target: 20,
     },
@@ -28,6 +32,7 @@ const initialState = {
       title: 'Coding pomodoro app',
       notes: '',
       isDisabled: false,
+      isFinished: false,
       progress: 3,
       target: 7,
     },
@@ -36,6 +41,7 @@ const initialState = {
       title: 'On lai docker',
       notes: 'On lai docker trong 2 ngay',
       isDisabled: false,
+      isFinished: false,
       progress: 8,
       target: 14,
     },
@@ -44,6 +50,7 @@ const initialState = {
       title: 'Coding pomodoro app',
       notes: 'Hoc cho xong postgresql',
       isDisabled: false,
+      isFinished: false,
       progress: 14,
       target: 21,
     },
@@ -52,6 +59,7 @@ const initialState = {
       title: 'Coding pomodoro app',
       notes: '',
       isDisabled: false,
+      isFinished: false,
       progress: 3,
       target: 7,
     },
@@ -60,6 +68,7 @@ const initialState = {
       title: 'Coding pomodoro app',
       notes: '',
       isDisabled: false,
+      isFinished: false,
       progress: 5,
       target: 9,
     },
@@ -69,7 +78,7 @@ const initialState = {
 
 export const taskListReducer = (state = initialState, action) => {
   switch (action.type) {
-    case TASKLIST_ADD_TASK_TOGGLE:
+    case TASKLIST_TOGGLE_ADD_TASK:
       return { ...state, isAddTask: !state.isAddTask };
 
     case TASKLIST_CHOOSE_TASK: {
@@ -92,11 +101,12 @@ export const taskListReducer = (state = initialState, action) => {
       return { ...state, hasChoseTask: false, tasks: newTasks };
     }
 
-    case TASKLIST_ADD_TASK_SUBMIT: {
+    case TASKLIST_SUBMIT_ADD_TASK: {
       const newTask = {
         id: state.tasks.length + 1,
         ...action.payload,
         isDisabled: false,
+        isFinished: false,
         progress: 0,
       };
 
@@ -112,7 +122,7 @@ export const taskListReducer = (state = initialState, action) => {
       return { ...state, isModifyTask: true, modifiedTask };
     }
 
-    case TASKLIST_MODIFY_TASK_SUBMIT: {
+    case TASKLIST_SUBMIT_MODIFY_TASK: {
       const newTasks = [
         { ...state.modifiedTask, ...action.payload },
         ...state.tasks.filter((item) => item.id !== state.modifiedTask.id),
@@ -121,24 +131,37 @@ export const taskListReducer = (state = initialState, action) => {
       return { ...state, modifiedTask: null, tasks: newTasks };
     }
 
-    case TASKLIST_MODIFY_TASK_CANCEL:
+    case TASKLIST_CANCEL_MODIFY_TASK:
       return { ...state, modifiedTask: null };
 
-    case TASKLIST_UPDATE_TASK_PROGRESS:
+    case TASKLIST_UPDATE_TASK_PROGRESS: {
       const choseTask = state.tasks.find((item) => !item.isDisabled);
       const updatedChoseTask = {
         ...choseTask,
         progress: choseTask.progress + 1,
       };
-      const newDisabledTaskList = state.tasks.filter((item) => item.isDisabled);
 
-      return { ...state, tasks: [updatedChoseTask, ...newDisabledTaskList] };
+      const disabledTaskList = state.tasks.filter((item) => item.isDisabled);
+      return { ...state, tasks: [updatedChoseTask, ...disabledTaskList] };
+    }
+
+    case TASKLIST_UPDATE_TASK_FINISH: {
+      const justFinishedTask = state.tasks.find(
+        (item) => item.id === action.payload
+      );
+      justFinishedTask.isFinished = true;
+      const otherTasks = state.tasks.filter((item) => item.id !== action.payload);
+
+      return { ...state, tasks: [justFinishedTask, ...otherTasks] };
+    }
 
     case TASKLIST_REMOVE_TASK: {
       const newTasks = state.tasks.filter((item) => item.id !== action.payload);
-
       return { ...state, tasks: newTasks };
     }
+
+    case TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK:
+      return { ...state, hasJustFinishedTask: !state.hasJustFinishedTask };
 
     default:
       return state;

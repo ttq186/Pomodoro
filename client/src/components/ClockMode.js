@@ -2,10 +2,10 @@ import { forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text } from '@chakra-ui/react';
 import {
-  CLOCK_SWITCH_MODE,
-  CLOCK_UPDATE_TIME_LEFT,
-  CLOCK_TOGGLE_START,
-} from '../constants/clockConstants';
+  switchClockMode,
+  updateTimeLeft,
+  toggleClockStart,
+} from '../actions/clockActions';
 
 const ClockMod = forwardRef((props, ref) => {
   const dispatch = useDispatch();
@@ -26,11 +26,11 @@ const ClockMod = forwardRef((props, ref) => {
       const confirm = window.confirm(
         'Be careful! The timer is still running. Are you sure you want to switch to this mode?'
       );
-      if (confirm) dispatch({ type: CLOCK_TOGGLE_START });
+      if (confirm) dispatch(toggleClockStart());
       else return;
     }
-    dispatch({ type: CLOCK_SWITCH_MODE, payload: { mode, time } });
-    dispatch({ type: CLOCK_UPDATE_TIME_LEFT, payload: time });
+    dispatch(switchClockMode({ mode, time }));
+    dispatch(updateTimeLeft(time));
   };
 
   return props.isActive ? (

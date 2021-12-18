@@ -15,12 +15,12 @@ import {
   NumberDecrementStepper,
 } from '@chakra-ui/react';
 import {
-  TASKLIST_ADD_TASK_SUBMIT,
-  TASKLIST_ADD_TASK_TOGGLE,
-  TASKLIST_MODIFY_TASK_SUBMIT,
-  TASKLIST_MODIFY_TASK_CANCEL,
-  TASKLIST_REMOVE_TASK,
-} from '../../constants/taskListConstants';
+  submitAddTask,
+  toggleAddTask,
+  submitModifyTask,
+  cancelModifyTask,
+  removeTask,
+} from '../../actions/taskListActions';
 
 const TaskForm = ({ title, target, progress, notes, id }) => {
   const [isValidForm, setValidForm] = useState(true);
@@ -33,15 +33,18 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
 
   const handleCancelClick = () => {
     if (title) {
-      dispatch({ type: TASKLIST_MODIFY_TASK_CANCEL });
-    } else dispatch({ type: TASKLIST_ADD_TASK_TOGGLE });
+      dispatch(cancelModifyTask());
+      return;
+    }
+    
+    dispatch(toggleAddTask());
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
     const newTitle = inputTitleRef.current.value;
-    const newTarget = inputSessionRef.current.value;
+    const newTarget = +inputSessionRef.current.value;
     const newNotes = notesRef.current.value;
 
     if (!newTitle) {
@@ -50,27 +53,29 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
     }
 
     setValidForm(true);
-    const payload = {
+    const taskInfo = {
       title: newTitle,
       target: newTarget,
       notes: newNotes,
     };
 
     if (title) {
-      dispatch({ type: TASKLIST_MODIFY_TASK_SUBMIT, payload });
+      dispatch(submitModifyTask(taskInfo));
       return;
     }
 
-    dispatch({ type: TASKLIST_ADD_TASK_SUBMIT, payload });
-    dispatch({ type: TASKLIST_ADD_TASK_TOGGLE });
+    dispatch(submitAddTask(taskInfo));
+    dispatch(toggleAddTask());
   };
 
   const handleRemoveTaskClick = () => {
-    const confirmRemove = window.confirm('Are you sure you want to remove this task?');
+    const confirmRemove = window.confirm(
+      'Are you sure you want to remove this task?'
+    );
     if (!confirmRemove) return;
 
-    dispatch({ type: TASKLIST_REMOVE_TASK, payload: id });
-    dispatch({ type: TASKLIST_MODIFY_TASK_CANCEL });
+    dispatch(removeTask(id));
+    dispatch(cancelModifyTask());
   };
 
   return (

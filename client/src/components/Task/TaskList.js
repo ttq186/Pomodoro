@@ -11,7 +11,7 @@ import {
 import Todo from '../../assets/icons/todo.svg';
 import TaskItem from '../../components/Task/TaskItem';
 import TaskForm from './TaskForm';
-import { TASKLIST_ADD_TASK_TOGGLE } from '../../constants/taskListConstants';
+import { toggleAddTask } from '../../actions/taskListActions';
 
 const TaskList = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const TaskList = () => {
   const modifiedTask = taskListState.modifiedTask;
 
   const handleAddTask = () => {
-    dispatch({ type: TASKLIST_ADD_TASK_TOGGLE });
+    dispatch(toggleAddTask());
   };
 
   return (
@@ -79,6 +79,7 @@ const TaskList = () => {
                 progress={item.progress}
                 target={item.target}
                 isDisabled={item.isDisabled}
+                isFinished={item.isFinished}
               />
             ))}
           </Box>

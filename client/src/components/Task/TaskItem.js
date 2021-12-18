@@ -2,26 +2,41 @@ import { Box, Checkbox, Image, Divider, Flex } from '@chakra-ui/react';
 import Setting from '../../assets/icons/setting.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  TASKLIST_MODIFY_TASK,
-  TASKLIST_CHOOSE_TASK,
-  TASKLIST_UNCHOOSE_TASK,
-} from '../../constants/taskListConstants';
+  modifyTask,
+  chooseTask,
+  unChooseTask,
+  updateTaskFinish,
+  toggleHasJustFinishedTask,
+} from '../../actions/taskListActions';
+import { updateTotalFinishedTask } from '../../actions/clockActions';
+import { useEffect } from 'react';
 
 const TaskItem = (props) => {
   const hasChoseTask = useSelector((state) => state.taskList.hasChoseTask);
   const dispatch = useDispatch();
 
-  const { id, title, notes, isDisabled, progress, target } = {
+  const { id, title, notes, isDisabled, progress, target, isFinished } = {
     ...props,
   };
 
+  useEffect(() => {
+    if (target === progress && !isFinished) {
+      dispatch(unChooseTask());
+      dispatch(toggleHasJustFinishedTask());
+      dispatch(updateTaskFinish(id));
+      dispatch(updateTotalFinishedTask());
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progress]);
+
   const handleSettingClick = () => {
-    if (!hasChoseTask) dispatch({ type: TASKLIST_MODIFY_TASK, payload: id });
+    if (!hasChoseTask || progress === target) dispatch(modifyTask(id));
   };
 
   const handleChooseTask = (e) => {
-    if (e.target.checked) dispatch({ type: TASKLIST_CHOOSE_TASK, payload: id });
-    else dispatch({ type: TASKLIST_UNCHOOSE_TASK });
+    if (e.target.checked) dispatch(chooseTask(id));
+    else dispatch(unChooseTask());
   };
 
   return (
@@ -32,7 +47,7 @@ const TaskItem = (props) => {
       mb={{ base: '8px', md: '11px' }}
       py={{ base: '5px', md: '10px' }}
       borderRadius='sm'
-      opacity={isDisabled ? '0.4' : '1'}
+      opacity={isDisabled || progress === target ? '0.4' : '1'}
     >
       <Flex d='flex' mb='2px'>
         <Checkbox
@@ -44,7 +59,7 @@ const TaskItem = (props) => {
           color='gray.100'
           fontSize='lg'
           fontWeight='600'
-          isDisabled={isDisabled}
+          isDisabled={isDisabled || progress === target}
           onChange={handleChooseTask}
         >
           {title}
@@ -65,7 +80,9 @@ const TaskItem = (props) => {
           w='25px'
           mr='5px'
           mt='5px'
-          cursor={hasChoseTask ? 'not-allowed' : 'pointer'}
+          cursor={
+            hasChoseTask && progress !== target ? 'not-allowed' : 'pointer'
+          }
           onClick={handleSettingClick}
         />
       </Flex>

@@ -4,12 +4,14 @@ import {
   CLOCK_UPDATE_TIME_LEFT,
   CLOCK_UPDATE_TIMER_SETTING,
   CLOCK_UPDATE_SUMMARY,
+  CLOCK_UPDATE_TOTAL_FINISHED_TASK,
 } from '../constants/clockConstants';
 
 const initialState = {
   isStart: false,
   mode: 'START_SESSION',
   timeLeft: -1,
+  totalSubSessions: 0,
   timerSetting: {
     sessionTime: 10,
     shortBreakTime: 5,
@@ -56,10 +58,20 @@ export const clockReducer = (state = initialState, action) => {
     case CLOCK_UPDATE_SUMMARY:
       return {
         ...state,
+        totalSubSessions: state.totalSubSessions + 1,
         summary: {
           ...state.summary,
           totalTime: state.summary.totalTime + action.payload,
           totalSessions: state.summary.totalSessions + 1,
+        },
+      };
+
+    case CLOCK_UPDATE_TOTAL_FINISHED_TASK:
+      return {
+        ...state,
+        summary: {
+          ...state.summary,
+          finishedTasks: state.summary.finishedTasks + 1,
         },
       };
 

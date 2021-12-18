@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Flex, Center, Button } from '@chakra-ui/react';
 import ModalDialog from '../components/ModalDialog';
 import {
-  CLOCK_TOGGLE_START,
-  CLOCK_UPDATE_TIME_LEFT,
-  CLOCK_UPDATE_SUMMARY,
-} from '../constants/clockConstants';
-import { TASKLIST_UPDATE_TASK_PROGRESS } from '../constants/taskListConstants';
+  toggleClockStart,
+  updateTimeLeft,
+  updateSummary,
+  switchClockMode,
+} from '../actions/clockActions';
+import { updateTaskProgress } from '../actions/taskListActions';
 import ClockMod from '../components/ClockMode';
 import { secondsToTime } from '../utils';
 import store from '../store';
@@ -20,22 +21,23 @@ const Clock = () => {
   const dispatch = useDispatch();
 
   const clockState = useSelector((state) => state.clock);
-  const { sessionTime, shortBreakTime, longBreakTime } =
-    clockState.timerSetting;
   const hasChoseTask = useSelector((state) => state.taskList.hasChoseTask);
-
-  const [playSound] = useSound(drumKick);
+  const timerSetting = clockState.timerSetting;
+  const { sessionTime, shortBreakTime, longBreakTime, longBreakInterval } =
+    timerSetting;
+  const clockMode = clockState.mode;
 
   const startSessionRef = useRef(null);
   const shortBreakRef = useRef(null);
   const longBreakRef = useRef(null);
 
   const mode = {
-    isStartSession: clockState.mode === 'START_SESSION' ? true : false,
-    isShortBreak: clockState.mode === 'SHORT_BREAK' ? true : false,
-    isLongBreak: clockState.mode === 'LONG_BREAK' ? true : false,
+    isStartSession: clockMode === 'START_SESSION' ? true : false,
+    isShortBreak: clockMode === 'SHORT_BREAK' ? true : false,
+    isLongBreak: clockMode === 'LONG_BREAK' ? true : false,
   };
 
+  const [playSound] = useSound(drumKick);
   const [playAlarmSound] = useSound(alarm, {
     sprite: {
       bell: [0, 2000],
@@ -47,24 +49,21 @@ const Clock = () => {
   });
   const [playTickingSpeed, { stop }] = useSound(ticking, {
     sprite: {
-      fast: [0, 2000],
-      slow: [5000, 2000],
+      fast: [0, 1000],
+      slow: [5000, 1100],
     },
     interrupt: true,
   });
 
   useEffect(() => {
     const time =
-      clockState.mode === 'START_SESSION'
+      clockMode === 'START_SESSION'
         ? sessionTime
-        : mode === 'SHORT_BREAK'
+        : clockMode === 'SHORT_BREAK'
         ? shortBreakTime
         : longBreakTime;
 
-    dispatch({
-      type: CLOCK_UPDATE_TIME_LEFT,
-      payload: time,
-    });
+    dispatch(updateTimeLeft(time));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionTime, shortBreakTime, longBreakTime]);
@@ -73,12 +72,12 @@ const Clock = () => {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     let isValidSession = false;
 
-    dispatch({ type: CLOCK_TOGGLE_START });
+    dispatch(toggleClockStart());
 
     if (time > 0) await delay(500);
 
     while (time > 0) {
-      let tickingSpeedValue = clockState.timerSetting.tickingSpeed
+      let tickingSpeedValue = timerSetting.tickingSpeed
         .toLowerCase()
         .split(' ')
         .join('');
@@ -88,40 +87,43 @@ const Clock = () => {
       if (!store.getState().clock.isStart) return;
 
       time--;
-      dispatch({
-        type: CLOCK_UPDATE_TIME_LEFT,
-        payload: time,
-      });
+      dispatch(updateTimeLeft(time));
       await delay(1000);
     }
 
-    stop();
-    let alarmSoundValue = clockState.timerSetting.alarmSound
+    stop({ id: timerSetting.tickingSpeed.toLowerCase() });
+
+    let alarmSoundValue = timerSetting.alarmSound
       .toLowerCase()
       .split(' ')
       .join('');
     playAlarmSound({ id: alarmSoundValue });
-    dispatch({ type: CLOCK_TOGGLE_START });
 
-    if (hasChoseTask) dispatch({ type: TASKLIST_UPDATE_TASK_PROGRESS });
+    dispatch(toggleClockStart());
 
-    if (clockState.mode === 'START_SESSION' && isValidSession)
-      dispatch({
-        type: CLOCK_UPDATE_SUMMARY,
-        payload: clockState.timerSetting.sessionTime,
-      });
+    if (hasChoseTask) dispatch(updateTaskProgress());
+
+    if (clockMode === 'START_SESSION' && isValidSession) {
+      dispatch(updateSummary(sessionTime));
+    }
+
+    if (store.getState().clock.totalSubSessions % longBreakInterval !== 0) {
+      dispatch(switchClockMode({ mode: 'SHORT_BREAK', time: shortBreakTime }));
+    } else {
+      dispatch(switchClockMode({ mode: 'LONG_BREAK', time: longBreakTime }));
+    }
   };
 
   const stopCountdown = () => {
-    dispatch({ type: CLOCK_TOGGLE_START });
+    stop({ id: timerSetting.tickingSpeed.toLowerCase() });
+    dispatch(toggleClockStart());
   };
 
   const handleToggleState = async () => {
     playSound();
 
     if (!store.getState().clock.isStart) {
-      const time = parseInt(clockState.timeLeft, 10);
-      await startCountdown(time);
+      await startCountdown(clockState.timeLeft);
       return;
     }
 
@@ -137,6 +139,7 @@ const Clock = () => {
       pos='relative'
     >
       <ModalDialog />
+
       <Flex
         w={{ base: '85%', md: '90%' }}
         mx='auto'

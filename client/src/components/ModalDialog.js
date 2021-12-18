@@ -36,7 +36,7 @@ import Tweak from '../assets/icons/tweak.svg';
 import Clock from '../assets/icons/clock.svg';
 import alarm from '../assets/sounds/alarm-sound.mp3';
 import ticking from '../assets/sounds/ticking-sound.mp3';
-import { CLOCK_UPDATE_TIMER_SETTING } from '../constants/clockConstants';
+import { updateTimerSetting } from '../actions/clockActions';
 
 const ModalDialog = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -84,7 +84,7 @@ const ModalDialog = () => {
       tickingSpeed,
     };
 
-    dispatch({ type: CLOCK_UPDATE_TIMER_SETTING, payload: updateTimerData });
+    dispatch(updateTimerSetting(updateTimerData));
   };
 
   const handleChooseSpeed = (value) => {

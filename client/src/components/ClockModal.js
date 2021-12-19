@@ -38,7 +38,7 @@ import alarm from '../assets/sounds/alarm-sound.mp3';
 import ticking from '../assets/sounds/ticking-sound.mp3';
 import { updateTimerSetting } from '../actions/clockActions';
 
-const ModalDialog = () => {
+const ClockModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const size = useBreakpointValue({ base: 'sm', md: 'md' });
 
@@ -57,16 +57,16 @@ const ModalDialog = () => {
 
   const [playAlarmSound] = useSound(alarm, {
     sprite: {
-      bell: [0, 2000],
+      bell: [0, 1000],
       digital: [2600, 2000],
       doorbell: [4300, 2000],
-      kitchen: [10000, 2000],
+      kitchen: [10000, 1500],
     },
     interrupt: true,
   });
   const [playTickingSpeed] = useSound(ticking, {
     sprite: {
-      fast: [0, 2000],
+      fast: [0, 1000],
       slow: [5000, 2000],
     },
     interrupt: true,
@@ -392,4 +392,4 @@ const ModalDialog = () => {
   );
 };
 
-export default ModalDialog;
+export default ClockModal;

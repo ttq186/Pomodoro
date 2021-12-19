@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Flex, Center, Button } from '@chakra-ui/react';
-import ModalDialog from '../components/ModalDialog';
+import ClockModal from '../components/ClockModal';
 import {
   toggleClockStart,
   updateTimeLeft,
@@ -19,6 +19,7 @@ import ticking from '../assets/sounds/ticking-sound.mp3';
 
 const Clock = () => {
   const dispatch = useDispatch();
+  const [isValidSession, setValidSession] = useState(false);
 
   const clockState = useSelector((state) => state.clock);
   const hasChoseTask = useSelector((state) => state.taskList.hasChoseTask);
@@ -70,10 +71,8 @@ const Clock = () => {
 
   const startCountdown = async (time) => {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    let isValidSession = false;
 
     dispatch(toggleClockStart());
-
     if (time > 0) await delay(500);
 
     while (time > 0) {
@@ -83,7 +82,7 @@ const Clock = () => {
         .join('');
       playTickingSpeed({ id: tickingSpeedValue });
 
-      if (time === 1) isValidSession = true;
+      if (time === 1) setValidSession(true);
       if (!store.getState().clock.isStart) return;
 
       time--;
@@ -91,8 +90,11 @@ const Clock = () => {
       await delay(1000);
     }
 
-    stop({ id: timerSetting.tickingSpeed.toLowerCase() });
+    handleFinishCountdown();
+  };
 
+  const handleFinishCountdown = () => {
+    stop();
     let alarmSoundValue = timerSetting.alarmSound
       .toLowerCase()
       .split(' ')
@@ -115,13 +117,12 @@ const Clock = () => {
   };
 
   const stopCountdown = () => {
-    stop({ id: timerSetting.tickingSpeed.toLowerCase() });
+    stop()
     dispatch(toggleClockStart());
   };
 
-  const handleToggleState = async () => {
+  const handleToggleStart = async () => {
     playSound();
-
     if (!store.getState().clock.isStart) {
       await startCountdown(clockState.timeLeft);
       return;
@@ -138,7 +139,7 @@ const Clock = () => {
       borderRadius='md'
       pos='relative'
     >
-      <ModalDialog />
+      <ClockModal />
 
       <Flex
         w={{ base: '85%', md: '90%' }}
@@ -187,7 +188,7 @@ const Clock = () => {
           borderBottom: '2px solid #fefefe',
           mt: '22px',
         }}
-        onClick={handleToggleState}
+        onClick={handleToggleStart}
       >
         {clockState.isStart ? 'STOP' : 'START'}
       </Button>

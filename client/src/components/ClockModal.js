@@ -76,10 +76,10 @@ const ClockModal = () => {
     onClose();
 
     const updateTimerData = {
-      sessionTime: +sessionRef.current.value * 60,
-      shortBreakTime: +shortBreakRef.current.value * 60,
-      longBreakTime: +longBreakRef.current.value * 60,
-      longBreakInterval: +longBreakIntervalRef.current.value,
+      sessionTime: Math.round(+sessionRef.current.value * 60),
+      shortBreakTime: Math.round(+shortBreakRef.current.value * 60),
+      longBreakTime: Math.round(+longBreakRef.current.value * 60),
+      longBreakInterval: Math.floor(+longBreakIntervalRef.current.value),
       alarmSound,
       tickingSpeed,
     };

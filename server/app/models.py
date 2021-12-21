@@ -33,6 +33,9 @@ class Task(Base):
     is_finished = Column(Boolean, default=False)
     progress = Column(Integer, nullable=False, default=0)
     target = Column(Integer, nullable=False)
+    created_at = Column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
 
     user = relationship("User", back_populates="tasks")
 

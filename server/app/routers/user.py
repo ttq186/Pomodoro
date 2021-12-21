@@ -17,7 +17,7 @@ async def get_users(db: Session = Depends(get_db)):
 
     if not users_query:
         raise HTTPException(
-            status_code=status.HTTP_200_OK, detail=f"there aren't any users"
+            status_code=status.HTTP_200_OK, detail=f"There aren't any users"
         )
     
     return users_query

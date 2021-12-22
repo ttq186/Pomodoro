@@ -32,11 +32,12 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon, LockIcon } from '@chakra-ui/icons';
 import useSound from 'use-sound';
-import Tweak from '../assets/icons/tweak.svg';
-import Clock from '../assets/icons/clock.svg';
-import alarm from '../assets/sounds/alarm-sound.mp3';
-import ticking from '../assets/sounds/ticking-sound.mp3';
-import { updateTimerSetting } from '../actions/clockActions';
+
+import Tweak from '../../assets/icons/tweak.svg';
+import Clock from '../../assets/icons/clock.svg';
+import alarm from '../../assets/sounds/alarm-sound.mp3';
+import ticking from '../../assets/sounds/ticking-sound.mp3';
+import { updateTimerSetting } from '../../actions/clockActions';
 
 const ClockModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

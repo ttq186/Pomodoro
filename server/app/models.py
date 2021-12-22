@@ -48,6 +48,7 @@ class Timer(Base):
     session_time = Column(Integer, default=1500)
     short_break_time = Column(Integer, default=300)
     long_break_time = Column(Integer, default=1200)
+    long_break_interval = Column(Integer, default=4)
     alarm_sound = Column(String, default="Digital")
     ticking_sound = Column(String, default="None")
 

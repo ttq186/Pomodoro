@@ -75,8 +75,10 @@ async def update_task(
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_task(id: int, db: Session = Depends(get_db)):
-    deleted_task = db.query(Task).filter_by(id=id).first()
+async def delete_task(
+    id: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)
+):
+    deleted_task = db.query(Task).filter_by(id=id, user_id=current_user.id).first()
 
     if deleted_task is None:
         raise HTTPException(

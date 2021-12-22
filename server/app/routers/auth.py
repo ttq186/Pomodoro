@@ -2,7 +2,7 @@ from fastapi import Depends, APIRouter, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from ..schemas import UserIn, Token
+from ..schemas import Token
 from ..models import User
 from ..utils import verify_password
 from ..db import get_db
@@ -27,10 +27,7 @@ async def login(
     if user is None:
         raise credentials_exception
 
-    if user.is_admin:
-        if user.password != form_data.password:
-            raise credentials_exception
-    elif not verify_password(form_data.password, user.password):
+    if not verify_password(form_data.password, user.password):
         raise credentials_exception
 
     access_token = create_access_token(data={"user_id": user.id})

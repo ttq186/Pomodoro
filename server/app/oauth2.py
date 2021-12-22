@@ -48,7 +48,7 @@ async def get_current_user(
         user = db.query(User).filter_by(id=token_data.id).first()
     except JWTError:
         raise credentials_exception
-        
+
     if user is None:
         raise credentials_exception
     return user

@@ -6,6 +6,8 @@ import {
   Image,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+
 import Pomodoro from '../assets/icons/pomodoro.svg';
 import UserManualModal from './UserManualModal';
 
@@ -15,43 +17,43 @@ const Header = () => {
   return (
     <Flex
       color='gray.100'
-      justify='space-between'
-      flexDir={{base: 'column', sm: 'row'}}
-      align='center'
+      justifyContent='space-between'
+      alignItems='center'
+      flexDir={{ base: 'column', sm: 'row' }}
       mx={{ base: '10px', md: '30px' }}
       mb={{ base: '-15px', md: '0px' }}
-      pt={{base: '1em', sm: '1.5em'}}
+      pt={{ base: '1em', sm: '1.2em' }}
     >
       <Flex
-        align='center'
+        alignItems='center'
         fontWeight='600'
         color='gray.400'
-        fontSize={{ base: '18px', md: '20px' }}
+        fontSize='20px'
       >
-        <Image
-          src={Pomodoro}
-          w={{ base: '30px', md: '50px' }}
-          h={{ base: '30px', md: '50px' }}
-        ></Image>
-        <Text>Pomodoro</Text>
+        <Image src={Pomodoro} w='50px' h='50px'></Image>
+        <Link to='/'>Pomodoro</Link>
       </Flex>
       <Box mt='0.7em'>
         <UserManualModal />
 
         <Button
           bg='gray.600'
-          mx={{ base: '10px', md: '20px' }}
+          mx={{ base: '15px', md: '20px' }}
           variant='customize'
-          size={size}
+          size='sm'
+          px={{ base: '1em', md: '1.2em' }}
+          fontSize={{ base: '14px', md: '15px' }}
         >
           Report
         </Button>
         <Button
           bg='gray.600'
           variant='customize'
-          size={size}
+          size='sm'
+          px={{ base: '1em', md: '1.2em' }}
+          fontSize={{ base: '14px', md: '15px' }}
         >
-          Login
+          <Link to='/signin'>Sign In</Link>
         </Button>
       </Box>
     </Flex>

@@ -5,7 +5,7 @@ import {
   switchClockMode,
   updateTimeLeft,
   toggleClockStart,
-} from '../actions/clockActions';
+} from '../../actions/clockActions';
 
 const ClockMod = forwardRef((props, ref) => {
   const dispatch = useDispatch();

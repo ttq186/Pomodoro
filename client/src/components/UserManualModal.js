@@ -8,21 +8,22 @@ import {
   ModalBody,
   Divider,
 } from '@chakra-ui/react';
-import { useDisclosure, useBreakpointValue } from '@chakra-ui/react';
+import { useDisclosure} from '@chakra-ui/react';
 
 const UserManualModal = () => {
-  const size = useBreakpointValue({ base: 'xs', sm: 'sm', lg: 'md' });
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Button
-        mx={{ base: '10px', md: '20px' }}
+        mx={{ base: '0', md: '20px' }}
         variant='customize'
         bg='gray.200'
         color='gray.800'
         onClick={onOpen}
         borderRadius='3px'
-        size={size}
+        size='sm'
+        px={{ base: '1em', md: '1.2em' }}
+        fontSize={{ base: '14px', md: '15px' }}
       >
         How To Use
       </Button>

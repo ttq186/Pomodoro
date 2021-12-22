@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Flex, Center, Button } from '@chakra-ui/react';
-import ClockModal from '../components/ClockModal';
+import useSound from 'use-sound';
+
 import {
   toggleClockStart,
   updateTimeLeft,
   updateSummary,
   switchClockMode,
-} from '../actions/clockActions';
-import { updateTaskProgress } from '../actions/taskListActions';
-import ClockMod from '../components/ClockMode';
-import { secondsToTime } from '../utils';
-import store from '../store';
-import useSound from 'use-sound';
-import drumKick from '../assets/sounds/drum-kick.mp3';
-import alarm from '../assets/sounds/alarm-sound.mp3';
-import ticking from '../assets/sounds/ticking-sound.mp3';
+} from '../../actions/clockActions';
+import { updateTaskProgress } from '../../actions/taskListActions';
+import ClockModal from '../../components/Clock/ClockModal';
+import ClockMod from '../../components/Clock/ClockMode';
+import { secondsToTime } from '../../utils';
+import store from '../../store';
+import drumKick from '../../assets/sounds/drum-kick.mp3';
+import alarm from '../../assets/sounds/alarm-sound.mp3';
+import ticking from '../../assets/sounds/ticking-sound.mp3';
 
 const Clock = () => {
   const dispatch = useDispatch();

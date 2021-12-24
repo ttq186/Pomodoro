@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import {
   Box,
   Flex,
@@ -8,13 +9,40 @@ import {
   Button,
   Text,
   Divider,
+  ScaleFade,
+  Spinner,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Pomodoro from '../assets/icons/pomodoro.svg';
 import GoogleIcon from '../assets/icons/google-icon.png';
+import { login } from '../actions/userActions';
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.user);
+  const { loading, userInfo } = userLogin;
+
+  const navigate = useNavigate();
+
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
+
+    const emailValue = emailRef.current.value;
+    const passwordValue = passwordRef.current.value;
+    dispatch(login(emailValue, passwordValue));
+  };
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [userInfo, navigate]);
+
   return (
     <Box bg='gray.800'>
       <Flex
@@ -24,99 +52,118 @@ const SignIn = () => {
         color='gray.400'
         fontSize={{ base: '18px', md: '20px' }}
         mx={{ base: '10px', md: '30px' }}
-        pt='0.6em'
+        pt='0.5em'
       >
         <Image
           src={Pomodoro}
-          mb='1px'
-          w={{ base: '30px', md: '50px' }}
-          h={{ base: '30px', md: '50px' }}
+          mb='-1px'
+          w={{ base: '40px', md: '50px' }}
+          h={{ base: '40px', md: '50px' }}
         ></Image>
         <Link to='/'>Pomodoro</Link>
       </Flex>
 
-      <Flex h='90vh' justifyContent='center'>
-        <Box
-          color='#fff'
-          alignSelf='center'
-          mt='-3em'
-          w='380px'
-          h='450px'
-          bg='#fff'
-          borderRadius='5px'
-          p='1.4em'
-          pt='2em'
-          color='gray.700'
-        >
-          <FormControl isRequired>
-            <FormLabel htmlFor='email' fontWeight='600'>
-              Email
-            </FormLabel>
-            <Input
-              id='email'
-              type='email'
-              placeholder='Enter your email address'
-              borderColor='gray.400'
-              focusBorderColor='gray.600'
-            />
-          </FormControl>
-          <FormControl isRequired mt='1.5em'>
-            <FormLabel htmlFor='password' fontWeight='600'>
-              Password
-            </FormLabel>
-            <Input
-              id='password'
-              type='password'
-              placeholder='Enter your password'
-              borderColor='gray.400'
-              focusBorderColor='gray.600'
-            />
-          </FormControl>
-          <Button
-            bg='gray.700'
-            variant='customize'
-            color='gray.200'
-            w='100%'
-            borderRadius='5px'
-            my='1.3em'
-          >
-            Sign In
-          </Button>
+      <ScaleFade initialScale='0.8' in={true}>
+        <Flex h='90vh' justifyContent='center'>
+          {loading ? (
+            <Spinner size='xl' color='gray.200' speed='1.5s' mt='20%' />
+          ) : (
+            <Box
+              alignSelf='center'
+              mt='-3em'
+              w={{ base: '90%', sm: '380px' }}
+              h={{ base: '400px', sm: '450px' }}
+              bg='#fff'
+              borderRadius='5px'
+              p={{ base: '1em', sm: '1.4em' }}
+              pt={{ base: '1em', sm: '2em' }}
+              color='gray.700'
+            >
+              <form onSubmit={handleSubmitForm}>
+                <FormControl>
+                  <FormLabel htmlFor='email' fontWeight='600' d='inline-block'>
+                    Email
+                    <span style={{ color: '#E53E5E', marginLeft: '3px' }}>
+                      *
+                    </span>
+                  </FormLabel>
+                  <Input
+                    id='email'
+                    placeholder='Enter your email address'
+                    borderColor='gray.400'
+                    focusBorderColor='gray.600'
+                    ref={emailRef}
+                  />
+                </FormControl>
+                <FormControl mt='1.5em'>
+                  <FormLabel
+                    htmlFor='password'
+                    fontWeight='600'
+                    d='inline-block'
+                  >
+                    Password
+                    <span style={{ color: '#E53E5E', marginLeft: '3px' }}>
+                      *
+                    </span>
+                  </FormLabel>
+                  <Input
+                    id='password'
+                    type='password'
+                    placeholder='Enter your password'
+                    borderColor='gray.400'
+                    focusBorderColor='gray.600'
+                    ref={passwordRef}
+                  />
+                </FormControl>
+                <Button
+                  type='submit'
+                  bg='gray.700'
+                  variant='customize'
+                  color='gray.100'
+                  w='100%'
+                  borderRadius='5px'
+                  my={{ base: '1em', sm: '1.3em' }}
+                >
+                  Sign In
+                </Button>
+              </form>
 
-          <Flex alignItems='center'>
-            <Divider />
-            <Text fontWeight='600' mx='0.5em'>
-              OR
-            </Text>
-            <Divider />
-          </Flex>
+              <Flex alignItems='center'>
+                <Divider />
+                <Text fontWeight='600' mx='0.5em'>
+                  OR
+                </Text>
+                <Divider />
+              </Flex>
 
-          <Button
-            bg='gray.300'
-            color='gray.700'
-            w='100%'
-            borderRadius='5px'
-            my='1.3em'
-          >
-            <Image src={GoogleIcon} w='20px' mx='0.5em' mt='-2px' /> Sign In
-            with Google
-          </Button>
+              <Button
+                bg='gray.300'
+                color='gray.700'
+                w='100%'
+                borderRadius='5px'
+                my={{ base: '0.7em', sm: '1.3em' }}
+              >
+                <Image src={GoogleIcon} w='20px' mx='0.5em' mt='-2px' /> Sign In
+                with Google
+              </Button>
 
-          <Flex
-            justifyContent='space-between'
-            fontSize='15px'
-            px='0.5em'
-            fontWeight='600'
-          >
-            <Text mt='1em' textAlign='center'>
-              <Link to='/reset-password'>Forgot Password?</Link>
-            </Text>
-            <Text mt='1em' textAlign='center'>
-              <Link to='/signup'>Sign Up</Link>
-            </Text>
-          </Flex>
-        </Box>
-      </Flex>
+              <Flex
+                justifyContent='space-between'
+                fontSize='15px'
+                px='0.5em'
+                fontWeight='600'
+              >
+                <Text mt='1em' textAlign='center'>
+                  <Link to='/reset-password'>Forgot Password?</Link>
+                </Text>
+                <Text mt='1em' textAlign='center'>
+                  <Link to='/signup'>Sign Up</Link>
+                </Text>
+              </Flex>
+            </Box>
+          )}
+        </Flex>
+      </ScaleFade>
     </Box>
   );
 };

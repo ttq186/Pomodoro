@@ -54,6 +54,7 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
 
     setValidForm(true);
     const taskInfo = {
+      id: id,
       title: newTitle,
       target: newTarget,
       notes: newNotes,

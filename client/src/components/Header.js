@@ -1,18 +1,29 @@
 import {
   Flex,
-  Text,
   Box,
   Button,
   Image,
-  useBreakpointValue,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Pomodoro from '../assets/icons/pomodoro.svg';
 import UserManualModal from './UserManualModal';
+import Report from './Report';
+import { logout } from '../actions/userActions';
 
 const Header = () => {
-  const size = useBreakpointValue({ base: 'xs', sm: 'sm', lg: 'md' });
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user.userInfo);
+
+  const handleLogOutClick = () => {
+    dispatch(logout());
+  }
 
   return (
     <Flex
@@ -33,28 +44,49 @@ const Header = () => {
         <Image src={Pomodoro} w='50px' h='50px'></Image>
         <Link to='/'>Pomodoro</Link>
       </Flex>
+      
       <Box mt='0.7em'>
         <UserManualModal />
+        <Report />
 
-        <Button
-          bg='gray.600'
-          mx={{ base: '15px', md: '20px' }}
-          variant='customize'
-          size='sm'
-          px={{ base: '1em', md: '1.2em' }}
-          fontSize={{ base: '14px', md: '15px' }}
-        >
-          Report
-        </Button>
-        <Button
-          bg='gray.600'
-          variant='customize'
-          size='sm'
-          px={{ base: '1em', md: '1.2em' }}
-          fontSize={{ base: '14px', md: '15px' }}
-        >
-          <Link to='/signin'>Sign In</Link>
-        </Button>
+        {userInfo ? (
+          <Menu closeOnSelect={true} autoSelect={false}>
+            <MenuButton
+              as={Button}
+              bg='gray.600'
+              variant='customize'
+              size='sm'
+              px={{ base: '1em', md: '1.2em' }}
+              h='35px'
+              fontSize={{ base: '14px', md: '15px' }}
+              rightIcon={<ChevronDownIcon />}
+            >
+              TTQ
+            </MenuButton>
+            <MenuList
+              color='gray.800'
+              border='none'
+              borderRadius='4px'
+              minW='0'
+              w='130px'
+              py='10px'
+            >
+              <MenuItem>Profile</MenuItem>
+              <MenuItem onClick={handleLogOutClick}>Logout</MenuItem>
+            </MenuList>
+          </Menu>
+        ) : (
+          <Button
+            bg='gray.600'
+            variant='customize'
+            size='sm'
+            px={{ base: '1em', md: '1.2em' }}
+            h='35px'
+            fontSize={{ base: '14px', md: '15px' }}
+          >
+            <Link to='/signin'>Sign In</Link>
+          </Button>
+        )}
       </Box>
     </Flex>
   );

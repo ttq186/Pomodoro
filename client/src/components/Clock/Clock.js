@@ -11,7 +11,7 @@ import {
 } from '../../actions/clockActions';
 import { updateTaskProgress } from '../../actions/taskListActions';
 import ClockModal from '../../components/Clock/ClockModal';
-import ClockMod from '../../components/Clock/ClockMode';
+import ClockMode from '../../components/Clock/ClockMode';
 import { secondsToTime } from '../../utils';
 import store from '../../store';
 import drumKick from '../../assets/sounds/drum-kick.mp3';
@@ -49,7 +49,7 @@ const Clock = () => {
     },
     interrupt: true,
   });
-  const [playTickingSpeed, { stop }] = useSound(ticking, {
+  const [playTickingSound, { stop }] = useSound(ticking, {
     sprite: {
       fast: [0, 1000],
       slow: [5000, 1100],
@@ -77,11 +77,11 @@ const Clock = () => {
     if (time > 0) await delay(500);
 
     while (time > 0) {
-      let tickingSpeedValue = timerSetting.tickingSpeed
+      let tickingSoundValue = timerSetting.tickingSound
         .toLowerCase()
         .split(' ')
         .join('');
-      playTickingSpeed({ id: tickingSpeedValue });
+      playTickingSound({ id: tickingSoundValue });
 
       if (time === 1) setValidSession(true);
       if (!store.getState().clock.isStart) return;
@@ -152,17 +152,17 @@ const Clock = () => {
         fontWeight='500'
         fontSize={{ base: '11px', md: '16px' }}
       >
-        <ClockMod
+        <ClockMode
           isActive={mode.isStartSession}
           content='Start Session'
           ref={startSessionRef}
         />
-        <ClockMod
+        <ClockMode
           isActive={mode.isShortBreak}
           content='Short Break'
           ref={shortBreakRef}
         />
-        <ClockMod
+        <ClockMode
           isActive={mode.isLongBreak}
           content='Long Break'
           ref={longBreakRef}

@@ -1,7 +1,9 @@
 import {
+  TASKLIST_GET_DATA,
   TASKLIST_CHOOSE_TASK,
   TASKLIST_MODIFY_TASK,
   TASKLIST_REMOVE_TASK,
+  TASKLIST_GET_DATA_FAIL,
   TASKLIST_UNCHOOSE_TASK,
   TASKLIST_SUBMIT_ADD_TASK,
   TASKLIST_TOGGLE_ADD_TASK,
@@ -17,62 +19,7 @@ const initialState = {
   hasChoseTask: false,
   isModifyTask: false,
   hasJustFinishedTask: false,
-  tasks: [
-    {
-      id: 1,
-      title: 'Coding pomodoro app',
-      notes: 'Hoan thanh project nay trong 2 tuan nua',
-      isDisabled: false,
-      isFinished: false,
-      progress: 13,
-      target: 20,
-    },
-    {
-      id: 2,
-      title: 'Coding pomodoro app',
-      notes: '',
-      isDisabled: false,
-      isFinished: false,
-      progress: 3,
-      target: 7,
-    },
-    {
-      id: 3,
-      title: 'On lai docker',
-      notes: 'On lai docker trong 2 ngay',
-      isDisabled: false,
-      isFinished: false,
-      progress: 8,
-      target: 14,
-    },
-    {
-      id: 4,
-      title: 'Coding pomodoro app',
-      notes: 'Hoc cho xong postgresql',
-      isDisabled: false,
-      isFinished: false,
-      progress: 14,
-      target: 21,
-    },
-    {
-      id: 5,
-      title: 'Coding pomodoro app',
-      notes: '',
-      isDisabled: false,
-      isFinished: false,
-      progress: 3,
-      target: 7,
-    },
-    {
-      id: 6,
-      title: 'Coding pomodoro app',
-      notes: '',
-      isDisabled: false,
-      isFinished: false,
-      progress: 5,
-      target: 9,
-    },
-  ],
+  tasks: [],
   modifiedTask: null,
 };
 
@@ -102,15 +49,7 @@ export const taskListReducer = (state = initialState, action) => {
     }
 
     case TASKLIST_SUBMIT_ADD_TASK: {
-      const newTask = {
-        id: state.tasks.length + 1,
-        ...action.payload,
-        isDisabled: false,
-        isFinished: false,
-        progress: 0,
-      };
-
-      const newTasks = [newTask, ...state.tasks];
+      const newTasks = [action.payload, ...state.tasks];
       return { ...state, tasks: newTasks };
     }
 
@@ -150,7 +89,9 @@ export const taskListReducer = (state = initialState, action) => {
         (item) => item.id === action.payload
       );
       justFinishedTask.isFinished = true;
-      const otherTasks = state.tasks.filter((item) => item.id !== action.payload);
+      const otherTasks = state.tasks.filter(
+        (item) => item.id !== action.payload
+      );
 
       return { ...state, tasks: [justFinishedTask, ...otherTasks] };
     }
@@ -162,6 +103,12 @@ export const taskListReducer = (state = initialState, action) => {
 
     case TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK:
       return { ...state, hasJustFinishedTask: !state.hasJustFinishedTask };
+
+    case TASKLIST_GET_DATA:
+      return { ...state, tasks: action.payload };
+
+    case TASKLIST_GET_DATA_FAIL:
+      return initialState;
 
     default:
       return state;

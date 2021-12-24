@@ -1,16 +1,20 @@
 import {
-  CLOCK_TOGGLE_START,
+  CLOCK_GET_SUMMARY,
   CLOCK_SWITCH_MODE,
-  CLOCK_UPDATE_TIME_LEFT,
-  CLOCK_UPDATE_TIMER_SETTING,
+  CLOCK_TOGGLE_START,
   CLOCK_UPDATE_SUMMARY,
+  CLOCK_GET_SUMMARY_FAIL,
+  CLOCK_UPDATE_TIME_LEFT,
+  CLOCK_GET_TIMER_SETTING,
+  CLOCK_UPDATE_TIMER_SETTING,
+  CLOCK_GET_TIMER_SETTING_FAIL,
   CLOCK_UPDATE_TOTAL_FINISHED_TASK,
 } from '../constants/clockConstants';
 
 const initialState = {
   isStart: false,
   mode: 'START_SESSION',
-  timeLeft: -1,
+  timeLeft: 1500,
   totalSubSessions: 0,
   timerSetting: {
     sessionTime: 10,
@@ -18,7 +22,7 @@ const initialState = {
     longBreakTime: 1200,
     longBreakInterval: 4,
     alarmSound: 'Digital',
-    tickingSpeed: 'None',
+    tickingSound: 'None',
     lightMode: false,
   },
   summary: {
@@ -74,6 +78,24 @@ export const clockReducer = (state = initialState, action) => {
           finishedTasks: state.summary.finishedTasks + 1,
         },
       };
+
+    case CLOCK_GET_TIMER_SETTING:
+      return {
+        ...state,
+        timerSetting: action.payload,
+      };
+
+    case CLOCK_GET_SUMMARY:
+      return {
+        ...state,
+        summary: action.payload,
+      };
+
+    case CLOCK_GET_SUMMARY_FAIL:
+      return initialState;
+
+    case CLOCK_GET_TIMER_SETTING_FAIL:
+      return initialState;
 
     default:
       return state;

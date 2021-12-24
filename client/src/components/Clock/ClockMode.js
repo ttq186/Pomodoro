@@ -7,7 +7,7 @@ import {
   toggleClockStart,
 } from '../../actions/clockActions';
 
-const ClockMod = forwardRef((props, ref) => {
+const ClockMode = forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const timerSettingState = useSelector((state) => state.clock.timerSetting);
   const isStart = useSelector((state) => state.clock.isStart);
@@ -62,4 +62,4 @@ const ClockMod = forwardRef((props, ref) => {
   );
 });
 
-export default ClockMod;
+export default ClockMode;

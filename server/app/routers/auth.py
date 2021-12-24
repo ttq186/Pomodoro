@@ -9,7 +9,7 @@ from ..db import get_db
 from ..oauth2 import create_access_token
 
 
-router = APIRouter(prefix="/login", tags=["Authentication"])
+router = APIRouter(prefix="/api/login", tags=["Authentication"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 

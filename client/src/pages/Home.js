@@ -13,22 +13,35 @@ import {
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import {TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK } from '../constants/taskListConstants';
+import { TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK } from '../constants/taskListConstants';
 import Clock from '../components/Clock/Clock';
 import TaskList from '../components/Task/TaskList';
 import Header from '../components/Header';
 import Study from '../assets/icons/study.svg';
 import Summary from '../components/Summary';
+import { useEffect } from 'react';
+import { getTasksFromServer } from '../actions/taskListActions';
+import {
+  getSummaryFromServer,
+  getTimerSettingFromServer,
+} from '../actions/clockActions';
 
 const Home = () => {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const hasJustFinishedTask = useSelector(
     (state) => state.taskList.hasJustFinishedTask
   );
+  const userInfo = useSelector(state => state.user.userInfo);
 
   const handleCloseButtonClick = () => {
     dispatch({ type: TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK });
   };
+
+  useEffect(() => {
+    dispatch(getTasksFromServer());
+    dispatch(getTimerSettingFromServer());
+    dispatch(getSummaryFromServer());
+  }, [userInfo, dispatch]);
 
   return (
     <Box
@@ -84,7 +97,12 @@ const Home = () => {
             <Heading
               color='gray.200'
               textAlign='center'
-              fontSize={{ base: '20px', sm: '34px', md: '32px', lg: '37px' }}
+              fontSize={{
+                base: '20px',
+                sm: '34px',
+                md: '32px',
+                lg: '37px',
+              }}
               d={!hasJustFinishedTask ? 'block' : 'none'}
             >
               Keep calm and <Text as='s'>play</Text>{' '}

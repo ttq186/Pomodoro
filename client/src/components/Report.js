@@ -11,23 +11,23 @@ import {
 } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 
-const UserManualModal = () => {
+const Report = () => {
   const size = useBreakpointValue({ base: 'lg', md: '2xl', xl: '4xl' });
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Button
         mx={{ base: '10px', md: '20px' }}
+        mr={{ base: '20px', sm: '0' }}
         variant='customize'
-        bg='gray.100'
-        color='gray.800'
+        bg='gray.600'
         onClick={onOpen}
         size='sm'
         px={{ base: '1em', md: '1.2em' }}
         fontSize={{ base: '14px', md: '15px' }}
         h='35px'
       >
-        How To Use
+        Report
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} size={size}>
@@ -61,4 +61,4 @@ const UserManualModal = () => {
   );
 };
 
-export default UserManualModal;
+export default Report;

@@ -17,9 +17,7 @@ async def get_tasks(
 ):
     tasks_query = db.query(Task).filter_by(user_id=current_user.id).all()
     if not tasks_query:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="There aren't any tasks"
-        )
+        return []
 
     return tasks_query
 
@@ -67,6 +65,7 @@ async def update_task(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Task with id {id} not found"
         )
+
     task_query_stmt.update(payload.dict(exclude_unset=True))
     db.commit()
     db.refresh(updated_task)

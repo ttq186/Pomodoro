@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDisclosure } from '@chakra-ui/hooks';
 import {
@@ -21,7 +21,6 @@ import {
   NumberDecrementStepper,
   Tag,
   TagRightIcon,
-  Divider,
   Menu,
   MenuList,
   MenuButton,
@@ -47,8 +46,8 @@ const ClockModal = () => {
   const dispatch = useDispatch();
 
   const [alarmSound, setAlarmSound] = useState(timerSettingState.alarmSound);
-  const [tickingSpeed, setTickingSpeed] = useState(
-    timerSettingState.tickingSpeed
+  const [tickingSound, setTickingSound] = useState(
+    timerSettingState.tickingSound
   );
 
   const sessionRef = useRef(null);
@@ -65,7 +64,7 @@ const ClockModal = () => {
     },
     interrupt: true,
   });
-  const [playTickingSpeed] = useSound(ticking, {
+  const [playTickingSound] = useSound(ticking, {
     sprite: {
       fast: [0, 1000],
       slow: [5000, 2000],
@@ -82,7 +81,7 @@ const ClockModal = () => {
       longBreakTime: Math.round(+longBreakRef.current.value * 60),
       longBreakInterval: Math.floor(+longBreakIntervalRef.current.value),
       alarmSound,
-      tickingSpeed,
+      tickingSound,
     };
 
     dispatch(updateTimerSetting(updateTimerData));
@@ -90,8 +89,8 @@ const ClockModal = () => {
 
   const handleChooseSpeed = (value) => {
     const speedValue = value.toLowerCase().split(' ').join('');
-    playTickingSpeed({ id: speedValue });
-    setTickingSpeed(value);
+    playTickingSound({ id: speedValue });
+    setTickingSound(value);
   };
 
   const handleChooseSound = (value) => {
@@ -102,8 +101,13 @@ const ClockModal = () => {
 
   const handleCloseClick = () => {
     setAlarmSound(timerSettingState.alarmSound);
-    setTickingSpeed(timerSettingState.tickingSpeed);
+    setTickingSound(timerSettingState.tickingSound);
   };
+
+  useEffect(() => {
+    setAlarmSound(timerSettingState.alarmSound);
+    setTickingSound(timerSettingState.tickingSound);
+  }, [timerSettingState]);
 
   return (
     <>
@@ -124,23 +128,35 @@ const ClockModal = () => {
         size={size}
       >
         <ModalOverlay backdropFilter='blur(1px)' />
-        <ModalContent bg='gray.700' color='gray.100' mt='7em'>
+        <ModalContent
+          bg='#fcfcfc'
+          color='gray.600'
+          mt='7em'
+          borderTopRadius='lg'
+        >
           <ModalHeader
-            borderBottom='2px solid #f2f2f2'
+            borderTopRadius='md'
+            color='gray.300'
+            bg='gray.600'
             d='flex'
-            py={{ base: '5px', md: '10px' }}
+            py={{ base: '5px', md: '8px' }}
             mb={{ base: '0px', md: '10px' }}
+            borderBottom='4px solid #718096'
           >
-            <Image src={Clock} w={{ base: '20px', md: '30px' }} />
+            <Image src={Clock} w={{ base: '20px', md: '30px' }} mb='-5px' />
             <Text fontSize={{ base: '20px', md: '25px' }} ml='10px'>
               Timer Setting
             </Text>
           </ModalHeader>
-          <ModalCloseButton onClick={handleCloseClick} />
+          <ModalCloseButton
+            color='gray.300'
+            size='lg'
+            onClick={handleCloseClick}
+          />
           <ModalBody px='4%'>
-            <Box>
+            <Box pb='1.5em' borderBottom='2px solid #CBD5E0'>
               <Tag
-                bg='gray.200'
+                bg='gray.400'
                 fontSize={{ base: '14px', md: '15px' }}
                 py='3px'
                 fontWeight='600'
@@ -152,7 +168,7 @@ const ClockModal = () => {
               <Flex
                 justifyContent='space-between'
                 fontWeight='600'
-                color='gray.200'
+                color='gray.600'
                 fontSize='14px'
               >
                 <Box>
@@ -166,7 +182,7 @@ const ClockModal = () => {
                     max={60}
                     maxW={{ base: '20', md: '24' }}
                   >
-                    <NumberInputField ref={sessionRef} />
+                    <NumberInputField ref={sessionRef} borderWidth='2px' />
                     <NumberInputStepper>
                       <NumberIncrementStepper border='none' />
                       <NumberDecrementStepper border='none' />
@@ -185,7 +201,7 @@ const ClockModal = () => {
                     max={20}
                     maxW={{ base: '20', md: '24' }}
                   >
-                    <NumberInputField ref={shortBreakRef} />
+                    <NumberInputField ref={shortBreakRef} borderWidth='2px' />
                     <NumberInputStepper>
                       <NumberIncrementStepper border='none' />
                       <NumberDecrementStepper border='none' />
@@ -203,7 +219,7 @@ const ClockModal = () => {
                     max={40}
                     maxW={{ base: '20', md: '24' }}
                   >
-                    <NumberInputField ref={longBreakRef} />
+                    <NumberInputField ref={longBreakRef} borderWidth='2px' />
                     <NumberInputStepper>
                       <NumberIncrementStepper border='none' />
                       <NumberDecrementStepper border='none' />
@@ -213,11 +229,14 @@ const ClockModal = () => {
               </Flex>
             </Box>
 
-            <Divider my='1em' />
-
-            <Flex justifyContent='space-between' alignItems='center'>
+            <Flex
+              justifyContent='space-between'
+              alignItems='center'
+              py='1em'
+              borderBottom='2px solid #CBD5E0'
+            >
               <Tag
-                bg='gray.200'
+                bg='gray.400'
                 fontSize={{ base: '14px', md: '15px' }}
                 py='3px'
                 fontWeight='600'
@@ -238,7 +257,10 @@ const ClockModal = () => {
                 max={10}
                 maxW={{ base: '20', md: '24' }}
               >
-                <NumberInputField ref={longBreakIntervalRef} />
+                <NumberInputField
+                  ref={longBreakIntervalRef}
+                  borderWidth='2px'
+                />
                 <NumberInputStepper>
                   <NumberIncrementStepper border='none' />
                   <NumberDecrementStepper border='none' />
@@ -246,11 +268,14 @@ const ClockModal = () => {
               </NumberInput>
             </Flex>
 
-            <Divider my='1em' />
-
-            <Flex justifyContent='space-between' alignItems='center'>
+            <Flex
+              justifyContent='space-between'
+              alignItems='center'
+              py='1em'
+              borderBottom='2px solid #CBD5E0'
+            >
               <Tag
-                bg='gray.200'
+                bg='gray.400'
                 fontSize={{ base: '14px', md: '15px' }}
                 py='3px'
                 fontWeight='600'
@@ -264,6 +289,7 @@ const ClockModal = () => {
                   as={Button}
                   variant='customize'
                   bg='gray.600'
+                  color='gray.200'
                   size='sm'
                   rightIcon={<ChevronDownIcon />}
                 >
@@ -271,6 +297,7 @@ const ClockModal = () => {
                 </MenuButton>
                 <MenuList
                   bg='gray.600'
+                  color='gray.200'
                   border='none'
                   borderRadius='4px'
                   _hover={{ bg: 'gray.600' }}
@@ -302,11 +329,14 @@ const ClockModal = () => {
               </Menu>
             </Flex>
 
-            <Divider my='1em' />
-
-            <Flex justifyContent='space-between' alignItems='center'>
+            <Flex
+              justifyContent='space-between'
+              alignItems='center'
+              py='1em'
+              borderBottom='2px solid #CBD5E0'
+            >
               <Tag
-                bg='gray.200'
+                bg='gray.400'
                 fontSize={{ base: '14px', md: '15px' }}
                 py='3px'
                 fontWeight='600'
@@ -321,13 +351,15 @@ const ClockModal = () => {
                   as={Button}
                   variant='customize'
                   bg='gray.600'
+                  color='gray.200'
                   size='sm'
                   rightIcon={<ChevronDownIcon />}
                 >
-                  {tickingSpeed}
+                  {tickingSound}
                 </MenuButton>
                 <MenuList
                   bg='gray.600'
+                  color='gray.200'
                   border='none'
                   borderRadius='4px'
                   _hover={{ bg: 'gray.600' }}
@@ -335,7 +367,7 @@ const ClockModal = () => {
                   w='150px'
                 >
                   <MenuOptionGroup
-                    defaultValue={tickingSpeed}
+                    defaultValue={tickingSound}
                     type='radio'
                     onChange={(optionValue) => handleChooseSpeed(optionValue)}
                   >
@@ -353,11 +385,14 @@ const ClockModal = () => {
               </Menu>
             </Flex>
 
-            <Divider my='1em' />
-
-            <Flex justifyContent='space-between' alignItems='center'>
+            <Flex
+              justifyContent='space-between'
+              alignItems='center'
+              py='1em'
+              borderBottom='2px solid #CBD5E0'
+            >
               <Tag
-                bg='gray.200'
+                bg='gray.400'
                 fontSize={{ base: '14px', md: '15px' }}
                 py='3px'
                 fontWeight='600'
@@ -374,14 +409,15 @@ const ClockModal = () => {
           <ModalFooter>
             <Button
               variant='customize'
-              bg='gray.800'
+              bg='gray.700'
               px={{ base: '4em', md: '5em' }}
               mx='auto'
-              opacity='0.9'
-              _hover={{
-                bg: 'gray.100',
-                color: '#171923',
-              }}
+              color='gray.200'
+              // opacity='0.9'
+              // _hover={{
+              //   bg: 'gray.100',
+              //   color: '#171923',
+              // }}
               onClick={handleOkayClick}
             >
               Okay

@@ -43,7 +43,7 @@ class TaskOut(TaskBase):
     id: int
     is_finished: bool
     progress: int = Field(ge=0)
-    user_id: UUID
+    user_id: str
     created_at: datetime
 
     class Config:
@@ -72,7 +72,7 @@ class TokenData(BaseModel):
 class AlarmSoundEnum(str, Enum):
     bell = "Bell"
     digital = "Digital"
-    door_bell = "DoorBell"
+    door_bell = "Door Bell"
     kitchen = "Kitchen"
 
 

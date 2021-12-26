@@ -7,6 +7,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
@@ -15,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Pomodoro from '../assets/icons/pomodoro.svg';
 import UserManualModal from './UserManualModal';
 import Report from './Report';
+import Profile from './Profile';
 import { logout } from '../actions/userActions';
 
 const Header = () => {
@@ -23,7 +25,7 @@ const Header = () => {
 
   const handleLogOutClick = () => {
     dispatch(logout());
-  }
+  };
 
   return (
     <Flex
@@ -44,24 +46,32 @@ const Header = () => {
         <Image src={Pomodoro} w='50px' h='50px'></Image>
         <Link to='/'>Pomodoro</Link>
       </Flex>
-      
+
       <Box mt='0.7em'>
         <UserManualModal />
         <Report />
 
-        {userInfo ? (
+        {userInfo.email !== '@' ? (
           <Menu closeOnSelect={true} autoSelect={false}>
             <MenuButton
               as={Button}
               bg='gray.600'
               variant='customize'
               size='sm'
-              px={{ base: '1em', md: '1.2em' }}
+              maxW={{base: '100px', sm: '150px'}}
+              px='7px'
+              pl='10px'
+              isTruncated
               h='35px'
-              fontSize={{ base: '14px', md: '15px' }}
+              fontSize={{ base: '12px', sm: '15px' }}
               rightIcon={<ChevronDownIcon />}
+              textTransform='uppercase'
             >
-              TTQ
+              <Text isTruncated>
+                {userInfo.username
+                  ? userInfo.username
+                  : userInfo.email.split('@')[0]}
+              </Text>
             </MenuButton>
             <MenuList
               color='gray.800'
@@ -71,8 +81,10 @@ const Header = () => {
               w='130px'
               py='10px'
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem onClick={handleLogOutClick}>Logout</MenuItem>
+              <Profile />
+              <MenuItem pl='13.5%' onClick={handleLogOutClick}>
+                Logout
+              </MenuItem>
             </MenuList>
           </Menu>
         ) : (

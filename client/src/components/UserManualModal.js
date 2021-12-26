@@ -17,14 +17,14 @@ const UserManualModal = () => {
   return (
     <>
       <Button
-        mx={{ base: '10px', md: '20px' }}
+        mr={{ base: '10px', md: '20px' }}
         variant='customize'
         bg='gray.100'
         color='gray.800'
         onClick={onOpen}
         size='sm'
-        px={{ base: '1em', md: '1.2em' }}
-        fontSize={{ base: '14px', md: '15px' }}
+        px={{ base: '0.5em', md: '1.2em' }}
+        fontSize={{ base: '14px', sm: '15px' }}
         h='35px'
       >
         How To Use

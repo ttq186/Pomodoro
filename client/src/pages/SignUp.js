@@ -8,12 +8,26 @@ import {
   Button,
   Text,
   ScaleFade,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import Pomodoro from '../assets/icons/pomodoro.svg';
 
 const SignUp = () => {
+  const {
+    handleSubmit,
+    register,
+    getValues,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const handleFormSubmit = () => {
+    console.log('eror');
+  };
+
   return (
     <Box bg='gray.800'>
       <Flex
@@ -40,67 +54,117 @@ const SignUp = () => {
             alignSelf='center'
             mt='-3em'
             w={{ base: '90%', sm: '380px' }}
-            h={{ base: '400px', sm: '450px' }}
+            minH={{ base: '400px', sm: '450px' }}
             bg='#fff'
             borderRadius='5px'
             p={{ base: '1em', sm: '1.4em' }}
             pt={{ base: '1em', sm: '2em' }}
             color='gray.700'
           >
-            <FormControl>
-              <FormLabel htmlFor='email' fontWeight='600' d='inline-block'>
-                Email
-                <span style={{ color: '#E53E5E', marginLeft: '3px' }}>*</span>
-              </FormLabel>
-              <Input
-                id='email'
-                type='email'
-                placeholder='Enter your email address'
-                borderColor='gray.400'
-                focusBorderColor='gray.600'
-              />
-            </FormControl>
-            <FormControl mt='1.5em'>
-              <FormLabel htmlFor='password' fontWeight='600' d='inline-block'>
-                Password
-                <span style={{ color: '#E53E5E', marginLeft: '3px' }}>*</span>
-              </FormLabel>
-              <Input
-                id='password'
-                type='password'
-                placeholder='Enter your password'
-                borderColor='gray.400'
-                focusBorderColor='gray.600'
-              />
-            </FormControl>
-            <FormControl mt='1.5em' mb='0.5em'>
-              <FormLabel
-                htmlFor='confirm-password'
-                fontWeight='600'
-                d='inline-block'
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
+              <FormControl isInvalid={errors.email}>
+                <FormLabel htmlFor='email' fontWeight='600' d='inline-block'>
+                  Email
+                  <span style={{ color: '#E53E5E', marginLeft: '3px' }}>*</span>
+                </FormLabel>
+                <Input
+                  id='email'
+                  placeholder='Enter your email address'
+                  borderColor='gray.400'
+                  focusBorderColor='gray.600'
+                  {...register('email', {
+                    required: {
+                      value: true,
+                      message: 'Please fill in this field!',
+                    },
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: 'Invalid email format!',
+                    },
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.email && errors.email.message}
+                </FormErrorMessage>
+              </FormControl>
+              <FormControl mt='1.5em' isInvalid={errors.password}>
+                <FormLabel htmlFor='password' fontWeight='600' d='inline-block'>
+                  Password
+                  <span style={{ color: '#E53E5E', marginLeft: '3px' }}>*</span>
+                </FormLabel>
+                <Input
+                  id='password'
+                  type='password'
+                  placeholder='Enter your password'
+                  borderColor='gray.400'
+                  focusBorderColor='gray.600'
+                  {...register('password', {
+                    required: {
+                      value: true,
+                      message: 'Please fill in this field!',
+                    },
+                    minLength: {
+                      value: 8,
+                      message: 'Minimum length should be 8',
+                    },
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.password && errors.password.message}
+                </FormErrorMessage>
+              </FormControl>
+              <FormControl
+                mt='1.5em'
+                mb='0.5em'
+                isInvalid={errors.confirmPassword}
               >
-                Confirm Password
-                <span style={{ color: '#E53E5E', marginLeft: '3px' }}>*</span>
-              </FormLabel>
-              <Input
-                id='confirm-password'
-                type='password'
-                placeholder='Enter your password again'
-                borderColor='gray.400'
-                focusBorderColor='gray.600'
-              />
-            </FormControl>
+                <FormLabel
+                  htmlFor='confirm-password'
+                  fontWeight='600'
+                  d='inline-block'
+                >
+                  Confirm Password
+                  <span style={{ color: '#E53E5E', marginLeft: '3px' }}>*</span>
+                </FormLabel>
+                <Input
+                  id='confirm-password'
+                  type='password'
+                  placeholder='Enter your password again'
+                  borderColor='gray.400'
+                  focusBorderColor='gray.600'
+                  {...register('confirmPassword', {
+                    required: {
+                      value: true,
+                      message: 'Please fill in this field!',
+                    },
+                    minLength: {
+                      value: 8,
+                      message: 'Minimum length should be 8',
+                    },
+                    validate: {
+                      matchPassword: (value) =>
+                        value === getValues().password ||
+                        'Password does not match!',
+                    },
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.confirmPassword && errors.confirmPassword.message}
+                </FormErrorMessage>
+              </FormControl>
 
-            <Button
-              bg='gray.700'
-              variant='customize'
-              color='gray.100'
-              w='100%'
-              borderRadius='5px'
-              my={{ base: '1em', sm: '1.3em' }}
-            >
-              Sign Up
-            </Button>
+              <Button
+                type='submit'
+                bg='gray.700'
+                variant='customize'
+                color='gray.100'
+                w='100%'
+                borderRadius='5px'
+                my={{ base: '1em', sm: '1.3em' }}
+              >
+                Sign Up
+              </Button>
+            </form>
 
             <Flex
               justifyContent='space-between'

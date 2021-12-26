@@ -17,14 +17,13 @@ const Report = () => {
   return (
     <>
       <Button
-        mx={{ base: '10px', md: '20px' }}
-        mr={{ base: '20px', sm: '0' }}
+        mr={{ base: '0.8em', sm: '1em' }}
         variant='customize'
         bg='gray.600'
         onClick={onOpen}
         size='sm'
-        px={{ base: '1em', md: '1.2em' }}
-        fontSize={{ base: '14px', md: '15px' }}
+        px={{ base: '0.5em', md: '1.2em' }}
+        fontSize={{ base: '14px', sm: '15px' }}
         h='35px'
       >
         Report
@@ -33,28 +32,10 @@ const Report = () => {
       <Modal isOpen={isOpen} onClose={onClose} size={size}>
         <ModalOverlay backdropFilter='blur(1px)' />
         <ModalContent top={{ base: '0', sm: '10%', md: '20%' }} w='90%'>
-          <ModalHeader>
-            This app applies the Pomodoro technique, which improves your
-            productivity
-          </ModalHeader>
+          <ModalHeader>Coming soon...</ModalHeader>
           <Divider />
           <ModalCloseButton />
-          <ModalBody>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-            aperiam possimus provident sit expedita quis sunt consequuntur
-            maxime tempora adipisci eum, amet quaerat qui id soluta! Quidem,
-            saepe. Earum, cupiditate. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Ipsum aperiam possimus provident sit expedita quis
-            sunt consequuntur maxime tempora adipisci eum, amet quaerat qui id
-            soluta! Quidem, saepe. Earum, cupiditate. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Ipsum aperiam possimus provident sit
-            expedita quis sunt consequuntur maxime tempora adipisci eum, amet
-            quaerat qui id soluta! Quidem, saepe. Earum, cupiditate. Lorem ipsum
-            dolor sit amet consectetur adipisicing elit. Ipsum aperiam possimus
-            provident sit expedita quis sunt consequuntur maxime tempora
-            adipisci eum, amet quaerat qui id soluta! Quidem, saepe. Earum,
-            cupiditate.
-          </ModalBody>
+          <ModalBody py='100px'></ModalBody>
         </ModalContent>
       </Modal>
     </>

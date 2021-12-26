@@ -11,3 +11,14 @@ export const secondsToTime = (seconds) => {
   if (secondsLeft < 10) secondsLeft = '0' + secondsLeft;
   return minutes + ':' + secondsLeft;
 };
+
+export const getAxiosConfig = (tokenData) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `bearer ${tokenData.accessToken}`,
+    },
+  };
+
+  return config;
+};

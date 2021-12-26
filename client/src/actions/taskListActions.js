@@ -53,11 +53,11 @@ export const toggleHasJustFinishedTask = () => ({
 
 export const submitAddTask = (taskInfo) => async (dispatch) => {
   try {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `bearer ${userInfo.access_token}`,
+        Authorization: `bearer ${tokenData.accessToken}`,
       },
     };
 
@@ -66,28 +66,21 @@ export const submitAddTask = (taskInfo) => async (dispatch) => {
       taskInfo,
       config
     );
-    const newTask = {
-      id: data.id,
-      title: data.title,
-      notes: data.notes,
-      progress: data.progress,
-      target: data.target,
-      isFinished: data.is_finished,
-    };
+    
     dispatch({
       type: TASKLIST_SUBMIT_ADD_TASK,
-      payload: newTask,
+      payload: data,
     });
   } catch {}
 };
 
 export const submitModifyTask = (taskInfo) => async (dispatch) => {
   try {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `bearer ${userInfo.access_token}`,
+        Authorization: `bearer ${tokenData.accessToken}`,
       },
     };
 
@@ -96,27 +89,20 @@ export const submitModifyTask = (taskInfo) => async (dispatch) => {
       taskInfo,
       config
     );
-    const newTask = {
-      title: data.title,
-      notes: data.notes,
-      progress: data.progress,
-      target: data.target,
-      isFinished: data.is_finished,
-    };
     dispatch({
       type: TASKLIST_SUBMIT_MODIFY_TASK,
-      payload: newTask,
+      payload: data,
     });
   } catch {}
 };
 
 export const removeTask = (id) => async (dispatch) => {
   try {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `bearer ${userInfo.access_token}`,
+        Authorization: `bearer ${tokenData.accessToken}`,
       },
     };
 
@@ -130,11 +116,11 @@ export const removeTask = (id) => async (dispatch) => {
 
 export const getTasksFromServer = () => async (dispatch) => {
   try {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `bearer ${userInfo.access_token}`,
+        Authorization: `bearer ${tokenData.accessToken}`,
       },
     };
 

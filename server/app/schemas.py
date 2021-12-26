@@ -1,9 +1,9 @@
 from datetime import datetime
 from enum import Enum
 from typing import Optional
-from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import EmailStr, Field
+from fastapi_camelcase import CamelModel as BaseModel
 
 
 # User Schemas
@@ -16,6 +16,7 @@ class UserIn(UserBase):
 
 
 class UserOut(UserBase):
+    username: Optional[str] = None
     id: str
     created_at: datetime
     is_admin: bool
@@ -25,6 +26,7 @@ class UserOut(UserBase):
 
 
 class UserUpdate(BaseModel):
+    username: Optional[str] = None
     password: Optional[str] = None
 
 
@@ -41,10 +43,10 @@ class TaskIn(TaskBase):
 
 class TaskOut(TaskBase):
     id: int
-    is_finished: bool
+    is_finished: bool 
     progress: int = Field(ge=0)
-    user_id: str
-    created_at: datetime
+    user_id: str 
+    created_at: datetime 
 
     class Config:
         orm_mode = True
@@ -59,7 +61,7 @@ class TaskUpdate(BaseModel):
 
 
 # Token Schemas
-class Token(BaseModel):
+class TokenOut(BaseModel):
     access_token: str
     token_type: str
 

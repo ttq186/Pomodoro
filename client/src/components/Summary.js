@@ -50,7 +50,7 @@ const Summary = () => {
           fontWeight='600'
           fontSize={{ base: '13px', md: '16px' }}
         >
-          Today's Progress
+          Your's Progress
         </TagLabel>
       </Tag>
 

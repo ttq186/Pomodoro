@@ -20,7 +20,6 @@ import ticking from '../../assets/sounds/ticking-sound.mp3';
 
 const Clock = () => {
   const dispatch = useDispatch();
-  const [isValidSession, setValidSession] = useState(false);
 
   const clockState = useSelector((state) => state.clock);
   const hasChoseTask = useSelector((state) => state.taskList.hasChoseTask);
@@ -83,10 +82,14 @@ const Clock = () => {
         .join('');
       playTickingSound({ id: tickingSoundValue });
 
-      if (time === 1) setValidSession(true);
+      if (time === 1) {
+        if (clockMode === 'START_SESSION') dispatch(updateSummary(sessionTime));
+      }
+
       if (!store.getState().clock.isStart) return;
 
       time--;
+      document.title = `${secondsToTime(time)} - Time to focus`;
       dispatch(updateTimeLeft(time));
       await delay(1000);
     }
@@ -104,21 +107,24 @@ const Clock = () => {
 
     dispatch(toggleClockStart());
 
-    if (hasChoseTask) dispatch(updateTaskProgress());
-
-    if (clockMode === 'START_SESSION' && isValidSession) {
-      dispatch(updateSummary(sessionTime));
+    if (clockMode === 'SHORT_BREAK' || clockMode === 'LONG_BREAK') {
+      dispatch(switchClockMode({ mode: 'START_SESSION', time: sessionTime }));
+      return;
     }
+
+    if (hasChoseTask) dispatch(updateTaskProgress());
 
     if (store.getState().clock.totalSubSessions % longBreakInterval !== 0) {
       dispatch(switchClockMode({ mode: 'SHORT_BREAK', time: shortBreakTime }));
+      document.title = `${secondsToTime(shortBreakTime)} - Time to break`;
     } else {
       dispatch(switchClockMode({ mode: 'LONG_BREAK', time: longBreakTime }));
+      document.title = `${secondsToTime(longBreakTime)} - Time to break`;
     }
   };
 
   const stopCountdown = () => {
-    stop()
+    stop();
     dispatch(toggleClockStart());
   };
 

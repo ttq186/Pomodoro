@@ -43,6 +43,8 @@ const SignUp = () => {
     if (isSignedUpSuccess) navigate('/signin');
   });
 
+  document.title = 'Sign Up';
+
   return (
     <Box bg='gray.800'>
       <Flex

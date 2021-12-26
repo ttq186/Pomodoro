@@ -81,17 +81,17 @@ const Home = () => {
             <Center h='10%' my='1em'>
               <Alert
                 status='success'
-                bg='gray.100'
+                variant='left-accent'
                 borderRadius='sm'
                 mt='-1em'
                 w='lg'
                 d={hasJustFinishedTask ? 'flex' : 'none'}
               >
-                <AlertIcon color='gray.500' />
+                <AlertIcon />
                 <Box flex='1'>
-                  <AlertTitle color='gray.800'>Congratulations!</AlertTitle>
+                  <AlertTitle>Congratulations!</AlertTitle>
                   <AlertDescription display='block' color='gray.700'>
-                    You've just accomplished the this task. Keep it up!
+                    You've just accomplished this task. Keep it up!
                   </AlertDescription>
                 </Box>
                 <CloseButton

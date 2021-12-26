@@ -12,6 +12,8 @@ import {
   ScaleFade,
   Spinner,
   FormErrorMessage,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +26,8 @@ import { login } from '../actions/userActions';
 const SignIn = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.user);
-  const { loading, tokenData } = userLogin;
+  const { loading, tokenData, isloggedInSuccess, isSignedUpSuccess } =
+    userLogin;
 
   const navigate = useNavigate();
 
@@ -36,9 +39,9 @@ const SignIn = () => {
   } = useForm();
 
   const handleFormSubmit = () => {
-    const emailValue = getValues().email;
-    const passwordValue = getValues().password;
-    dispatch(login(emailValue, passwordValue));
+    const email = getValues().email;
+    const password = getValues().password;
+    dispatch(login(email, password));
   };
 
   useEffect(() => {
@@ -83,6 +86,31 @@ const SignIn = () => {
               pt={{ base: '1em', sm: '2em' }}
               color='gray.700'
             >
+              {isloggedInSuccess === false && (
+                <Alert
+                  status='error'
+                  borderRadius='sm'
+                  mt='-1em'
+                  mb='1em'
+                  fontSize='15px'
+                >
+                  <AlertIcon />
+                  Incorrect email or password. Try again!
+                </Alert>
+              )}
+              {isSignedUpSuccess === true && (
+                <Alert
+                  status='success'
+                  borderRadius='sm'
+                  mt={{ base: '0', md: '-1em' }}
+                  mb='1em'
+                  pl='10px'
+                  fontSize='14px'
+                >
+                  <AlertIcon mr='5px' />
+                  Your account has been created successfully!
+                </Alert>
+              )}
               <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <FormControl isInvalid={errors.email}>
                   <FormLabel htmlFor='email' fontWeight='600' d='inline-block'>

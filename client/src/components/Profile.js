@@ -32,7 +32,7 @@ const Profile = () => {
     register,
     getValues,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
 
   const handleFormSubmit = () => {
@@ -173,6 +173,7 @@ const Profile = () => {
                     {errors.confirmPassword && errors.confirmPassword.message}
                   </FormErrorMessage>
                 </FormControl>
+
                 <Button
                   type='submit'
                   w='50%'

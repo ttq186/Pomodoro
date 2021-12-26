@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from ..models import User
 from ..db import get_db
 from ..schemas import UserIn, UserOut, UserUpdate
-from ..utils import get_hashed_password
+from ..utils import get_hashed_password, generate_uuid
 from ..oauth2 import get_current_user
 
 
@@ -59,6 +59,11 @@ async def create_user(user_in: UserIn, db: Session = Depends(get_db)):
     hashed_password = get_hashed_password(user_in.password)
     user_dict = user_in.dict()
     user_dict["password"] = hashed_password
+
+    new_user_id = generate_uuid()
+    while db.query(User).filter_by(id=new_user_id).first() is not None:
+        new_user_id = generate_uuid()
+    user_dict["id"] = new_user_id
     new_user = User(**user_dict)
 
     db.add(new_user)

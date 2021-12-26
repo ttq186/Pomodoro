@@ -6,6 +6,9 @@ import {
   USER_LOGOUT_REQUEST,
   USER_LOGOUT_SUCCESS,
   USER_UPDATE_USER_INFO,
+  USER_SIGNUP_REQUEST,
+  USER_SIGNUP_SUCCESS,
+  USER_SIGNUP_FAIL,
 } from '../constants/userConstants';
 
 const tokenDataFromStorage = localStorage.getItem('tokenData')
@@ -26,22 +29,37 @@ export const userReducer = (state = initialState, action) => {
       return { ...initialState, loading: true };
 
     case USER_LOGIN_SUCCESS:
-      return { ...state, loading: false, tokenData: action.payload };
+      return {
+        ...state,
+        loading: false,
+        tokenData: action.payload,
+        isloggedInSuccess: true,
+      };
 
     case USER_LOGIN_FAIL:
-      return { ...initialState, loading: false };
+      return { ...initialState, loading: false, isloggedInSuccess: false };
 
     case USER_LOGOUT_REQUEST:
       return { ...initialState, loading: true, tokenData: null };
 
     case USER_LOGOUT_SUCCESS:
-      return {...initialState, tokenData: null};
+      return { ...initialState, tokenData: null };
 
     case USER_GET_USER_INFO:
       return { ...state, userInfo: action.payload };
 
     case USER_UPDATE_USER_INFO:
       return { ...state, userInfo: action.payload };
+
+    case USER_SIGNUP_REQUEST: {
+      return { ...state };
+    }
+
+    case USER_SIGNUP_SUCCESS:
+      return { ...state, isSignedUpSuccess: true };
+
+    case USER_SIGNUP_FAIL:
+      return { ...state, isSignedUpSuccess: false };
 
     default:
       return state;

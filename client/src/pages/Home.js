@@ -49,6 +49,8 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenData]);
 
+  document.title = 'Pomodoro Timer';
+
   return (
     <Box
       bg='gray.800'

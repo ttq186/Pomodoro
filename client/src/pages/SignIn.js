@@ -50,6 +50,8 @@ const SignIn = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenData]);
 
+  document.title = 'Sign In';
+
   return (
     <Box bg='gray.800'>
       <Flex

@@ -9,24 +9,39 @@ import {
   Text,
   ScaleFade,
   FormErrorMessage,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 import Pomodoro from '../assets/icons/pomodoro.svg';
+import { signUp } from '../actions/userActions';
 
 const SignUp = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isSignedUpSuccess = useSelector((state) => state.user.isSignedUpSuccess);
+
   const {
     handleSubmit,
     register,
     getValues,
     formState: { errors },
-    reset,
   } = useForm();
 
   const handleFormSubmit = () => {
-    console.log('eror');
+    const email = getValues().email;
+    const password = getValues().password;
+
+    dispatch(signUp(email, password));
   };
+
+  useEffect(() => {
+    if (isSignedUpSuccess) navigate('/signin');
+  });
 
   return (
     <Box bg='gray.800'>
@@ -61,6 +76,18 @@ const SignUp = () => {
             pt={{ base: '1em', sm: '2em' }}
             color='gray.700'
           >
+            {isSignedUpSuccess === false && (
+              <Alert
+                status='error'
+                borderRadius='sm'
+                mt='-1em'
+                mb='1em'
+                fontSize='15px'
+              >
+                <AlertIcon />
+                This email already exists. Try again!
+              </Alert>
+            )}
             <form onSubmit={handleSubmit(handleFormSubmit)}>
               <FormControl isInvalid={errors.email}>
                 <FormLabel htmlFor='email' fontWeight='600' d='inline-block'>

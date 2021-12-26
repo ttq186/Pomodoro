@@ -7,6 +7,9 @@ import {
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_REQUEST,
   USER_UPDATE_USER_INFO,
+  USER_SIGNUP_REQUEST,
+  USER_SIGNUP_SUCCESS,
+  USER_SIGNUP_FAIL,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async (dispatch) => {
@@ -45,6 +48,27 @@ export const logout = () => async (dispatch) => {
   localStorage.removeItem('tokenData');
   await delay(500);
   dispatch({ type: USER_LOGOUT_SUCCESS });
+};
+
+export const signUp = (email, password) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_SIGNUP_REQUEST });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    await axios.post(
+      'http://127.0.0.1:8000/api/users/',
+      { email, password },
+      config
+    );
+
+    dispatch({ type: USER_SIGNUP_SUCCESS });
+  } catch {
+    dispatch({ type: USER_SIGNUP_FAIL });
+  }
 };
 
 export const getUserInfoFromServer = () => async (dispatch) => {
@@ -86,4 +110,4 @@ export const updateUserInfo = (updatedUserInfo) => async (dispatch) => {
     );
     dispatch({ type: USER_UPDATE_USER_INFO, payload: data });
   } catch {}
-} 
+};

@@ -36,7 +36,7 @@ async def get_task(
     return task_query
 
 
-@router.post("/")
+@router.post("/", response_model=TaskOut)
 async def create_task(
     task_in: TaskIn,
     db: Session = Depends(get_db),
@@ -51,7 +51,7 @@ async def create_task(
     return new_task
 
 
-@router.put("/{id}", status_code=status.HTTP_200_OK)
+@router.put("/{id}", response_model=TaskOut)
 async def update_task(
     id: int,
     payload: TaskUpdate,

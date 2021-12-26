@@ -17,10 +17,7 @@ async def get_users(
     db: Session = Depends(get_db), current_user=Depends(get_current_user)
 ):
     if not current_user.is_admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have this privilege",
-        )
+        return [current_user]
 
     users_query = db.query(User).all()
     if not users_query:
@@ -77,21 +74,16 @@ async def update_user(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    if payload.password is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Password"
-        )
-
     user_query_stmt = db.query(User).filter_by(id=current_user.id)
     updated_user = user_query_stmt.first()
 
-    new_hashed_password = get_hashed_password(payload.password)
-    if new_hashed_password == update_user.password:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Password must be different from the previous one"
-        )
+    if payload.username is not None:
+        user_query_stmt.update({"username": payload.username})
 
-    user_query_stmt.update({"password": new_hashed_password})
+    if payload.password is not None:
+        new_hashed_password = get_hashed_password(payload.password)
+        user_query_stmt.update({"password": new_hashed_password})
+
     db.commit()
     db.refresh(updated_user)
 

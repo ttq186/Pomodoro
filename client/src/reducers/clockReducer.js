@@ -14,7 +14,7 @@ import {
 const initialState = {
   isStart: false,
   mode: 'START_SESSION',
-  timeLeft: 1500,
+  timeLeft: 10,
   totalSubSessions: 0,
   timerSetting: {
     sessionTime: 10,
@@ -28,7 +28,7 @@ const initialState = {
   summary: {
     totalTime: 0,
     totalSessions: 0,
-    finishedTasks: 0,
+    totalFinishedTasks: 0,
   },
 };
 
@@ -75,7 +75,7 @@ export const clockReducer = (state = initialState, action) => {
         ...state,
         summary: {
           ...state.summary,
-          finishedTasks: state.summary.finishedTasks + 1,
+          totalFinishedTasks: state.summary.totalFinishedTasks + 1,
         },
       };
 

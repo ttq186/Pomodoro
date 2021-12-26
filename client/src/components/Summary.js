@@ -13,7 +13,7 @@ import Happy from '../assets/icons/happy.svg';
 import Sad from '../assets/icons/sad.svg';
 
 const Summary = () => {
-  const { totalTime, totalSessions, finishedTasks } = useSelector(
+  const { totalTime, totalSessions, totalFinishedTasks } = useSelector(
     (state) => state.clock.summary
   );
 
@@ -89,7 +89,7 @@ const Summary = () => {
           >
             Task Done
           </StatLabel>
-          <StatNumber>{finishedTasks}</StatNumber>
+          <StatNumber>{totalFinishedTasks}</StatNumber>
         </Stat>
       </StatGroup>
     </Box>

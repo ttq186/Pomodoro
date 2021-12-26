@@ -2,28 +2,46 @@ import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
-  USER_LOGOUT,
+  USER_GET_USER_INFO,
+  USER_LOGOUT_REQUEST,
+  USER_LOGOUT_SUCCESS,
+  USER_UPDATE_USER_INFO,
 } from '../constants/userConstants';
 
-const userInfoFromStorage = localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo'))
+const tokenDataFromStorage = localStorage.getItem('tokenData')
+  ? JSON.parse(localStorage.getItem('tokenData'))
   : null;
 
-const initialState = { userInfo: userInfoFromStorage };
+const initialState = {
+  tokenData: tokenDataFromStorage,
+  userInfo: {
+    username: null,
+    email: '@',
+  },
+};
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return { loading: true };
+      return { ...initialState, loading: true };
 
     case USER_LOGIN_SUCCESS:
-      return { loading: false, userInfo: action.payload };
+      return { ...state, loading: false, tokenData: action.payload };
 
     case USER_LOGIN_FAIL:
-      return {};
+      return { ...initialState, loading: false };
 
-    case USER_LOGOUT:
-      return {};
+    case USER_LOGOUT_REQUEST:
+      return { ...initialState, loading: true, tokenData: null };
+
+    case USER_LOGOUT_SUCCESS:
+      return {...initialState, tokenData: null};
+
+    case USER_GET_USER_INFO:
+      return { ...state, userInfo: action.payload };
+
+    case USER_UPDATE_USER_INFO:
+      return { ...state, userInfo: action.payload };
 
     default:
       return state;

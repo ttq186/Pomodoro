@@ -133,6 +133,7 @@ const ClockModal = () => {
           color='gray.600'
           mt='7em'
           borderTopRadius='lg'
+          w={{ base: '90%' }}
         >
           <ModalHeader
             borderTopRadius='md'
@@ -413,11 +414,6 @@ const ClockModal = () => {
               px={{ base: '4em', md: '5em' }}
               mx='auto'
               color='gray.200'
-              // opacity='0.9'
-              // _hover={{
-              //   bg: 'gray.100',
-              //   color: '#171923',
-              // }}
               onClick={handleOkayClick}
             >
               Okay

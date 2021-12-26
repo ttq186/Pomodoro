@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -11,9 +11,11 @@ import {
   Divider,
   ScaleFade,
   Spinner,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
 
 import Pomodoro from '../assets/icons/pomodoro.svg';
 import GoogleIcon from '../assets/icons/google-icon.png';
@@ -22,26 +24,28 @@ import { login } from '../actions/userActions';
 const SignIn = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.user);
-  const { loading, userInfo } = userLogin;
+  const { loading, tokenData } = userLogin;
 
   const navigate = useNavigate();
 
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const {
+    handleSubmit,
+    register,
+    getValues,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmitForm = (e) => {
-    e.preventDefault();
-
-    const emailValue = emailRef.current.value;
-    const passwordValue = passwordRef.current.value;
+  const handleFormSubmit = () => {
+    const emailValue = getValues().email;
+    const passwordValue = getValues().password;
     dispatch(login(emailValue, passwordValue));
   };
 
   useEffect(() => {
-    if (userInfo) {
-      navigate('/');
-    }
-  }, [userInfo, navigate]);
+    if (tokenData) navigate('/');
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenData]);
 
   return (
     <Box bg='gray.800'>
@@ -72,15 +76,15 @@ const SignIn = () => {
               alignSelf='center'
               mt='-3em'
               w={{ base: '90%', sm: '380px' }}
-              h={{ base: '400px', sm: '450px' }}
+              minH={{ base: '400px', sm: '450px' }}
               bg='#fff'
               borderRadius='5px'
               p={{ base: '1em', sm: '1.4em' }}
               pt={{ base: '1em', sm: '2em' }}
               color='gray.700'
             >
-              <form onSubmit={handleSubmitForm}>
-                <FormControl>
+              <form onSubmit={handleSubmit(handleFormSubmit)}>
+                <FormControl isInvalid={errors.email}>
                   <FormLabel htmlFor='email' fontWeight='600' d='inline-block'>
                     Email
                     <span style={{ color: '#E53E5E', marginLeft: '3px' }}>
@@ -92,10 +96,22 @@ const SignIn = () => {
                     placeholder='Enter your email address'
                     borderColor='gray.400'
                     focusBorderColor='gray.600'
-                    ref={emailRef}
+                    {...register('email', {
+                      required: {
+                        value: true,
+                        message: 'Please fill in this field!',
+                      },
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: 'Invalid email format!',
+                      },
+                    })}
                   />
+                  <FormErrorMessage>
+                    {errors.email && errors.email.message}
+                  </FormErrorMessage>
                 </FormControl>
-                <FormControl mt='1.5em'>
+                <FormControl mt='1.5em' isInvalid={errors.password}>
                   <FormLabel
                     htmlFor='password'
                     fontWeight='600'
@@ -112,8 +128,20 @@ const SignIn = () => {
                     placeholder='Enter your password'
                     borderColor='gray.400'
                     focusBorderColor='gray.600'
-                    ref={passwordRef}
+                    {...register('password', {
+                      required: {
+                        value: true,
+                        message: 'Please fill in this field!',
+                      },
+                      minLength: {
+                        value: 8,
+                        message: 'Minimum length should be 8',
+                      },
+                    })}
                   />
+                  <FormErrorMessage>
+                    {errors.password && errors.password.message}
+                  </FormErrorMessage>
                 </FormControl>
                 <Button
                   type='submit'

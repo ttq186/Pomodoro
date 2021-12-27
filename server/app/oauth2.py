@@ -9,12 +9,11 @@ from .db import get_db
 from .models import User
 from .schemas import TokenData
 
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 SECRET_KEY = "d2d647edef55b0e8df4a61f34355e985dd2fd12fdc6bbb5f4b31db850bbf2faa"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):

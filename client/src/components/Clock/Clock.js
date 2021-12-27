@@ -109,6 +109,7 @@ const Clock = () => {
 
     if (clockMode === 'SHORT_BREAK' || clockMode === 'LONG_BREAK') {
       dispatch(switchClockMode({ mode: 'START_SESSION', time: sessionTime }));
+      document.title = `${secondsToTime(sessionTime)} - Time to focus`;
       return;
     }
 

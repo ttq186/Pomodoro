@@ -70,6 +70,10 @@ class TokenData(BaseModel):
     id: Optional[str] = None
 
 
+class GoogleToken(BaseModel):
+    token_id: str
+    
+
 # Timer Schemas
 class AlarmSoundEnum(str, Enum):
     bell = "Bell"

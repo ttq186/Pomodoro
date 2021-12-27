@@ -12,7 +12,7 @@ class User(Base):
     id = Column(String, primary_key=True, default=generate_uuid())
     username = Column(String)
     email = Column(String, nullable=False)
-    password = Column(String, nullable=False)
+    password = Column(String)
     is_admin = Column(Boolean, default=False)
     created_at = Column(
         DateTime(timezone=True), nullable=False, server_default=func.now()

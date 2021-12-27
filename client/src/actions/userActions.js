@@ -111,3 +111,29 @@ export const updateUserInfo = (updatedUserInfo) => async (dispatch) => {
     dispatch({ type: USER_UPDATE_USER_INFO, payload: data });
   } catch {}
 };
+
+export const loginViaGoogle = (tokenId) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_LOGIN_REQUEST });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.post(
+      'http://127.0.0.1:8000/api/login/google',
+      { tokenId },
+      config
+    );
+
+    localStorage.setItem('tokenData', JSON.stringify(data));
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({ type: USER_LOGIN_FAIL, payload: error.response.data.detail });
+  }
+};

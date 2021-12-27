@@ -37,7 +37,7 @@ export const userReducer = (state = initialState, action) => {
       };
 
     case USER_LOGIN_FAIL:
-      return { ...initialState, loading: false, isloggedInSuccess: false };
+      return { ...initialState, loading: false, isloggedInSuccess: false, errorMessage: action.payload };
 
     case USER_LOGOUT_REQUEST:
       return { ...initialState, loading: true, tokenData: null };

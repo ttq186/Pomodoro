@@ -66,10 +66,10 @@ const SignUp = () => {
       </Flex>
 
       <ScaleFade initialScale='0.8' in={true}>
-        <Flex h='90vh' justifyContent='center'>
+        <Flex h={{ base: '95vh', sm: '90vh' }} justifyContent='center'>
           <Box
             alignSelf='center'
-            mt='-3em'
+            mb='2em'
             w={{ base: '90%', sm: '380px' }}
             minH={{ base: '400px', sm: '450px' }}
             bg='#fff'
@@ -81,8 +81,8 @@ const SignUp = () => {
             {isSignedUpSuccess === false && (
               <Alert
                 status='error'
-                borderRadius='sm'
-                mt='-1em'
+                borderRadius='md'
+                mt={{ base: '0', sm: '-1em' }}
                 mb='1em'
                 fontSize='15px'
               >

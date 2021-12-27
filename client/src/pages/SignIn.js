@@ -20,14 +20,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
 import Pomodoro from '../assets/icons/pomodoro.svg';
-import GoogleIcon from '../assets/icons/google-icon.png';
 import { login } from '../actions/userActions';
+import GoogleLogin from '../components/GoogleLogin';
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.user);
-  const { loading, tokenData, isloggedInSuccess, isSignedUpSuccess } =
-    userLogin;
+  const {
+    loading,
+    tokenData,
+    isloggedInSuccess,
+    isSignedUpSuccess,
+    errorMessage,
+  } = userLogin;
 
   const navigate = useNavigate();
 
@@ -73,13 +78,13 @@ const SignIn = () => {
       </Flex>
 
       <ScaleFade initialScale='0.8' in={true}>
-        <Flex h='90vh' justifyContent='center'>
+        <Flex h={{ base: '95vh', sm: '90vh' }} justifyContent='center'>
           {loading ? (
             <Spinner size='xl' color='gray.200' speed='1.5s' mt='20%' />
           ) : (
             <Box
               alignSelf='center'
-              mt='-3em'
+              mb='2em'
               w={{ base: '90%', sm: '380px' }}
               minH={{ base: '400px', sm: '450px' }}
               bg='#fff'
@@ -91,19 +96,19 @@ const SignIn = () => {
               {isloggedInSuccess === false && (
                 <Alert
                   status='error'
-                  borderRadius='sm'
-                  mt='-1em'
+                  borderRadius='md'
+                  mt={{ base: '0', sm: '-1em' }}
                   mb='1em'
                   fontSize='15px'
                 >
                   <AlertIcon />
-                  Incorrect email or password. Try again!
+                  {errorMessage}
                 </Alert>
               )}
               {isSignedUpSuccess === true && (
                 <Alert
                   status='success'
-                  borderRadius='sm'
+                  borderRadius='md'
                   mt={{ base: '0', md: '-1em' }}
                   mb='1em'
                   pl='10px'
@@ -194,16 +199,7 @@ const SignIn = () => {
                 <Divider />
               </Flex>
 
-              <Button
-                bg='gray.300'
-                color='gray.700'
-                w='100%'
-                borderRadius='5px'
-                my={{ base: '0.7em', sm: '1.3em' }}
-              >
-                <Image src={GoogleIcon} w='20px' mx='0.5em' mt='-2px' /> Sign In
-                with Google
-              </Button>
+              <GoogleLogin />
 
               <Flex
                 justifyContent='space-between'

@@ -9,6 +9,8 @@ import {
   USER_SIGNUP_REQUEST,
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_FAIL,
+  USER_PASSWORD_RESET_FAIL,
+  USER_PASSWORD_RESET_SUCCESS,
 } from '../constants/userConstants';
 
 const tokenDataFromStorage = localStorage.getItem('tokenData')
@@ -37,7 +39,12 @@ export const userReducer = (state = initialState, action) => {
       };
 
     case USER_LOGIN_FAIL:
-      return { ...initialState, loading: false, isloggedInSuccess: false, errorMessage: action.payload };
+      return {
+        ...initialState,
+        loading: false,
+        isloggedInSuccess: false,
+        loginErrorMessage: action.payload,
+      };
 
     case USER_LOGOUT_REQUEST:
       return { ...initialState, loading: true, tokenData: null };
@@ -60,6 +67,12 @@ export const userReducer = (state = initialState, action) => {
 
     case USER_SIGNUP_FAIL:
       return { ...state, isSignedUpSuccess: false };
+
+    case USER_PASSWORD_RESET_FAIL:
+      return { ...state, errorMessage: action.payload };
+
+    case USER_PASSWORD_RESET_SUCCESS:
+      return { ...state, successMessage: action.payload };
 
     default:
       return state;

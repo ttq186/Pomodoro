@@ -1,12 +1,15 @@
+from datetime import timedelta
 from typing import List
 from fastapi import status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
+from jose import JWTError, jwt
 
 from ..models import User
 from ..db import get_db
-from ..schemas import UserIn, UserOut, UserUpdate
+from ..schemas import UserIn, UserOut, UserUpdate, UserBase
 from ..utils import get_hashed_password, generate_uuid
-from ..oauth2 import get_current_user
+from ..oauth2 import create_access_token, get_current_user
+from ..email_service import send_reset_email
 
 
 router = APIRouter(prefix="/api/users", tags=["Users"])
@@ -93,3 +96,62 @@ async def update_user(
     db.refresh(updated_user)
 
     return updated_user
+
+
+@router.post("/forgot-password")
+async def forgot_password(payload: UserBase, db: Session = Depends(get_db)):
+    user_query = db.query(User).filter_by(email=payload.email).first()
+
+    if user_query is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="This email does not exist. Try again!",
+        )
+    print(user_query.password)
+    if user_query.password is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Looks like this account has been created by Google sign in method. Try again!",
+        )
+
+    to_encode = {"id": user_query.id}
+    JWT_SECRET_KEY = (
+        "d2d647edef55b0e8df4a61f34355e985dd2fd12fdc6bbb5f4b31db850bbf2faa"
+        + user_query.password
+    )
+    reset_token = create_access_token(to_encode, timedelta(15), JWT_SECRET_KEY)
+    reset_link = f"http://localhost:3000/reset-password/{user_query.id}/{reset_token}"
+    send_reset_email(user_query.email, reset_link)
+
+    return {"detail": "Password reset requests successfully!"}
+
+
+@router.post("/reset-password/{id}/{token}")
+async def reset_password(
+    id: str, token: str, payload: UserUpdate, db: Session = Depends(get_db)
+):
+    user_query_stmt = db.query(User).filter_by(id=id)
+    user_query = user_query_stmt.first()
+    expired_exception = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="This reset link has expired. Try again!",
+    )
+    if user_query is None:
+        raise expired_exception
+
+    try:
+        JWT_SECRET_KEY = (
+            "d2d647edef55b0e8df4a61f34355e985dd2fd12fdc6bbb5f4b31db850bbf2faa"
+            + user_query.password
+        )
+        jwt.decode(token, JWT_SECRET_KEY, algorithms=["HS256"])
+
+        if payload.password is not None:
+            new_hashed_password = get_hashed_password(payload.password)
+            user_query_stmt.update({"password": new_hashed_password})
+            db.commit()
+            db.refresh(user_query)
+        return {"detail": "Reset password successfully!"}
+
+    except JWTError:
+        raise expired_exception

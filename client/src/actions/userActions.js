@@ -10,6 +10,8 @@ import {
   USER_SIGNUP_REQUEST,
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_FAIL,
+  USER_PASSWORD_RESET_FAIL,
+  USER_PASSWORD_RESET_SUCCESS,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async (dispatch) => {
@@ -38,7 +40,7 @@ export const login = (email, password) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    dispatch({ type: USER_LOGIN_FAIL });
+    dispatch({ type: USER_LOGIN_FAIL, payload: error.response.data.detail });
   }
 };
 
@@ -137,3 +139,50 @@ export const loginViaGoogle = (tokenId) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_FAIL, payload: error.response.data.detail });
   }
 };
+
+export const resetPassword = (email) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.post(
+      'http://127.0.0.1:8000/api/users/forgot-password',
+      { email },
+      config
+    );
+
+    dispatch({ type: USER_PASSWORD_RESET_SUCCESS, payload: data.detail });
+  } catch (error) {
+    const errorMessage = error.response.data.detail[0].msg
+      ? error.response.data.detail[0].msg
+      : error.response.data.detail;
+    dispatch({ type: USER_PASSWORD_RESET_FAIL, payload: errorMessage });
+  }
+};
+
+export const resetPasswordConfirm = (id, token, newPassword) => async (dispatch) => {
+  try {
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.post(
+      `http://127.0.0.1:8000/api/users/reset-password/${id}/${token}`,
+      { password: newPassword },
+      config
+    );
+
+    dispatch({ type: USER_PASSWORD_RESET_SUCCESS, payload: data.detail });
+  } catch (error) {
+    const errorMessage = error.response.data.detail[0].msg
+      ? error.response.data.detail[0].msg
+      : error.response.data.detail;
+    dispatch({ type: USER_PASSWORD_RESET_FAIL, payload: errorMessage });
+  }
+}

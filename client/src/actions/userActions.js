@@ -29,7 +29,7 @@ export const login = (email, password) => async (dispatch) => {
     formData.append('password', password);
 
     const { data } = await axios.post(
-      'http://127.0.0.1:8000/api/login/',
+      'http://178.128.17.56/api/login/',
       formData,
       config
     );
@@ -62,7 +62,7 @@ export const signUp = (email, password) => async (dispatch) => {
       },
     };
     await axios.post(
-      'http://127.0.0.1:8000/api/users/',
+      'http://178.128.17.56/api/users/',
       { email, password },
       config
     );
@@ -84,7 +84,7 @@ export const getUserInfoFromServer = () => async (dispatch) => {
     };
 
     const { data } = await axios.get(
-      'http://127.0.0.1:8000/api/users/',
+      'http://178.128.17.56/api/users/',
       config
     );
     const userInfo = {
@@ -106,7 +106,7 @@ export const updateUserInfo = (updatedUserInfo) => async (dispatch) => {
     };
 
     const { data } = await axios.put(
-      'http://127.0.0.1:8000/api/users/',
+      'http://178.128.17.56/api/users/',
       updatedUserInfo,
       config
     );
@@ -125,7 +125,7 @@ export const loginViaGoogle = (tokenId) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      'http://127.0.0.1:8000/api/login/google',
+      'http://178.128.17.56/api/login/google',
       { tokenId },
       config
     );
@@ -149,7 +149,7 @@ export const resetPassword = (email) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      'http://127.0.0.1:8000/api/users/forgot-password',
+      'http://178.128.17.56/api/users/forgot-password',
       { email },
       config
     );
@@ -173,7 +173,7 @@ export const resetPasswordConfirm = (id, token, newPassword) => async (dispatch)
     };
 
     const { data } = await axios.post(
-      `http://127.0.0.1:8000/api/users/reset-password/${id}/${token}`,
+      `http://178.128.17.56/api/users/reset-password/${id}/${token}`,
       { password: newPassword },
       config
     );

@@ -6,7 +6,6 @@ import {
   FormLabel,
   Input,
   Button,
-  Text,
   ScaleFade,
   FormErrorMessage,
   Alert,

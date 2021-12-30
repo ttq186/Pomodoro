@@ -42,7 +42,7 @@ export const updateTimerSetting = (timerSetting) => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getAxiosConfig(tokenData);
     const { data } = await axios.put(
-      'http://178.128.17.56/api/timers/',
+      'http://178.128.17.56:8000/api/timers/',
       timerSetting,
       config
     );
@@ -59,7 +59,7 @@ export const getTimerSettingFromServer = () => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getAxiosConfig(tokenData);
     const { data } = await axios.get(
-      'http://178.128.17.56/api/timers/',
+      'http://178.128.17.56:8000/api/timers/',
       config
     );
     dispatch({ type: CLOCK_GET_TIMER_SETTING, payload: data });
@@ -73,7 +73,7 @@ export const getSummaryFromServer = () => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getAxiosConfig(tokenData);
     const { data } = await axios.get(
-      'http://178.128.17.56/api/summary/',
+      'http://178.128.17.56:8000/api/summary/',
       config
     );
     const { totalTime, totalSessions, totalFinishedTasks } = data;

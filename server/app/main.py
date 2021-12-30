@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import user, task, auth, timer, summary
+from app.routers import user, task, auth, timer, summary
 
 app = FastAPI()
 
-origins = ["http://localhost:3000"]
+origins = ["http://localhost", "http://ttq186.xyz", "https://ttq186.xyz"]
 
 app.add_middleware(
     CORSMiddleware,

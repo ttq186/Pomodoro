@@ -78,7 +78,6 @@ const Profile = () => {
           <ModalBody p='0' as={Flex} justifyContent='space-between'>
             <Box
               w='30%'
-              bg='gray.300'
               bg='linear-gradient(0deg, rgba(74,85,104,1) 10%, rgba(113,128,150,1) 42%, rgba(203,213,224,1) 82%)'
               borderLeftRadius='md'
               d={{ base: 'none', sm: 'block' }}

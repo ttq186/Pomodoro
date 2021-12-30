@@ -12,7 +12,7 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';

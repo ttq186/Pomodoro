@@ -62,7 +62,7 @@ export const submitAddTask = (taskInfo) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      'http://127.0.0.1:8000/api/tasks/',
+      'http://178.128.17.56/api/tasks/',
       taskInfo,
       config
     );
@@ -85,7 +85,7 @@ export const submitModifyTask = (taskInfo) => async (dispatch) => {
     };
 
     const { data } = await axios.put(
-      `http://127.0.0.1:8000/api/tasks/${taskInfo.id}`,
+      `http://178.128.17.56/api/tasks/${taskInfo.id}`,
       taskInfo,
       config
     );
@@ -106,7 +106,7 @@ export const removeTask = (id) => async (dispatch) => {
       },
     };
 
-    await axios.delete(`http://127.0.0.1:8000/api/tasks/${id}`, config);
+    await axios.delete(`http://178.128.17.56/api/tasks/${id}`, config);
     dispatch({
       type: TASKLIST_REMOVE_TASK,
       payload: id,
@@ -125,7 +125,7 @@ export const getTasksFromServer = () => async (dispatch) => {
     };
 
     const { data } = await axios.get(
-      'http://127.0.0.1:8000/api/tasks/',
+      'http://178.128.17.56/api/tasks/',
       config
     );
     dispatch({ type: TASKLIST_GET_DATA, payload: data });

@@ -15,7 +15,7 @@ def send_reset_email(to_emails, reset_link):
 
     try:
         sg = SendGridAPIClient(
-            "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"
+            "sendgrid-api-key"
         )
         sg.send(message)
     except Exception as e:

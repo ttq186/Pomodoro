@@ -8,7 +8,7 @@ def send_reset_email(to_emails, reset_link):
         to_emails="anhkobiet123186@gmail.com",
         subject="Reset your password",
     )
-    message.template_id = "d-74a3967325ac45ff82d09fa31246433e"
+    message.template_id = "sendgrid-api-key"
     message.dynamic_template_data = {
         "resetLink": reset_link,
     }

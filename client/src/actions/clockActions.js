@@ -12,7 +12,7 @@ import {
   CLOCK_GET_TIMER_SETTING_FAIL,
   CLOCK_UPDATE_TOTAL_FINISHED_TASK,
 } from '../constants/clockConstants';
-import { getAxiosConfig } from '../utils';
+import { getRequestConfig } from '../utils';
 
 export const switchClockMode = ({ mode, time }) => ({
   type: CLOCK_SWITCH_MODE,
@@ -40,9 +40,9 @@ export const updateTotalFinishedTask = () => ({
 export const updateTimerSetting = (timerSetting) => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getAxiosConfig(tokenData);
+    const config = getRequestConfig(tokenData.accessToken);
     const { data } = await axios.put(
-      'http://178.128.17.56:8000/api/timers/',
+      'http://localhost:8000/api/timers/',
       timerSetting,
       config
     );
@@ -57,9 +57,9 @@ export const updateTimerSetting = (timerSetting) => async (dispatch) => {
 export const getTimerSettingFromServer = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getAxiosConfig(tokenData);
+    const config = getRequestConfig(tokenData.accessToken);
     const { data } = await axios.get(
-      'http://178.128.17.56:8000/api/timers/',
+      'http://localhost:8000/api/timers/',
       config
     );
     dispatch({ type: CLOCK_GET_TIMER_SETTING, payload: data });
@@ -71,9 +71,9 @@ export const getTimerSettingFromServer = () => async (dispatch) => {
 export const getSummaryFromServer = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getAxiosConfig(tokenData);
+    const config = getRequestConfig(tokenData.accessToken);
     const { data } = await axios.get(
-      'http://178.128.17.56:8000/api/summary/',
+      'http://localhost:8000/api/summary/',
       config
     );
     const { totalTime, totalSessions, totalFinishedTasks } = data;

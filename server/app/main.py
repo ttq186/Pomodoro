@@ -5,7 +5,7 @@ from app.routers import user, task, auth, timer, summary
 
 app = FastAPI()
 
-origins = ["http://localhost", "http://ttq186.xyz", "https://ttq186.xyz"]
+origins = ["http://localhost", "http://ttq186.xyz", "https://ttq186.xyz", "*"]
 
 app.add_middleware(
     CORSMiddleware,

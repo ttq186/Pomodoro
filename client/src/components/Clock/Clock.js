@@ -8,8 +8,14 @@ import {
   updateTimeLeft,
   updateSummary,
   switchClockMode,
+  updateTotalFinishedTask,
 } from '../../actions/clockActions';
-import { updateTaskProgress } from '../../actions/taskListActions';
+import {
+  toggleHasJustFinishedTask,
+  unChooseTask,
+  updateTaskFinish,
+  updateTaskProgress,
+} from '../../actions/taskListActions';
 import ClockModal from '../../components/Clock/ClockModal';
 import ClockMode from '../../components/Clock/ClockMode';
 import { secondsToTime } from '../../utils';
@@ -22,7 +28,7 @@ const Clock = () => {
   const dispatch = useDispatch();
 
   const clockState = useSelector((state) => state.clock);
-  const hasChoseTask = useSelector((state) => state.taskList.hasChoseTask);
+  const choseTask = useSelector((state) => state.taskList.choseTask);
   const timerSetting = clockState.timerSetting;
   const { sessionTime, shortBreakTime, longBreakTime, longBreakInterval } =
     timerSetting;
@@ -106,14 +112,23 @@ const Clock = () => {
     playAlarmSound({ id: alarmSoundValue });
 
     dispatch(toggleClockStart());
+    if (choseTask) {
+      let { id, target, progress, isFinished } = choseTask;
+      dispatch(updateTaskProgress(id, progress));
+
+      if (target === progress + 1) {
+        dispatch(unChooseTask());
+        dispatch(toggleHasJustFinishedTask());
+        dispatch(updateTaskFinish(id));
+        dispatch(updateTotalFinishedTask());
+      }
+    }
 
     if (clockMode === 'SHORT_BREAK' || clockMode === 'LONG_BREAK') {
       dispatch(switchClockMode({ mode: 'START_SESSION', time: sessionTime }));
       document.title = `${secondsToTime(sessionTime)} - Time to focus`;
       return;
     }
-
-    if (hasChoseTask) dispatch(updateTaskProgress());
 
     if (store.getState().clock.totalSubSessions % longBreakInterval !== 0) {
       dispatch(switchClockMode({ mode: 'SHORT_BREAK', time: shortBreakTime }));
@@ -125,7 +140,7 @@ const Clock = () => {
   };
 
   const stopCountdown = () => {
-    stop();
+    stop(); // stop current ticking sound
     dispatch(toggleClockStart());
   };
 
@@ -141,8 +156,8 @@ const Clock = () => {
 
   return (
     <Box
-      h={{ base: '240px', md: '350px' }}
-      w='lg'
+      h={{ base: '240px', sm: '280px', md: '330px', lg: '390px' }}
+      w='xl'
       bg='gray.700'
       borderRadius='md'
       pos='relative'
@@ -157,7 +172,7 @@ const Clock = () => {
         mt={{ base: '20px', md: '30px' }}
         mb='10px'
         fontWeight='500'
-        fontSize={{ base: '11px', md: '16px' }}
+        fontSize={{ base: '11px', md: '16px', lg: '18px' }}
       >
         <ClockMode
           isActive={mode.isStartSession}
@@ -175,16 +190,19 @@ const Clock = () => {
           ref={longBreakRef}
         />
       </Flex>
-      <Center fontSize={{ base: '85px', md: '130px' }} my='-15px'>
+      <Center
+        fontSize={{ base: '95px', sm: '120px', md: '130px', lg: '160px' }}
+        my='-20px'
+      >
         {secondsToTime(clockState.timeLeft)}
       </Center>
 
       <Button
         variant='customize'
-        fontSize={{ base: '19px', md: '25px' }}
+        fontSize={{ base: '19px', md: '27px' }}
         textTransform='uppercase'
         w='44%'
-        py={{ base: '15px', md: '23px' }}
+        py={{ base: '15px', md: '20px', lg: '26px' }}
         mt={{ base: '17px', md: '15px' }}
         borderRadius='sm'
         borderWidth='2px'

@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import {
   Box,
   Flex,
-  Image,
   FormControl,
   FormLabel,
   Input,
@@ -19,9 +18,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
-import Pomodoro from '../assets/icons/pomodoro.svg';
 import { login } from '../actions/userActions';
 import GoogleLogin from '../components/GoogleLogin';
+import SimpleHeader from '../components/SimpleHeader';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -59,23 +58,7 @@ const SignIn = () => {
 
   return (
     <Box bg='gray.800'>
-      <Flex
-        h='10vh'
-        alignItems='center'
-        fontWeight='600'
-        color='gray.400'
-        fontSize={{ base: '18px', md: '20px' }}
-        mx={{ base: '10px', md: '30px' }}
-        pt='0.5em'
-      >
-        <Image
-          src={Pomodoro}
-          mb='-1px'
-          w={{ base: '40px', md: '50px' }}
-          h={{ base: '40px', md: '50px' }}
-        ></Image>
-        <Link to='/'>Pomodoro</Link>
-      </Flex>
+      <SimpleHeader />
 
       <ScaleFade initialScale='0.8' in={true}>
         <Flex h={{ base: '95vh', sm: '90vh' }} justifyContent='center'>
@@ -84,9 +67,9 @@ const SignIn = () => {
           ) : (
             <Box
               alignSelf='center'
-              mb='2em'
-              w={{ base: '90%', sm: '380px' }}
-              minH={{ base: '400px', sm: '450px' }}
+              mb='3em'
+              w={{ base: '90%', sm: '385px' }}
+              minH={{ base: '400px', sm: '465px' }}
               bg='#fff'
               borderRadius='5px'
               p={{ base: '1em', sm: '1.4em' }}
@@ -120,7 +103,7 @@ const SignIn = () => {
               )}
               <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <FormControl isInvalid={errors.email}>
-                  <FormLabel htmlFor='email' fontWeight='600' d='inline-block'>
+                  <FormLabel htmlFor='email' fontSize='18px' fontWeight='600' d='inline-block'>
                     Email
                     <span style={{ color: '#E53E5E', marginLeft: '3px' }}>
                       *
@@ -151,6 +134,7 @@ const SignIn = () => {
                     htmlFor='password'
                     fontWeight='600'
                     d='inline-block'
+                    fontSize='18px'
                   >
                     Password
                     <span style={{ color: '#E53E5E', marginLeft: '3px' }}>
@@ -186,6 +170,7 @@ const SignIn = () => {
                   w='100%'
                   borderRadius='5px'
                   my={{ base: '1em', sm: '1.3em' }}
+                  fontSize={{base: '16px', sm: '18px'}}
                 >
                   Sign In
                 </Button>
@@ -203,7 +188,7 @@ const SignIn = () => {
 
               <Flex
                 justifyContent='space-between'
-                fontSize='15px'
+                fontSize='16px'
                 px='0.5em'
                 fontWeight='600'
               >

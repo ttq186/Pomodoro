@@ -16,7 +16,7 @@ import {
 
 const initialState = {
   isAddTask: false,
-  hasChoseTask: false,
+  choseTask: null,
   isModifyTask: false,
   hasJustFinishedTask: false,
   tasks: [],
@@ -29,23 +29,31 @@ export const taskListReducer = (state = initialState, action) => {
       return { ...state, isAddTask: !state.isAddTask };
 
     case TASKLIST_CHOOSE_TASK: {
+      const choseTask = state.tasks.find((item) => item.id === action.payload);
       const newTasks = state.tasks.map((item) => {
         return item.id !== action.payload
           ? { ...item, isDisabled: true }
           : item;
       });
 
-      return { ...state, hasChoseTask: true, tasks: newTasks };
+      return {
+        ...state,
+        choseTask,
+        tasks: newTasks,
+      };
     }
 
     case TASKLIST_UNCHOOSE_TASK: {
       const newTasks = state.tasks.map((item) => ({
         ...item,
         isDisabled: false,
-        isChecked: false,
       }));
 
-      return { ...state, hasChoseTask: false, tasks: newTasks };
+      return {
+        ...state,
+        choseTask: null,
+        tasks: newTasks,
+      };
     }
 
     case TASKLIST_SUBMIT_ADD_TASK: {
@@ -58,13 +66,17 @@ export const taskListReducer = (state = initialState, action) => {
         (item) => item.id === action.payload
       );
 
-      return { ...state, isModifyTask: true, modifiedTask };
+      return {
+        ...state,
+        isModifyTask: true,
+        modifiedTask: { ...modifiedTask, isFinished: false },
+      };
     }
 
     case TASKLIST_SUBMIT_MODIFY_TASK: {
       const newTasks = [
         { ...state.modifiedTask, ...action.payload },
-        ...state.tasks.filter((item) => item.id !== state.modifiedTask.id),
+        ...state.tasks.filter((item) => item.id !== action.payload.id),
       ];
 
       return { ...state, modifiedTask: null, tasks: newTasks };
@@ -74,23 +86,28 @@ export const taskListReducer = (state = initialState, action) => {
       return { ...state, modifiedTask: null };
 
     case TASKLIST_UPDATE_TASK_PROGRESS: {
-      const choseTask = state.tasks.find((item) => !item.isDisabled);
-      const updatedChoseTask = {
-        ...choseTask,
-        progress: choseTask.progress + 1,
+      const updatedChoseTask = action.payload;
+      const newChoseTask =
+        updatedChoseTask.progress !== updatedChoseTask.target
+          ? updatedChoseTask
+          : null;
+      const otherTasks = state.tasks.filter(
+        (item) => item.id !== updatedChoseTask.id
+      );
+      return {
+        ...state,
+        choseTask: newChoseTask,
+        tasks: [updatedChoseTask, ...otherTasks],
       };
-
-      const disabledTaskList = state.tasks.filter((item) => item.isDisabled);
-      return { ...state, tasks: [updatedChoseTask, ...disabledTaskList] };
     }
 
     case TASKLIST_UPDATE_TASK_FINISH: {
       const justFinishedTask = state.tasks.find(
-        (item) => item.id === action.payload
+        (item) => item.id === action.payload.id
       );
-      justFinishedTask.isFinished = true;
+
       const otherTasks = state.tasks.filter(
-        (item) => item.id !== action.payload
+        (item) => item.id !== action.payload.id
       );
 
       return { ...state, tasks: [justFinishedTask, ...otherTasks] };

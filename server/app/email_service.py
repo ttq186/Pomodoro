@@ -5,7 +5,7 @@ from sendgrid.helpers.mail import Mail
 def send_reset_email(to_emails, reset_link):
     message = Mail(
         from_email="tt.quang.186@gmail.com",
-        to_emails="anhkobiet123186@gmail.com",
+        to_emails="to_emails",
         subject="Reset your password",
     )
     message.template_id = "sendgrid-api-key"

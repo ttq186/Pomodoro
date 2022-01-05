@@ -23,16 +23,17 @@ const TaskList = () => {
   };
 
   return (
-    <Box bg='gray.700' maxH='560px' w='lg' py='1em' borderRadius='sm'>
+    <Box bg='gray.700' w='xl' py='0.8em' borderRadius='sm'>
       <Flex
         color='gray.300'
         align='center'
         borderBottom='2px solid #f2f2f2'
         pl='20px'
         mb='20px'
+        pb='5px'
       >
         <Image src={Todo} w={{ base: '20px', md: '25px' }} />
-        <Heading ml='10px' fontSize={{ base: '20px', md: '24px' }}>
+        <Heading ml='10px' fontSize={{ base: '20px', md: '27px' }}>
           Task List
         </Heading>
       </Flex>
@@ -56,7 +57,7 @@ const TaskList = () => {
           <Box
             overflowY='auto'
             mx='3px'
-            h='400px'
+            h={{ base: '300px', md: '440px' }}
             sx={{
               '&::-webkit-scrollbar': {
                 width: '7px',
@@ -94,7 +95,7 @@ const TaskList = () => {
           fontSize='22px'
           w='95%'
           mx='2.5%'
-          py='20px'
+          py='22px'
           mt='25px'
           mb='5px'
           borderRadius='sm'

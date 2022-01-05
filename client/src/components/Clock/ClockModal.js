@@ -40,7 +40,7 @@ import { updateTimerSetting } from '../../actions/clockActions';
 
 const ClockModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const size = useBreakpointValue({ base: 'sm', md: 'md' });
+  const size = useBreakpointValue({ base: 'sm', md: 'lg' });
 
   const timerSettingState = useSelector((state) => state.clock.timerSetting);
   const dispatch = useDispatch();
@@ -113,7 +113,7 @@ const ClockModal = () => {
     <>
       <Image
         src={Tweak}
-        w={{ base: '20px', md: '25px' }}
+        w={{ base: '20px', md: '28px' }}
         pos='absolute'
         right={{ base: '4px', md: '6px' }}
         top={{ base: '3px', md: '9px' }}
@@ -134,6 +134,7 @@ const ClockModal = () => {
           mt='7em'
           borderTopRadius='lg'
           w={{ base: '90%' }}
+          pb='1em'
         >
           <ModalHeader
             borderTopRadius='md'
@@ -151,15 +152,15 @@ const ClockModal = () => {
           </ModalHeader>
           <ModalCloseButton
             color='gray.300'
-            size='lg'
+            size={size}
             onClick={handleCloseClick}
           />
           <ModalBody px='4%'>
             <Box pb='1.5em' borderBottom='2px solid #CBD5E0'>
               <Tag
                 bg='gray.400'
-                fontSize={{ base: '14px', md: '15px' }}
-                py='3px'
+                fontSize={{ base: '14px', md: '16px' }}
+                py='4px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -172,12 +173,10 @@ const ClockModal = () => {
                 color='gray.600'
                 fontSize='14px'
               >
-                <Box>
+                <Box fontSize='md'>
                   <Text>Session</Text>
                   <NumberInput
                     focusBorderColor='gray.500'
-                    step={1}
-                    size='sm'
                     defaultValue={timerSettingState.sessionTime / 60}
                     min={0}
                     max={60}
@@ -191,12 +190,10 @@ const ClockModal = () => {
                   </NumberInput>
                 </Box>
 
-                <Box>
+                <Box fontSize='md'>
                   <Text>Short Break</Text>
                   <NumberInput
                     focusBorderColor='gray.500'
-                    step={1}
-                    size='sm'
                     defaultValue={timerSettingState.shortBreakTime / 60}
                     min={0}
                     max={20}
@@ -209,12 +206,12 @@ const ClockModal = () => {
                     </NumberInputStepper>
                   </NumberInput>
                 </Box>
-                <Box>
+                <Box fontSize='md'>
                   <Text>Long Break</Text>
                   <NumberInput
                     focusBorderColor='gray.500'
                     step={1}
-                    size='sm'
+                    size='md'
                     defaultValue={timerSettingState.longBreakTime / 60}
                     min={0}
                     max={40}
@@ -233,13 +230,13 @@ const ClockModal = () => {
             <Flex
               justifyContent='space-between'
               alignItems='center'
-              py='1em'
+              py='1.5em'
               borderBottom='2px solid #CBD5E0'
             >
               <Tag
                 bg='gray.400'
-                fontSize={{ base: '14px', md: '15px' }}
-                py='3px'
+                fontSize={{ base: '14px', md: '16px' }}
+                py='4px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -249,7 +246,7 @@ const ClockModal = () => {
               <NumberInput
                 focusBorderColor='gray.500'
                 step={1}
-                size='sm'
+                size='md'
                 defaultValue={timerSettingState.longBreakInterval}
                 isInvalid={
                   !Number.isInteger(timerSettingState.longBreakInterval)
@@ -277,8 +274,8 @@ const ClockModal = () => {
             >
               <Tag
                 bg='gray.400'
-                fontSize={{ base: '14px', md: '15px' }}
-                py='3px'
+                fontSize={{ base: '14px', md: '16px' }}
+                py='4px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -338,8 +335,8 @@ const ClockModal = () => {
             >
               <Tag
                 bg='gray.400'
-                fontSize={{ base: '14px', md: '15px' }}
-                py='3px'
+                fontSize={{ base: '14px', md: '16px' }}
+                py='4px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'
@@ -394,8 +391,8 @@ const ClockModal = () => {
             >
               <Tag
                 bg='gray.400'
-                fontSize={{ base: '14px', md: '15px' }}
-                py='3px'
+                fontSize={{ base: '14px', md: '16px' }}
+                py='4px'
                 fontWeight='600'
                 borderRadius='sm'
                 my='8px'

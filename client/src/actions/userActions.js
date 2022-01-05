@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import {
   USER_LOGIN_FAIL,
   USER_GET_USER_INFO,
@@ -13,23 +14,19 @@ import {
   USER_PASSWORD_RESET_FAIL,
   USER_PASSWORD_RESET_SUCCESS,
 } from '../constants/userConstants';
+import { getErrorMessageFromServer, getRequestConfig } from '../utils';
 
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
+    const config = getRequestConfig();
     const formData = new FormData();
     formData.append('username', email);
     formData.append('password', password);
 
     const { data } = await axios.post(
-      'http://178.128.17.56:8000/api/login/',
+      'http://localhost:8000/api/login/',
       formData,
       config
     );
@@ -40,9 +37,7 @@ export const login = (email, password) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    const errorMessage = error.response.data.detail[0].msg
-      ? error.response.data.detail[0].msg
-      : error.response.data.detail;
+    const errorMessage = getErrorMessageFromServer(error);
     dispatch({ type: USER_LOGIN_FAIL, payload: errorMessage });
   }
 };
@@ -59,13 +54,9 @@ export const signUp = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_SIGNUP_REQUEST });
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+    const config = getRequestConfig();
     await axios.post(
-      'http://178.128.17.56:8000/api/users/',
+      'http://localhost:8000/api/users/',
       { email, password },
       config
     );
@@ -79,15 +70,10 @@ export const signUp = (email, password) => async (dispatch) => {
 export const getUserInfoFromServer = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${tokenData.accessToken}`,
-      },
-    };
+    const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.get(
-      'http://178.128.17.56:8000/api/users/',
+      'http://localhost:8000/api/users/',
       config
     );
     const userInfo = {
@@ -101,15 +87,10 @@ export const getUserInfoFromServer = () => async (dispatch) => {
 export const updateUserInfo = (updatedUserInfo) => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${tokenData.accessToken}`,
-      },
-    };
+    const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.put(
-      'http://178.128.17.56:8000/api/users/',
+      'http://localhost:8000/api/users/',
       updatedUserInfo,
       config
     );
@@ -121,14 +102,10 @@ export const loginViaGoogle = (tokenId) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+    const config = getRequestConfig();
 
     const { data } = await axios.post(
-      'http://178.128.17.56:8000/api/login/google',
+      'http://localhost:8000/api/login/google',
       { tokenId },
       config
     );
@@ -139,56 +116,42 @@ export const loginViaGoogle = (tokenId) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    const errorMessage = error.response.data.detail[0].msg
-      ? error.response.data.detail[0].msg
-      : error.response.data.detail;
+    const errorMessage = getErrorMessageFromServer(error);
     dispatch({ type: USER_LOGIN_FAIL, payload: errorMessage });
   }
 };
 
 export const resetPassword = (email) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+    const config = getRequestConfig();
 
     const { data } = await axios.post(
-      'http://178.128.17.56:8000/api/users/forgot-password',
+      'http://localhost:8000/api/users/forgot-password',
       { email },
       config
     );
 
     dispatch({ type: USER_PASSWORD_RESET_SUCCESS, payload: data.detail });
   } catch (error) {
-    const errorMessage = error.response.data.detail[0].msg
-      ? error.response.data.detail[0].msg
-      : error.response.data.detail;
+    const errorMessage = getErrorMessageFromServer(error);
     dispatch({ type: USER_PASSWORD_RESET_FAIL, payload: errorMessage });
   }
 };
 
-export const resetPasswordConfirm = (id, token, newPassword) => async (dispatch) => {
-  try {
+export const resetPasswordConfirm =
+  (id, token, newPassword) => async (dispatch) => {
+    try {
+      const config = getRequestConfig();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+      const { data } = await axios.post(
+        `http://localhost:8000/api/users/reset-password/${id}/${token}`,
+        { password: newPassword },
+        config
+      );
 
-    const { data } = await axios.post(
-      `http://178.128.17.56:8000/api/users/reset-password/${id}/${token}`,
-      { password: newPassword },
-      config
-    );
-
-    dispatch({ type: USER_PASSWORD_RESET_SUCCESS, payload: data.detail });
-  } catch (error) {
-    const errorMessage = error.response.data.detail[0].msg
-      ? error.response.data.detail[0].msg
-      : error.response.data.detail;
-    dispatch({ type: USER_PASSWORD_RESET_FAIL, payload: errorMessage });
-  }
-}
+      dispatch({ type: USER_PASSWORD_RESET_SUCCESS, payload: data.detail });
+    } catch (error) {
+      const errorMessage = getErrorMessageFromServer(error);
+      dispatch({ type: USER_PASSWORD_RESET_FAIL, payload: errorMessage });
+    }
+  };

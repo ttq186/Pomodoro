@@ -14,14 +14,13 @@ import {
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK } from '../constants/taskListConstants';
 import Clock from '../components/Clock/Clock';
 import TaskList from '../components/Task/TaskList';
 import Header from '../components/Header';
 import Study from '../assets/icons/study.svg';
 import Summary from '../components/Summary';
 import { useEffect } from 'react';
-import { getTasksFromServer } from '../actions/taskListActions';
+import { getTasksFromServer,toggleHasJustFinishedTask } from '../actions/taskListActions';
 import {
   getSummaryFromServer,
   getTimerSettingFromServer,
@@ -37,7 +36,7 @@ const Home = () => {
   const tokenData = useSelector((state) => state.user.tokenData);
 
   const handleCloseButtonClick = () => {
-    dispatch({ type: TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK });
+    dispatch(toggleHasJustFinishedTask());
   };
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const Home = () => {
     dispatch(getTasksFromServer());
     dispatch(getTimerSettingFromServer());
     dispatch(getSummaryFromServer());
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenData]);
 
@@ -73,25 +72,30 @@ const Home = () => {
         >
           <Center
             h='100%'
-            w={{ base: '95%', sm: '80%', md: '60%', lg: '35%' }}
-            maxW={{ lg: '400px' }}
+            w={{ base: '95%', lg: '40%' }}
+            maxW={{ base: '420px', sm: '420px', md: '480px', lg: '450px' }}
+            maxH='580px'
+            mt={{base: '1em', lg: '0'}}
           >
             <TaskList />
           </Center>
 
-          <Box w={{ base: '95%', sm: '80%', md: '60%', lg: '55%' }}>
+          <Box
+            w={{ base: '95%', lg: '55%' }}
+            maxW={{ base: '420px', sm: '420px', md: '480px', lg: '560px' }}
+          >
             <Center h='10%' my='1em'>
               <Alert
                 status='success'
                 variant='left-accent'
                 borderRadius='sm'
-                mt='-1em'
-                w='lg'
+                mt='0em'
+                py='1.5em'
                 d={hasJustFinishedTask ? 'flex' : 'none'}
               >
                 <AlertIcon />
                 <Box flex='1'>
-                  <AlertTitle>Congratulations!</AlertTitle>
+                  <AlertTitle fontSize='20px'>Congratulations!</AlertTitle>
                   <AlertDescription display='block' color='gray.700'>
                     You've just accomplished this task. Keep it up!
                   </AlertDescription>
@@ -110,9 +114,10 @@ const Home = () => {
                 textAlign='center'
                 fontSize={{
                   base: '20px',
-                  sm: '34px',
+                  sm: '30px',
                   md: '32px',
-                  lg: '37px',
+                  lg: '38px',
+                  xl: '41px',
                 }}
                 d={!hasJustFinishedTask ? 'block' : 'none'}
               >

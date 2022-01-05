@@ -29,14 +29,16 @@ const Header = () => {
 
   return (
     <Flex
-      color='gray.100'
-      justifyContent='space-between'
+      h='10vh'
       alignItems='center'
+      justifyContent='space-between'
       flexDir={{ base: 'column', md: 'row' }}
+      fontWeight='600'
+      color='gray.100'
+      fontSize={{ base: '22px', md: '24px' }}
       mx={{ base: '10px', md: '30px' }}
-      mb={{ base: '-15px', md: '0px' }}
-      pt={{ base: '1em', sm: '1.45em' }}
-      pb={{ base: '0', sm: '0.5em' }}
+      pt='0.8em'
+      pb='0.1em'
     >
       <Flex
         alignItems='center'
@@ -85,6 +87,7 @@ const Header = () => {
               minW='0'
               w='130px'
               py='10px'
+              fontSize='16px'
             >
               <Profile />
               <MenuItem pl='13.5%' onClick={handleLogOutClick}>

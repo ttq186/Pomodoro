@@ -113,7 +113,7 @@ const Clock = () => {
 
     dispatch(toggleClockStart());
     if (choseTask) {
-      let { id, target, progress, isFinished } = choseTask;
+      let { id, target, progress } = choseTask;
       dispatch(updateTaskProgress(id, progress));
 
       if (target === progress + 1) {

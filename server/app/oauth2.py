@@ -13,10 +13,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 SECRET_KEY = "d2d647edef55b0e8df4a61f34355e985dd2fd12fdc6bbb5f4b31db850bbf2faa"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 10080
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None, JWT_SECRET_KEY: Optional[str] = None):
+def create_access_token(
+    data: dict,
+    expires_delta: Optional[timedelta] = None,
+    JWT_SECRET_KEY: Optional[str] = None,
+):
     to_encode = data.copy()
 
     if expires_delta:

@@ -15,6 +15,7 @@ import {
   TASKLIST_UPDATE_TASK_PROGRESS,
   TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK,
 } from '../constants/taskListConstants';
+import { getRequestConfig } from '../utils';
 
 export const toggleAddTask = () => ({
   type: TASKLIST_TOGGLE_ADD_TASK,
@@ -38,15 +39,6 @@ export const cancelModifyTask = () => ({
   type: TASKLIST_CANCEL_MODIFY_TASK,
 });
 
-export const updateTaskProgress = () => ({
-  type: TASKLIST_UPDATE_TASK_PROGRESS,
-});
-
-export const updateTaskFinish = (id) => ({
-  type: TASKLIST_UPDATE_TASK_FINISH,
-  payload: id,
-});
-
 export const toggleHasJustFinishedTask = () => ({
   type: TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK,
 });
@@ -54,19 +46,14 @@ export const toggleHasJustFinishedTask = () => ({
 export const submitAddTask = (taskInfo) => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${tokenData.accessToken}`,
-      },
-    };
+    const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.post(
-      'http://178.128.17.56:8000/api/tasks/',
+      'http://localhost:8000/api/tasks/',
       taskInfo,
       config
     );
-    
+
     dispatch({
       type: TASKLIST_SUBMIT_ADD_TASK,
       payload: data,
@@ -77,16 +64,11 @@ export const submitAddTask = (taskInfo) => async (dispatch) => {
 export const submitModifyTask = (taskInfo) => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${tokenData.accessToken}`,
-      },
-    };
+    const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.put(
-      `http://178.128.17.56:8000/api/tasks/${taskInfo.id}`,
-      taskInfo,
+      `http://localhost:8000/api/tasks/${taskInfo.id}`,
+      {...taskInfo, isFinished: false},
       config
     );
     dispatch({
@@ -99,14 +81,9 @@ export const submitModifyTask = (taskInfo) => async (dispatch) => {
 export const removeTask = (id) => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${tokenData.accessToken}`,
-      },
-    };
+    const config = getRequestConfig(tokenData.accessToken);
 
-    await axios.delete(`http://178.128.17.56:8000/api/tasks/${id}`, config);
+    await axios.delete(`http://localhost:8000/api/tasks/${id}`, config);
     dispatch({
       type: TASKLIST_REMOVE_TASK,
       payload: id,
@@ -117,19 +94,46 @@ export const removeTask = (id) => async (dispatch) => {
 export const getTasksFromServer = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `bearer ${tokenData.accessToken}`,
-      },
-    };
+    const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.get(
-      'http://178.128.17.56:8000/api/tasks/',
+      'http://localhost:8000/api/tasks/',
       config
     );
     dispatch({ type: TASKLIST_GET_DATA, payload: data });
   } catch {
     dispatch({ type: TASKLIST_GET_DATA_FAIL });
   }
+};
+
+export const updateTaskProgress =
+  (taskId, currentProgress) => async (dispatch) => {
+    try {
+      const tokenData = JSON.parse(localStorage.getItem('tokenData'));
+      const config = getRequestConfig(tokenData.accessToken);
+
+      const { data } = await axios.put(
+        `http://localhost:8000/api/tasks/${taskId}`,
+        { progress: currentProgress + 1 },
+        config
+      );
+      dispatch({ type: TASKLIST_UPDATE_TASK_PROGRESS, payload: data });
+    } catch {}
+  };
+
+export const updateTaskFinish = (taskId) => async (dispatch) => {
+  try {
+    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
+    const config = getRequestConfig(tokenData.accessToken);
+
+    const { data } = await axios.put(
+      `http://localhost:8000/api/tasks/${taskId}`,
+      { isFinished: true },
+      config
+    );
+    dispatch({
+      type: TASKLIST_UPDATE_TASK_FINISH,
+      payload: data,
+    });
+  } catch {}
 };

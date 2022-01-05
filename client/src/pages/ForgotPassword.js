@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Image,
   FormControl,
   Input,
   Button,
@@ -12,12 +11,11 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
-import Pomodoro from '../assets/icons/pomodoro.svg';
 import { resetPassword } from '../actions/userActions';
+import SimpleHeader from '../components/SimpleHeader';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -39,23 +37,7 @@ const SignIn = () => {
 
   return (
     <Box bg='gray.800'>
-      <Flex
-        h='10vh'
-        alignItems='center'
-        fontWeight='600'
-        color='gray.400'
-        fontSize={{ base: '18px', md: '20px' }}
-        mx={{ base: '10px', md: '30px' }}
-        pt='0.5em'
-      >
-        <Image
-          src={Pomodoro}
-          mb='-1px'
-          w={{ base: '40px', md: '50px' }}
-          h={{ base: '40px', md: '50px' }}
-        ></Image>
-        <Link to='/'>Pomodoro</Link>
-      </Flex>
+      <SimpleHeader />
 
       <ScaleFade initialScale='0.8' in={true}>
         <Flex h='90vh' justifyContent='center'>
@@ -65,7 +47,7 @@ const SignIn = () => {
               borderRadius='md'
               w={{ base: '90%', md: '80%' }}
               mt='1em'
-              maxH={{base: '120px', md: '80px'}}
+              maxH={{ base: '120px', md: '80px' }}
               fontSize={{ base: 'md', md: 'lg' }}
             >
               <AlertIcon />
@@ -75,6 +57,7 @@ const SignIn = () => {
           ) : (
             <Box
               alignSelf='center'
+              mb='3em'
               w={{ base: '90%', sm: '380px' }}
               minH={{ base: '200px', sm: '250px' }}
               bg='#fff'

@@ -65,11 +65,9 @@ async def update_task(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Task with id {id} not found"
         )
-
     task_query_stmt.update(payload.dict(exclude_unset=True))
     db.commit()
     db.refresh(updated_task)
-
     return updated_task
 
 

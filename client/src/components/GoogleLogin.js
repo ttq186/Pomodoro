@@ -33,6 +33,7 @@ const GoogleLogin = () => {
       borderRadius='5px'
       my={{ base: '0.7em', sm: '1.3em' }}
       onClick={signIn}
+      fontSize={{base: '16px', sm: '18px'}}
     >
       <Image src={GoogleIcon} w='20px' mx='0.5em' mt='-2px' /> Sign In with
       Google

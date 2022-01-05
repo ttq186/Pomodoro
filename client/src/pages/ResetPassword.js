@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Image,
   FormControl,
   FormLabel,
   Input,
@@ -12,18 +11,16 @@ import {
   AlertIcon,
   Heading,
 } from '@chakra-ui/react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Pomodoro from '../assets/icons/pomodoro.svg';
 import { resetPasswordConfirm } from '../actions/userActions';
+import SimpleHeader from '../components/SimpleHeader';
 
 const ResetPassword = () => {
   const dispatch = useDispatch();
-  const {successMessage, errorMessage} = useSelector(
-    (state) => state.user
-  );
+  const { successMessage, errorMessage } = useSelector((state) => state.user);
   const { id, token } = useParams();
   const {
     handleSubmit,
@@ -42,23 +39,7 @@ const ResetPassword = () => {
 
   return (
     <Box bg='gray.800'>
-      <Flex
-        h='10vh'
-        alignItems='center'
-        fontWeight='600'
-        color='gray.400'
-        fontSize={{ base: '18px', md: '20px' }}
-        mx={{ base: '10px', md: '30px' }}
-        pt='0.5em'
-      >
-        <Image
-          src={Pomodoro}
-          mb='-1px'
-          w={{ base: '40px', md: '50px' }}
-          h={{ base: '40px', md: '50px' }}
-        ></Image>
-        <Link to='/'>Pomodoro</Link>
-      </Flex>
+      <SimpleHeader />
 
       <ScaleFade initialScale='0.8' in={true}>
         <Flex h={{ base: '95vh', sm: '90vh' }} justifyContent='center'>

@@ -24,8 +24,8 @@ const UserManualModal = () => {
         onClick={onOpen}
         size='sm'
         px={{ base: '0.5em', md: '1.2em' }}
-        fontSize={{ base: '14px', sm: '15px' }}
-        h='35px'
+        fontSize={{ base: '14px', sm: '16px' }}
+        h={{base: '30px', md: '38px'}}
       >
         How To Use
       </Button>

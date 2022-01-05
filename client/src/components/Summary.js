@@ -20,26 +20,26 @@ const Summary = () => {
   return (
     <Box
       bg='gray.700'
-      h={{ base: '110px', md: '120px' }}
-      w='lg'
+      h={{ base: '110px', md: '130px' }}
+      w='xl'
       textAlign='center'
       color='gray.400'
       my={{ base: '20px', md: '30px' }}
+      pt='5px'
       borderRadius='md'
     >
       <Tag
         size='lg'
         bg='gray.800'
         px='13px'
-        mt='5px'
-        mb={{ base: '7px', md: '10px' }}
+        my='5px'
         borderRadius='sm'
         opacity='0.85'
       >
         <Image
           src={totalTime / 3600 >= 1 ? Happy : Sad}
-          w={{ base: '20px', md: '25px' }}
-          h={{ base: '20px', md: '25px' }}
+          w={{ base: '20px', md: '27px' }}
+          h={{ base: '20px', md: '27px' }}
           mr='5px'
           ml='-5px'
           mt='2px'
@@ -59,11 +59,11 @@ const Summary = () => {
           <StatLabel
             color='gray.300'
             fontWeight='600'
-            fontSize={{ base: '13px', md: '17px' }}
+            fontSize={{ base: '15px', md: '20px' }}
           >
             Total
           </StatLabel>
-          <StatNumber>
+          <StatNumber fontSize={{ base: '24px', md: '28px' }}>
             {(totalTime / 3600).toFixed(1) !== '0.0'
               ? `${(totalTime / 3600).toFixed(1)}h`
               : '0h'}
@@ -74,22 +74,22 @@ const Summary = () => {
           <StatLabel
             color='gray.300'
             fontWeight='600'
-            fontSize={{ base: '13px', md: '17px' }}
+            fontSize={{ base: '15px', md: '20px' }}
           >
             Session
           </StatLabel>
-          <StatNumber>{totalSessions}</StatNumber>
+          <StatNumber fontSize={{ base: '24px', md: '28px' }}>{totalSessions}</StatNumber>
         </Stat>
 
         <Stat>
           <StatLabel
             color='gray.300'
             fontWeight='600'
-            fontSize={{ base: '13px', md: '17px' }}
+            fontSize={{ base: '15px', md: '20px' }}
           >
             Task Done
           </StatLabel>
-          <StatNumber>{totalFinishedTasks}</StatNumber>
+          <StatNumber fontSize={{ base: '24px', md: '28px' }}>{totalFinishedTasks}</StatNumber>
         </Stat>
       </StatGroup>
     </Box>

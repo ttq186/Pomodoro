@@ -32,22 +32,27 @@ const Header = () => {
       color='gray.100'
       justifyContent='space-between'
       alignItems='center'
-      flexDir={{ base: 'column', sm: 'row' }}
+      flexDir={{ base: 'column', md: 'row' }}
       mx={{ base: '10px', md: '30px' }}
       mb={{ base: '-15px', md: '0px' }}
-      pt={{ base: '1em', sm: '1.2em' }}
+      pt={{ base: '1em', sm: '1.45em' }}
+      pb={{ base: '0', sm: '0.5em' }}
     >
       <Flex
         alignItems='center'
         fontWeight='600'
         color='gray.400'
-        fontSize='20px'
+        fontSize={{ base: '22px', md: '24px' }}
       >
-        <Image src={Pomodoro} w='50px' h='50px'></Image>
+        <Image
+          src={Pomodoro}
+          w={{ base: '45px', md: '55px' }}
+          h={{ base: '45px', md: '55px' }}
+        ></Image>
         <Link to='/'>Pomodoro</Link>
       </Flex>
 
-      <Box mt='0.7em'>
+      <Box mt={{base: '1em', md: '0'}}>
         <UserManualModal />
         <Report />
 
@@ -58,12 +63,12 @@ const Header = () => {
               bg='gray.600'
               variant='customize'
               size='sm'
-              maxW={{base: '100px', sm: '150px'}}
+              maxW={{ base: '100px', sm: '150px' }}
               px='7px'
               pl='10px'
               isTruncated
-              h='35px'
-              fontSize={{ base: '12px', sm: '15px' }}
+              h={{base: '30px', md: '38px'}}
+              fontSize={{ base: '12px', sm: '16px' }}
               rightIcon={<ChevronDownIcon />}
               textTransform='uppercase'
             >
@@ -93,8 +98,8 @@ const Header = () => {
             variant='customize'
             size='sm'
             px={{ base: '1em', md: '1.2em' }}
-            h='35px'
-            fontSize={{ base: '14px', md: '15px' }}
+            h={{base: '30px', md: '38px'}}
+            fontSize={{ base: '14px', md: '16px' }}
           >
             <Link to='/signin'>Sign In</Link>
           </Button>

@@ -13,7 +13,9 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  useBreakpointValue
 } from '@chakra-ui/react';
+
 import {
   submitAddTask,
   toggleAddTask,
@@ -24,6 +26,7 @@ import {
 
 const TaskForm = ({ title, target, progress, notes, id }) => {
   const [isValidForm, setValidForm] = useState(true);
+  const size = useBreakpointValue({ base: 'sm', md: 'md' });
 
   const inputTitleRef = useRef(null);
   const inputSessionRef = useRef(null);
@@ -36,7 +39,7 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
       dispatch(cancelModifyTask());
       return;
     }
-    
+
     dispatch(toggleAddTask());
   };
 
@@ -82,7 +85,7 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
   return (
     <Box
       as='form'
-      h='265px'
+      h='270px'
       mr='3px'
       bg='gray.600'
       mx='0.7em'
@@ -93,7 +96,7 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
         variant='flushed'
         placeholder='What is your target?'
         focusBorderColor='gray.700'
-        fontSize='lg'
+        fontSize={{ base: 'lg', md: 'xl' }}
         fontWeight='600'
         color='gray.200'
         ref={inputTitleRef}
@@ -104,7 +107,7 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
       <Flex justifyContent='space-between' alignItems='center' my='1em'>
         <Tag
           bg='gray.500'
-          fontSize='15px'
+          fontSize={{ base: 'sm', md: 'md' }}
           py='5px'
           fontWeight='600'
           borderRadius='sm'
@@ -132,7 +135,8 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
       </Flex>
 
       <Textarea
-        size='sm'
+        size={size}
+        borderRadius='sm'
         focusBorderColor='gray.700'
         bg='gray.500'
         color='gray.200'
@@ -162,6 +166,7 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
           variant='customize'
           color='gray.200'
           size='sm'
+          fontSize={{ base: 'sm', md: 'md' }}
           onClick={handleCancelClick}
         >
           Cancel
@@ -170,8 +175,9 @@ const TaskForm = ({ title, target, progress, notes, id }) => {
           type='submit'
           bg='gray.200'
           variant='customize'
-          size='sm'
           px='20px'
+          size='sm'
+          fontSize={{ base: 'sm', md: 'md' }}
           onClick={handleFormSubmit}
         >
           Save

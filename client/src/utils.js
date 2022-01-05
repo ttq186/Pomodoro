@@ -12,13 +12,23 @@ export const secondsToTime = (seconds) => {
   return minutes + ':' + secondsLeft;
 };
 
-export const getAxiosConfig = (tokenData) => {
+export const getErrorMessageFromServer = (error) => {
+  const errorMessage = error.response.data.detail[0].msg
+    ? error.response.data.detail[0].msg
+    : error.response.data.detail;
+  return errorMessage;
+};
+
+export const getRequestConfig = (accessToken) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `bearer ${tokenData.accessToken}`,
     },
   };
+  
+  if (accessToken) {
+    config.headers.Authorization = `bearer ${accessToken}`;
+  }
 
   return config;
 };

@@ -57,7 +57,7 @@ const Home = () => {
       pb={{ base: '100px', md: '100px', lg: '0px' }}
       overflowY='auto'
     >
-      <Header h='10%' />
+      <Header />
 
       {loading ? (
         <Spinner size='xl' color='gray.200' speed='1.5s' mt='20%' ml='48%' />

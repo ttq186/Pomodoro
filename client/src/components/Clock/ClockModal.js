@@ -41,6 +41,7 @@ import { updateTimerSetting } from '../../actions/clockActions';
 const ClockModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const size = useBreakpointValue({ base: 'sm', md: 'lg' });
+  const inputSize = useBreakpointValue({ base: 'sm', md: 'md' });
 
   const timerSettingState = useSelector((state) => state.clock.timerSetting);
   const dispatch = useDispatch();
@@ -181,6 +182,7 @@ const ClockModal = () => {
                     min={0}
                     max={60}
                     maxW={{ base: '20', md: '24' }}
+                    size={inputSize}
                   >
                     <NumberInputField ref={sessionRef} borderWidth='2px' />
                     <NumberInputStepper>
@@ -198,6 +200,7 @@ const ClockModal = () => {
                     min={0}
                     max={20}
                     maxW={{ base: '20', md: '24' }}
+                    size={inputSize}
                   >
                     <NumberInputField ref={shortBreakRef} borderWidth='2px' />
                     <NumberInputStepper>
@@ -211,11 +214,11 @@ const ClockModal = () => {
                   <NumberInput
                     focusBorderColor='gray.500'
                     step={1}
-                    size='md'
                     defaultValue={timerSettingState.longBreakTime / 60}
                     min={0}
                     max={40}
                     maxW={{ base: '20', md: '24' }}
+                    size={inputSize}
                   >
                     <NumberInputField ref={longBreakRef} borderWidth='2px' />
                     <NumberInputStepper>
@@ -246,7 +249,6 @@ const ClockModal = () => {
               <NumberInput
                 focusBorderColor='gray.500'
                 step={1}
-                size='md'
                 defaultValue={timerSettingState.longBreakInterval}
                 isInvalid={
                   !Number.isInteger(timerSettingState.longBreakInterval)
@@ -254,6 +256,7 @@ const ClockModal = () => {
                 min={1}
                 max={10}
                 maxW={{ base: '20', md: '24' }}
+                size={inputSize}
               >
                 <NumberInputField
                   ref={longBreakIntervalRef}

@@ -14,6 +14,8 @@ import {
 } from '../constants/clockConstants';
 import { getRequestConfig } from '../utils';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export const switchClockMode = ({ mode, time }) => ({
   type: CLOCK_SWITCH_MODE,
   payload: { mode, time },
@@ -42,7 +44,7 @@ export const updateTimerSetting = (timerSetting) => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
     const { data } = await axios.put(
-      'http://localhost:8000/api/timers/',
+      `${BASE_URL}/api/timers/`,
       timerSetting,
       config
     );
@@ -54,12 +56,12 @@ export const updateTimerSetting = (timerSetting) => async (dispatch) => {
   } catch {}
 };
 
-export const getTimerSettingFromServer = () => async (dispatch) => {
+export const getTimerSetting = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
     const { data } = await axios.get(
-      'http://localhost:8000/api/timers/',
+      `${BASE_URL}/api/timers/`,
       config
     );
     dispatch({ type: CLOCK_GET_TIMER_SETTING, payload: data });
@@ -68,12 +70,12 @@ export const getTimerSettingFromServer = () => async (dispatch) => {
   }
 };
 
-export const getSummaryFromServer = () => async (dispatch) => {
+export const getSummary = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
     const { data } = await axios.get(
-      'http://localhost:8000/api/summary/',
+      `${BASE_URL}/api/summary/`,
       config
     );
     const { totalTime, totalSessions, totalFinishedTasks } = data;

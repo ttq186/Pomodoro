@@ -11,7 +11,7 @@ const TaskItem = (props) => {
   const dispatch = useDispatch();
   const choseTask = useSelector((state) => state.taskList.choseTask);
 
-  const { id, title, notes, isDisabled, progress, target, isFinished } = {
+  const { id, title, notes, isDisabled, progress, target } = {
     ...props,
   };
 

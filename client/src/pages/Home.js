@@ -20,12 +20,12 @@ import Header from '../components/Header';
 import Study from '../assets/icons/study.svg';
 import Summary from '../components/Summary';
 import { useEffect } from 'react';
-import { getTasksFromServer,toggleHasJustFinishedTask } from '../actions/taskListActions';
 import {
-  getSummaryFromServer,
-  getTimerSettingFromServer,
-} from '../actions/clockActions';
-import { getUserInfoFromServer } from '../actions/userActions';
+  getTasks,
+  toggleHasJustFinishedTask,
+} from '../actions/taskListActions';
+import { getSummary, getTimerSetting } from '../actions/clockActions';
+import { getUserInfo } from '../actions/userActions';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -40,10 +40,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    dispatch(getUserInfoFromServer());
-    dispatch(getTasksFromServer());
-    dispatch(getTimerSettingFromServer());
-    dispatch(getSummaryFromServer());
+    dispatch(getUserInfo());
+    dispatch(getTasks());
+    dispatch(getTimerSetting());
+    dispatch(getSummary());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenData]);
@@ -75,7 +75,7 @@ const Home = () => {
             w={{ base: '95%', lg: '40%' }}
             maxW={{ base: '420px', sm: '420px', md: '480px', lg: '450px' }}
             maxH='580px'
-            mt={{base: '1em', lg: '0'}}
+            mt={{ base: '1em', lg: '0' }}
           >
             <TaskList />
           </Center>

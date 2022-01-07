@@ -13,9 +13,9 @@ export const secondsToTime = (seconds) => {
 };
 
 export const getErrorMessageFromServer = (error) => {
-  const errorMessage = error.response.data.detail[0].msg
-    ? error.response.data.detail[0].msg
-    : error.response.data.detail;
+  const errorMessage = error.response
+    ? error.response.data.detail || error.response.detail[0].msg
+    : 'Oops, something went wrong. Try later!';
   return errorMessage;
 };
 
@@ -25,7 +25,7 @@ export const getRequestConfig = (accessToken) => {
       'Content-Type': 'application/json',
     },
   };
-  
+
   if (accessToken) {
     config.headers.Authorization = `bearer ${accessToken}`;
   }

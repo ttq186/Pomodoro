@@ -8,7 +8,7 @@ from ..models import User
 from ..db import get_db
 from ..schemas import UserIn, UserOut, UserUpdate, UserBase
 from ..utils import get_hashed_password, generate_uuid
-from ..oauth2 import create_access_token, get_current_user
+from ..oauth2 import SECRET_KEY, create_access_token, get_current_user
 from ..email_service import send_reset_email
 
 
@@ -115,10 +115,7 @@ async def forgot_password(payload: UserBase, db: Session = Depends(get_db)):
         )
 
     to_encode = {"id": user_query.id}
-    JWT_SECRET_KEY = (
-        "d2d647edef55b0e8df4a61f34355e985dd2fd12fdc6bbb5f4b31db850bbf2faa"
-        + user_query.password
-    )
+    JWT_SECRET_KEY = SECRET_KEY + user_query.password
     reset_token = create_access_token(to_encode, timedelta(15), JWT_SECRET_KEY)
     reset_link = f"http://localhost:3000/reset-password/{user_query.id}/{reset_token}"
     send_reset_email(user_query.email, reset_link)
@@ -140,10 +137,7 @@ async def reset_password(
         raise expired_exception
 
     try:
-        JWT_SECRET_KEY = (
-            "d2d647edef55b0e8df4a61f34355e985dd2fd12fdc6bbb5f4b31db850bbf2faa"
-            + user_query.password
-        )
+        JWT_SECRET_KEY = SECRET_KEY + user_query.password
         jwt.decode(token, JWT_SECRET_KEY, algorithms=["HS256"])
 
         if payload.password is not None:

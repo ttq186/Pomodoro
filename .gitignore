@@ -1,3 +1,7 @@
+#### Global ####
+.vscode/
+.env
+
 #### Client ####
 # dependencies
 node_modules/
@@ -16,7 +20,6 @@ build
 .env.development.local
 .env.test.local
 .env.production.local
-.vscode/
 npm-debug.log*
 
 #### Server ####

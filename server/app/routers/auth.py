@@ -9,6 +9,7 @@ from ..models import User
 from ..utils import verify_password, generate_uuid
 from ..db import get_db
 from ..oauth2 import create_access_token
+from ..config import settings
 
 
 router = APIRouter(prefix="/api/login", tags=["Authentication"])
@@ -16,7 +17,7 @@ router = APIRouter(prefix="/api/login", tags=["Authentication"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 request = requests.Request()
-CLIENT_ID = "518727150893-4c80ip0io9lbbnmbrujki5l8cn4vrvvv.apps.googleusercontent.com"
+GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
 
 
 @router.post("/", response_model=TokenOut)
@@ -45,12 +46,15 @@ async def login(
 
 @router.post("/google", response_model=TokenOut)
 async def login_via_google(payload: GoogleToken, db: Session = Depends(get_db)):
-    user_data = id_token.verify_oauth2_token(payload.token_id, request, CLIENT_ID)
+    user_data = id_token.verify_oauth2_token(
+        payload.token_id, request, GOOGLE_CLIENT_ID
+    )
     user_id = None
     user_query = db.query(User).filter_by(email=user_data["email"]).first()
 
     # if email does not exist, create a new user with empty password
     if user_query is None:
+        # avoid duplicating user id
         new_user_id = generate_uuid()
         while db.query(User).filter_by(id=new_user_id).first() is not None:
             new_user_id = generate_uuid()
@@ -60,6 +64,7 @@ async def login_via_google(payload: GoogleToken, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(new_user)
         user_id = new_user.id
+
     else:
         # if user attempts to sign in with email that has already been created
         #  without signing in by google, raise error

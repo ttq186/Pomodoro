@@ -8,6 +8,8 @@ import {
   ScaleFade,
   SlideFade,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+
 import Todo from '../../assets/icons/todo.svg';
 import TaskItem from '../../components/Task/TaskItem';
 import TaskForm from './TaskForm';
@@ -15,10 +17,18 @@ import { toggleAddTask } from '../../actions/taskListActions';
 
 const TaskList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isSignedIn = useSelector((state) => state.user.tokenData);
   const taskListState = useSelector((state) => state.taskList);
   const modifiedTask = taskListState.modifiedTask;
 
   const handleAddTask = () => {
+    if (!isSignedIn) {
+      alert('Oops, you need to sign in to use this feature!');
+      navigate('/signin');
+      return;
+    }
     dispatch(toggleAddTask());
   };
 

@@ -3,17 +3,19 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
+from jose.exceptions import ExpiredSignatureError
 from sqlalchemy.orm import Session
 
 from .db import get_db
 from .models import User
 from .schemas import TokenData
+from .config import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-SECRET_KEY = "d2d647edef55b0e8df4a61f34355e985dd2fd12fdc6bbb5f4b31db850bbf2faa"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 10080
+SECRET_KEY = settings.SECRET_KEY
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+ALGORITHM = settings.ALGORITHM
 
 
 def create_access_token(
@@ -52,6 +54,11 @@ async def get_current_user(
             raise credentials_exception
         token_data = TokenData(id=id)
         user = db.query(User).filter_by(id=token_data.id).first()
+
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired!"
+        )
     except JWTError:
         raise credentials_exception
 

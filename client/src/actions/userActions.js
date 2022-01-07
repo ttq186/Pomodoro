@@ -16,6 +16,8 @@ import {
 } from '../constants/userConstants';
 import { getErrorMessageFromServer, getRequestConfig } from '../utils';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
@@ -26,7 +28,7 @@ export const login = (email, password) => async (dispatch) => {
     formData.append('password', password);
 
     const { data } = await axios.post(
-      'http://localhost:8000/api/login/',
+      `${BASE_URL}/api/login/`,
       formData,
       config
     );
@@ -55,11 +57,7 @@ export const signUp = (email, password) => async (dispatch) => {
     dispatch({ type: USER_SIGNUP_REQUEST });
 
     const config = getRequestConfig();
-    await axios.post(
-      'http://localhost:8000/api/users/',
-      { email, password },
-      config
-    );
+    await axios.post(`${BASE_URL}/api/users/`, { email, password }, config);
 
     dispatch({ type: USER_SIGNUP_SUCCESS });
   } catch {
@@ -67,21 +65,24 @@ export const signUp = (email, password) => async (dispatch) => {
   }
 };
 
-export const getUserInfoFromServer = () => async (dispatch) => {
+export const getUserInfo = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
 
-    const { data } = await axios.get(
-      'http://localhost:8000/api/users/',
-      config
-    );
+    const { data } = await axios.get(`${BASE_URL}/api/users/`, config);
     const userInfo = {
       username: data[0].username,
       email: data[0].email,
     };
     dispatch({ type: USER_GET_USER_INFO, payload: userInfo });
-  } catch {}
+  } catch (error) {
+    const errorMessage = error.response.data?.detail;
+    if (errorMessage === 'Token has expired!') {
+      alert('Your working session has timed out. Please sign in again!');
+      localStorage.removeItem('tokenData');
+    }
+  }
 };
 
 export const updateUserInfo = (updatedUserInfo) => async (dispatch) => {
@@ -90,7 +91,7 @@ export const updateUserInfo = (updatedUserInfo) => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.put(
-      'http://localhost:8000/api/users/',
+      `${BASE_URL}/api/users/`,
       updatedUserInfo,
       config
     );
@@ -105,7 +106,7 @@ export const loginViaGoogle = (tokenId) => async (dispatch) => {
     const config = getRequestConfig();
 
     const { data } = await axios.post(
-      'http://localhost:8000/api/login/google',
+      `${BASE_URL}/api/login/google`,
       { tokenId },
       config
     );
@@ -126,7 +127,7 @@ export const resetPassword = (email) => async (dispatch) => {
     const config = getRequestConfig();
 
     const { data } = await axios.post(
-      'http://localhost:8000/api/users/forgot-password',
+      `${BASE_URL}/api/users/forgot-password`,
       { email },
       config
     );
@@ -144,7 +145,7 @@ export const resetPasswordConfirm =
       const config = getRequestConfig();
 
       const { data } = await axios.post(
-        `http://localhost:8000/api/users/reset-password/${id}/${token}`,
+        `${BASE_URL}/api/users/reset-password/${id}/${token}`,
         { password: newPassword },
         config
       );

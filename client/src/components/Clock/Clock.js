@@ -23,10 +23,13 @@ import store from '../../store';
 import drumKick from '../../assets/sounds/drum-kick.mp3';
 import alarm from '../../assets/sounds/alarm-sound.mp3';
 import ticking from '../../assets/sounds/ticking-sound.mp3';
+import { useNavigate } from 'react-router-dom';
 
 const Clock = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const isSignedIn = useSelector((state) => state.user.tokenData);
   const clockState = useSelector((state) => state.clock);
   const choseTask = useSelector((state) => state.taskList.choseTask);
   const timerSetting = clockState.timerSetting;
@@ -145,6 +148,12 @@ const Clock = () => {
   };
 
   const handleToggleStart = async () => {
+    if (!isSignedIn) {
+      alert('Oops, you need to sign in to use this feature!');
+      navigate('/signin');
+      return;
+    }
+
     playSound();
     if (!store.getState().clock.isStart) {
       await startCountdown(clockState.timeLeft);

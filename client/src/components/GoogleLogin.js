@@ -8,8 +8,7 @@ import { loginViaGoogle } from '../actions/userActions';
 const GoogleLogin = () => {
   const dispatch = useDispatch();
 
-  const clientId =
-    '518727150893-4c80ip0io9lbbnmbrujki5l8cn4vrvvv.apps.googleusercontent.com';
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   const onSuccess = (res) => {
     dispatch(loginViaGoogle(res.tokenId));
@@ -33,7 +32,7 @@ const GoogleLogin = () => {
       borderRadius='5px'
       my={{ base: '0.7em', sm: '1.3em' }}
       onClick={signIn}
-      fontSize={{base: '16px', sm: '18px'}}
+      fontSize={{ base: '16px', sm: '18px' }}
     >
       <Image src={GoogleIcon} w='20px' mx='0.5em' mt='-2px' /> Sign In with
       Google

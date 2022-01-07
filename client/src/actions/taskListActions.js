@@ -17,6 +17,8 @@ import {
 } from '../constants/taskListConstants';
 import { getRequestConfig } from '../utils';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export const toggleAddTask = () => ({
   type: TASKLIST_TOGGLE_ADD_TASK,
 });
@@ -49,7 +51,7 @@ export const submitAddTask = (taskInfo) => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.post(
-      'http://localhost:8000/api/tasks/',
+      `${BASE_URL}/api/tasks/`,
       taskInfo,
       config
     );
@@ -67,8 +69,8 @@ export const submitModifyTask = (taskInfo) => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.put(
-      `http://localhost:8000/api/tasks/${taskInfo.id}`,
-      {...taskInfo, isFinished: false},
+      `${BASE_URL}/api/tasks/${taskInfo.id}`,
+      { ...taskInfo, isFinished: false },
       config
     );
     dispatch({
@@ -83,7 +85,7 @@ export const removeTask = (id) => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
 
-    await axios.delete(`http://localhost:8000/api/tasks/${id}`, config);
+    await axios.delete(`${BASE_URL}/api/tasks/${id}`, config);
     dispatch({
       type: TASKLIST_REMOVE_TASK,
       payload: id,
@@ -91,15 +93,12 @@ export const removeTask = (id) => async (dispatch) => {
   } catch {}
 };
 
-export const getTasksFromServer = () => async (dispatch) => {
+export const getTasks = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
 
-    const { data } = await axios.get(
-      'http://localhost:8000/api/tasks/',
-      config
-    );
+    const { data } = await axios.get(`${BASE_URL}/api/tasks/`, config);
     dispatch({ type: TASKLIST_GET_DATA, payload: data });
   } catch {
     dispatch({ type: TASKLIST_GET_DATA_FAIL });
@@ -113,7 +112,7 @@ export const updateTaskProgress =
       const config = getRequestConfig(tokenData.accessToken);
 
       const { data } = await axios.put(
-        `http://localhost:8000/api/tasks/${taskId}`,
+        `${BASE_URL}/api/tasks/${taskId}`,
         { progress: currentProgress + 1 },
         config
       );
@@ -127,7 +126,7 @@ export const updateTaskFinish = (taskId) => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.put(
-      `http://localhost:8000/api/tasks/${taskId}`,
+      `${BASE_URL}/api/tasks/${taskId}`,
       { isFinished: true },
       config
     );

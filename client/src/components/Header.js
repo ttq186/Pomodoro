@@ -54,7 +54,7 @@ const Header = () => {
         <Link to='/'>Pomodoro</Link>
       </Flex>
 
-      <Box mt={{base: '1em', md: '0'}}>
+      <Box mt={{ base: '0.5em', md: '0' }}>
         <UserManualModal />
         <Report />
 
@@ -69,7 +69,7 @@ const Header = () => {
               px='7px'
               pl='10px'
               isTruncated
-              h={{base: '30px', md: '38px'}}
+              h={{ base: '30px', md: '38px' }}
               fontSize={{ base: '12px', sm: '16px' }}
               rightIcon={<ChevronDownIcon />}
               textTransform='uppercase'
@@ -101,7 +101,7 @@ const Header = () => {
             variant='customize'
             size='sm'
             px={{ base: '1em', md: '1.2em' }}
-            h={{base: '30px', md: '38px'}}
+            h={{ base: '30px', md: '38px' }}
             fontSize={{ base: '14px', md: '16px' }}
           >
             <Link to='/signin'>Sign In</Link>

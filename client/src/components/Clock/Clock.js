@@ -65,6 +65,12 @@ const Clock = () => {
     interrupt: true,
   });
 
+  const [playTickingNoneSound] = useSound(ticking, {
+    sprite: { none: [0, 200] },
+    interrupt: true,
+    volume: 0.01,
+  });
+
   useEffect(() => {
     const time =
       clockMode === 'START_SESSION'
@@ -85,14 +91,18 @@ const Clock = () => {
     if (time > 0) await delay(500);
 
     while (time > 0) {
-      let tickingSoundValue = timerSetting.tickingSound
-        .toLowerCase()
-        .split(' ')
-        .join('');
-      playTickingSound({ id: tickingSoundValue });
+      let tickingSoundValue = timerSetting.tickingSound.toLowerCase();
+      if (tickingSoundValue === 'none')
+        playTickingNoneSound({ id: tickingSoundValue });
+      else 
+        playTickingSound({ id: tickingSoundValue });
 
       if (time === 1) {
-        if (clockMode === 'START_SESSION') dispatch(updateSummary(sessionTime));
+        if (clockMode === 'START_SESSION') {
+          const newTotalTime = clockState.summary.totalTime + sessionTime;
+          const newTotalSessions = clockState.summary.totalSessions + 1;
+          dispatch(updateSummary(newTotalTime, newTotalSessions));
+        }
       }
 
       if (!store.getState().clock.isStart) return;
@@ -113,7 +123,6 @@ const Clock = () => {
       .split(' ')
       .join('');
     playAlarmSound({ id: alarmSoundValue });
-
     dispatch(toggleClockStart());
     if (choseTask) {
       let { id, target, progress } = choseTask;

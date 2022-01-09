@@ -65,7 +65,7 @@ const Home = () => {
         <Flex
           justifyContent='space-between'
           px={{ base: '2%', md: '1%', xl: '8%' }}
-          mt='2em'
+          mt={{base: '3em', md: '2em'}}
           mx='auto'
           flexDir={{ base: 'column-reverse', lg: 'row' }}
           alignItems='center'
@@ -113,10 +113,10 @@ const Home = () => {
                 color='gray.200'
                 textAlign='center'
                 fontSize={{
-                  base: '20px',
+                  base: '6.5vw',
                   sm: '30px',
-                  md: '32px',
-                  lg: '38px',
+                  md: '34px',
+                  lg: '39px',
                   xl: '41px',
                 }}
                 d={!hasJustFinishedTask ? 'block' : 'none'}

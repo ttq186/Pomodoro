@@ -25,11 +25,6 @@ export const toggleClockStart = () => ({
   type: CLOCK_TOGGLE_START,
 });
 
-export const updateSummary = (sessionTime) => ({
-  type: CLOCK_UPDATE_SUMMARY,
-  payload: sessionTime,
-});
-
 export const updateTimeLeft = (timeLeft) => ({
   type: CLOCK_UPDATE_TIME_LEFT,
   payload: timeLeft,
@@ -60,10 +55,7 @@ export const getTimerSetting = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
-    const { data } = await axios.get(
-      `${BASE_URL}/api/timers/`,
-      config
-    );
+    const { data } = await axios.get(`${BASE_URL}/api/timers/`, config);
     dispatch({ type: CLOCK_GET_TIMER_SETTING, payload: data });
   } catch {
     dispatch({ type: CLOCK_GET_TIMER_SETTING_FAIL });
@@ -74,10 +66,7 @@ export const getSummary = () => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
-    const { data } = await axios.get(
-      `${BASE_URL}/api/summary/`,
-      config
-    );
+    const { data } = await axios.get(`${BASE_URL}/api/summary/`, config);
     const { totalTime, totalSessions, totalFinishedTasks } = data;
     dispatch({
       type: CLOCK_GET_SUMMARY,
@@ -87,3 +76,21 @@ export const getSummary = () => async (dispatch) => {
     dispatch({ type: CLOCK_GET_SUMMARY_FAIL });
   }
 };
+
+export const updateSummary =
+  (newTotalTime, newTotalSessions) => async (dispatch) => {
+    try {
+      const tokenData = JSON.parse(localStorage.getItem('tokenData'));
+      const config = getRequestConfig(tokenData.accessToken);
+      const { data } = await axios.put(
+        `${BASE_URL}/api/summary/`,
+        { totalTime: newTotalTime, totalSessions: newTotalSessions },
+        config
+      );
+
+      dispatch({
+        type: CLOCK_UPDATE_SUMMARY,
+        payload: data,
+      });
+    } catch {}
+  };

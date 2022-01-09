@@ -52,7 +52,7 @@ const SignUp = () => {
         <Flex h={{ base: '95vh', sm: '90vh' }} justifyContent='center'>
           <Box
             alignSelf='center'
-            mb='3em'
+            mb={{base: '10vh', sm: '3em'}}
             w={{ base: '90%', sm: '385px' }}
             minH={{ base: '400px', sm: '465px' }}
             bg='#fff'

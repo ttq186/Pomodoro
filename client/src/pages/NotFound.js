@@ -9,9 +9,9 @@ const NotFound = () => {
     <Box bg='gray.800' h='100vh'>
       <SimpleHeader />
 
-      <Center color='gray.100' mt='5%' d='flex'  fontWeight='600'>
-        <Text fontSize='150px' mr='20px'>404</Text>
-        <Text fontSize='50px'> Page Not Found</Text>
+      <Center color='gray.100' mt={{base: '15%', sm: '5%'}} d='flex' flexDir={{base: 'column', sm: 'row'}} fontWeight='600'>
+        <Text fontSize={{base: '80px', md: '150px'}} mr='20px'>404</Text>
+        <Text fontSize={{base: '10vw', sm: '35px', md: '50px'}}> Page Not Found</Text>
       </Center>
     </Box>
   );

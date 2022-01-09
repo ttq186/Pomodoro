@@ -77,7 +77,7 @@ export const getUserInfo = () => async (dispatch) => {
     };
     dispatch({ type: USER_GET_USER_INFO, payload: userInfo });
   } catch (error) {
-    const errorMessage = error.response.data?.detail;
+    const errorMessage = getErrorMessageFromServer(error);
     if (errorMessage === 'Token has expired!') {
       alert('Your working session has timed out. Please sign in again!');
       localStorage.removeItem('tokenData');

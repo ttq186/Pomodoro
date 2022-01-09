@@ -63,11 +63,7 @@ export const clockReducer = (state = initialState, action) => {
       return {
         ...state,
         totalSubSessions: state.totalSubSessions + 1,
-        summary: {
-          ...state.summary,
-          totalTime: state.summary.totalTime + action.payload,
-          totalSessions: state.summary.totalSessions + 1,
-        },
+        summary: { ...action.payload },
       };
 
     case CLOCK_UPDATE_TOTAL_FINISHED_TASK:

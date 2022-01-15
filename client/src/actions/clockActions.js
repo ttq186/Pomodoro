@@ -10,7 +10,6 @@ import {
   CLOCK_GET_TIMER_SETTING,
   CLOCK_UPDATE_TIMER_SETTING,
   CLOCK_GET_TIMER_SETTING_FAIL,
-  CLOCK_UPDATE_TOTAL_FINISHED_TASK,
 } from '../constants/clockConstants';
 import { getRequestConfig } from '../utils';
 
@@ -28,10 +27,6 @@ export const toggleClockStart = () => ({
 export const updateTimeLeft = (timeLeft) => ({
   type: CLOCK_UPDATE_TIME_LEFT,
   payload: timeLeft,
-});
-
-export const updateTotalFinishedTask = () => ({
-  type: CLOCK_UPDATE_TOTAL_FINISHED_TASK,
 });
 
 export const updateTimerSetting = (timerSetting) => async (dispatch) => {
@@ -78,13 +73,13 @@ export const getSummary = () => async (dispatch) => {
 };
 
 export const updateSummary =
-  (newTotalTime, newTotalSessions) => async (dispatch) => {
+  (updatedSummary) => async (dispatch) => {
     try {
       const tokenData = JSON.parse(localStorage.getItem('tokenData'));
       const config = getRequestConfig(tokenData.accessToken);
       const { data } = await axios.put(
         `${BASE_URL}/api/summary/`,
-        { totalTime: newTotalTime, totalSessions: newTotalSessions },
+        updatedSummary,
         config
       );
 

@@ -8,7 +8,6 @@ import {
   CLOCK_GET_TIMER_SETTING,
   CLOCK_UPDATE_TIMER_SETTING,
   CLOCK_GET_TIMER_SETTING_FAIL,
-  CLOCK_UPDATE_TOTAL_FINISHED_TASK,
 } from '../constants/clockConstants';
 
 const initialState = {
@@ -64,15 +63,6 @@ export const clockReducer = (state = initialState, action) => {
         ...state,
         totalSubSessions: state.totalSubSessions + 1,
         summary: { ...action.payload },
-      };
-
-    case CLOCK_UPDATE_TOTAL_FINISHED_TASK:
-      return {
-        ...state,
-        summary: {
-          ...state.summary,
-          totalFinishedTasks: state.summary.totalFinishedTasks + 1,
-        },
       };
 
     case CLOCK_GET_TIMER_SETTING:

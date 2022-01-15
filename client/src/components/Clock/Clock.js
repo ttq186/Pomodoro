@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Flex, Center, Button } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import useSound from 'use-sound';
 
 import {
@@ -8,7 +9,6 @@ import {
   updateTimeLeft,
   updateSummary,
   switchClockMode,
-  updateTotalFinishedTask,
 } from '../../actions/clockActions';
 import {
   toggleHasJustFinishedTask,
@@ -23,7 +23,7 @@ import store from '../../store';
 import drumKick from '../../assets/sounds/drum-kick.mp3';
 import alarm from '../../assets/sounds/alarm-sound.mp3';
 import ticking from '../../assets/sounds/ticking-sound.mp3';
-import { useNavigate } from 'react-router-dom';
+import noneSound from '../../assets/sounds/none-sound.mp3';
 
 const Clock = () => {
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const Clock = () => {
     isLongBreak: clockMode === 'LONG_BREAK' ? true : false,
   };
 
-  const [playSound] = useSound(drumKick);
+  const [playButtonSound] = useSound(drumKick);
   const [playAlarmSound] = useSound(alarm, {
     sprite: {
       bell: [0, 2000],
@@ -64,90 +64,121 @@ const Clock = () => {
     },
     interrupt: true,
   });
-
-  const [playTickingNoneSound] = useSound(ticking, {
-    sprite: { none: [0, 200] },
+  const [playTickingNoneSound] = useSound(noneSound, {
+    sprite: { none: [0, 2000] },
     interrupt: true,
     volume: 0.01,
   });
 
   useEffect(() => {
-    const time =
+    const timeByMode =
       clockMode === 'START_SESSION'
         ? sessionTime
         : clockMode === 'SHORT_BREAK'
         ? shortBreakTime
         : longBreakTime;
 
-    dispatch(updateTimeLeft(time));
-
+    dispatch(updateTimeLeft(timeByMode));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionTime, shortBreakTime, longBreakTime]);
 
-  const startCountdown = async (time) => {
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const playClockTickingSound = () => {
+    const tickingSoundValue = timerSetting.tickingSound.toLowerCase();
+    if (tickingSoundValue === 'none') {
+      playTickingNoneSound({ id: tickingSoundValue });
+    } else {
+      playTickingSound({ id: tickingSoundValue });
+    }
+  };
 
+  const handleUpdateSummary = () => {
+    const newTotalTime = clockState.summary.totalTime + sessionTime;
+    const newTotalSessions = clockState.summary.totalSessions + 1;
+    dispatch(
+      updateSummary({
+        totalTime: newTotalTime,
+        totalSessions: newTotalSessions,
+      })
+    );
+  };
+
+  const startCountdown = async (timeLeft) => {
     dispatch(toggleClockStart());
-    if (time > 0) await delay(500);
 
-    while (time > 0) {
-      let tickingSoundValue = timerSetting.tickingSound.toLowerCase();
-      if (tickingSoundValue === 'none')
-        playTickingNoneSound({ id: tickingSoundValue });
-      else 
-        playTickingSound({ id: tickingSoundValue });
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    // delay 0.5s for smoother clock toggling state
+    if (timeLeft > 0) await delay(500);
 
-      if (time === 1) {
-        if (clockMode === 'START_SESSION') {
-          const newTotalTime = clockState.summary.totalTime + sessionTime;
-          const newTotalSessions = clockState.summary.totalSessions + 1;
-          dispatch(updateSummary(newTotalTime, newTotalSessions));
-        }
+    while (timeLeft > 0) {
+      playClockTickingSound();
+
+      if (timeLeft === 1 && clockMode === 'START_SESSION') {
+        handleUpdateSummary();
       }
-
+      // Stop countdown if stop button is clicked
       if (!store.getState().clock.isStart) return;
 
-      time--;
-      document.title = `${secondsToTime(time)} - Time to focus`;
-      dispatch(updateTimeLeft(time));
+      timeLeft--;
+      document.title = `${secondsToTime(timeLeft)} - Time to focus`;
+      dispatch(updateTimeLeft(timeLeft));
       await delay(1000);
     }
-
     handleFinishCountdown();
   };
 
-  const handleFinishCountdown = () => {
-    stop();
+  const playClockAlarmSound = () => {
     let alarmSoundValue = timerSetting.alarmSound
       .toLowerCase()
       .split(' ')
       .join('');
     playAlarmSound({ id: alarmSoundValue });
-    dispatch(toggleClockStart());
+  };
+
+  const switchToStartSessionMode = () => {
+    dispatch(switchClockMode({ mode: 'START_SESSION', time: sessionTime }));
+    document.title = `${secondsToTime(sessionTime)} - Time to focus`;
+  };
+
+  const switchToShortBreakMode = () => {
+    dispatch(switchClockMode({ mode: 'SHORT_BREAK', time: shortBreakTime }));
+    document.title = `${secondsToTime(shortBreakTime)} - Time to break`;
+  };
+
+  const switchToLongBreakMode = () => {
+    dispatch(switchClockMode({ mode: 'LONG_BREAK', time: longBreakTime }));
+    document.title = `${secondsToTime(longBreakTime)} - Time to break`;
+  };
+
+  const handleFinishCountdown = () => {
+    stopCountdown();
+    playClockAlarmSound();
+
+    if (clockMode === 'SHORT_BREAK' || clockMode === 'LONG_BREAK') {
+      switchToStartSessionMode();
+      return;
+    }
+
     if (choseTask) {
-      let { id, target, progress } = choseTask;
+      const { id, target, progress } = choseTask;
       dispatch(updateTaskProgress(id, progress));
 
       if (target === progress + 1) {
         dispatch(unChooseTask());
         dispatch(toggleHasJustFinishedTask());
         dispatch(updateTaskFinish(id));
-        dispatch(updateTotalFinishedTask());
+        const updatedSummary = {
+          totalFinishedTasks: clockState.summary.totalFinishedTasks + 1,
+        };
+        dispatch(updateSummary(updatedSummary));
       }
     }
+    const isLongBreakMode =
+      store.getState().clock.totalSubSessions % longBreakInterval === 0;
 
-    if (clockMode === 'SHORT_BREAK' || clockMode === 'LONG_BREAK') {
-      dispatch(switchClockMode({ mode: 'START_SESSION', time: sessionTime }));
-      document.title = `${secondsToTime(sessionTime)} - Time to focus`;
-      return;
-    }
-
-    if (store.getState().clock.totalSubSessions % longBreakInterval !== 0) {
-      dispatch(switchClockMode({ mode: 'SHORT_BREAK', time: shortBreakTime }));
-      document.title = `${secondsToTime(shortBreakTime)} - Time to break`;
+    if (isLongBreakMode) {
+      switchToLongBreakMode();
     } else {
-      dispatch(switchClockMode({ mode: 'LONG_BREAK', time: longBreakTime }));
-      document.title = `${secondsToTime(longBreakTime)} - Time to break`;
+      switchToShortBreakMode();
     }
   };
 
@@ -163,13 +194,12 @@ const Clock = () => {
       return;
     }
 
-    playSound();
+    playButtonSound();
     if (!store.getState().clock.isStart) {
       await startCountdown(clockState.timeLeft);
-      return;
+    } else {
+      stopCountdown();
     }
-
-    stopCountdown();
   };
 
   return (

@@ -90,7 +90,7 @@ const Header = () => {
               fontSize='16px'
             >
               <Profile />
-              <MenuItem pl='13.5%' onClick={handleLogOutClick}>
+              <MenuItem pl='13.5%' fontWeight='500' onClick={handleLogOutClick}>
                 Logout
               </MenuItem>
             </MenuList>

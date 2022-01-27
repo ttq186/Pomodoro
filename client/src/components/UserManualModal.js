@@ -7,6 +7,8 @@ import {
   ModalCloseButton,
   ModalBody,
   Divider,
+  Box,
+  Square,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
@@ -23,11 +25,11 @@ const UserManualModal = () => {
         color='gray.800'
         onClick={onOpen}
         size='sm'
-        px={{ base: '0.5em', md: '1.2em' }}
+        px={{ base: '0.5em', md: '1em' }}
         fontSize={{ base: '14px', sm: '16px' }}
-        h={{base: '30px', md: '38px'}}
+        h={{ base: '30px', md: '38px' }}
       >
-        How To Use
+        How to use
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} size={size}>

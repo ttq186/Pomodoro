@@ -29,6 +29,5 @@ export const getRequestConfig = (accessToken) => {
   if (accessToken) {
     config.headers.Authorization = `bearer ${accessToken}`;
   }
-
   return config;
 };

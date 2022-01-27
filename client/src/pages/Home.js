@@ -65,7 +65,7 @@ const Home = () => {
         <Flex
           justifyContent='space-between'
           px={{ base: '2%', md: '1%', xl: '8%' }}
-          mt={{base: '3em', md: '2em'}}
+          mt={{ base: '3em', md: '2em' }}
           mx='auto'
           flexDir={{ base: 'column-reverse', lg: 'row' }}
           alignItems='center'

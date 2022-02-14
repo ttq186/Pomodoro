@@ -14,13 +14,8 @@ const GoogleLogin = () => {
     dispatch(loginViaGoogle(res.tokenId));
   };
 
-  const onFailure = (res) => {
-    console.log('login failure', res);
-  };
-
   const { signIn } = useGoogleLogin({
     onSuccess,
-    onFailure,
     clientId,
   });
 

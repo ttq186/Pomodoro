@@ -69,24 +69,26 @@ const Profile = () => {
       >
         <ModalOverlay backdropFilter='blur(1px)' />
         <ModalContent
-          top={{ base: '8%', md: '10vh', lg: '5vh' }}
+          top={{ base: '8%', md: '8%' }}
           w='90%'
           minH='510px'
-          mb={{ base: '10em', md: '2em' }}
+          mb='10em'
         >
           <ModalCloseButton />
           <ModalBody p='0' as={Flex} justifyContent='space-between'>
             <Box
-              w='28%'
+              w='30%'
               bg='linear-gradient(0deg, rgba(74,85,104,1) 10%, rgba(113,128,150,1) 42%, rgba(203,213,224,1) 82%)'
               borderLeftRadius='md'
               d={{ base: 'none', sm: 'block' }}
             ></Box>
+
             <Box
-              w={{ base: '100%', sm: '68%' }}
+              w={{ base: '100%', sm: '64%' }}
               py='1.5em'
-              pr='2em'
+              pr='2.5em'
               pl={{ base: '2em', sm: '0' }}
+              h=''
             >
               <Heading color='gray.600' mb='0.3em'>
                 Profile
@@ -117,42 +119,13 @@ const Profile = () => {
                     borderColor='gray.300'
                   />
                 </FormControl>
-
-                <FormControl
-                  my='1.5em'
-                  mb='0.8em'
-                  isInvalid={errors.currentPassword}
-                >
-                  <FormLabel
-                    htmlFor='currentPassword'
-                    fontWeight='600'
-                    color='gray.600'
-                  >
-                    Current Password
-                  </FormLabel>
-                  <Input
-                    id='currentPassword'
-                    type='password'
-                    focusBorderColor='gray.500'
-                    borderColor='gray.300'
-                    {...register('password', {
-                      minLength: {
-                        value: 8,
-                        message: 'Minimum length should be 8',
-                      },
-                    })}
-                  />
-                  <FormErrorMessage>
-                    {errors.password && errors.password.message}
-                  </FormErrorMessage>
-                </FormControl>
                 <FormControl my='0.8em' isInvalid={errors.password}>
                   <FormLabel
                     htmlFor='password'
                     fontWeight='600'
                     color='gray.600'
                   >
-                    New Password
+                    Password
                   </FormLabel>
                   <Input
                     id='password'
@@ -176,7 +149,7 @@ const Profile = () => {
                     fontWeight='600'
                     color='gray.600'
                   >
-                    Confirm New Password
+                    Confirm Password
                   </FormLabel>
                   <Input
                     id='confirm-password'
@@ -200,13 +173,6 @@ const Profile = () => {
                   </FormErrorMessage>
                 </FormControl>
 
-                <Box fontSize='13px' fontWeight='600'>
-                  <span style={{ color: '#E53E5E', marginRight: '3px' }}>
-                    *
-                  </span>
-                  Don't fill in password section if you don't want to change
-                  password
-                </Box>
                 <Button
                   type='submit'
                   w='50%'
@@ -214,7 +180,7 @@ const Profile = () => {
                   bg='gray.400'
                   color='gray.700'
                   mx='25%'
-                  mt='1.5em'
+                  mt='0.5em'
                 >
                   Update
                 </Button>

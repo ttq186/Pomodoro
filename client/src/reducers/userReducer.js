@@ -11,14 +11,12 @@ import {
   USER_SIGNUP_FAIL,
   USER_PASSWORD_RESET_FAIL,
   USER_PASSWORD_RESET_SUCCESS,
+  USER_TOKEN_HAS_EXPIRED,
 } from '../constants/userConstants';
-
-const tokenDataFromStorage = localStorage.getItem('tokenData')
-  ? JSON.parse(localStorage.getItem('tokenData'))
-  : null;
+import { getTokenFromLocalStorage } from '../utils';
 
 const initialState = {
-  tokenData: tokenDataFromStorage,
+  tokenData: getTokenFromLocalStorage(),
   userInfo: {
     username: null,
     email: '@',
@@ -28,7 +26,11 @@ const initialState = {
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return { ...initialState, loading: true };
+      return {
+        ...initialState,
+        tokenData: getTokenFromLocalStorage(),
+        loading: true,
+      };
 
     case USER_LOGIN_SUCCESS:
       return {
@@ -41,6 +43,7 @@ export const userReducer = (state = initialState, action) => {
     case USER_LOGIN_FAIL:
       return {
         ...initialState,
+        tokenData: null,
         loading: false,
         isloggedInSuccess: false,
         loginErrorMessage: action.payload,
@@ -73,6 +76,15 @@ export const userReducer = (state = initialState, action) => {
 
     case USER_PASSWORD_RESET_SUCCESS:
       return { ...state, successMessage: action.payload };
+
+    case USER_TOKEN_HAS_EXPIRED:
+      return {
+        tokenData: null,
+        userInfo: {
+          username: null,
+          email: '@',
+        },
+      };
 
     default:
       return state;

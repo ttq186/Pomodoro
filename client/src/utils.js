@@ -32,3 +32,9 @@ export const getRequestConfig = (accessToken) => {
 
   return config;
 };
+
+export const getTokenFromLocalStorage = () => {
+  return localStorage.getItem('tokenData')
+    ? JSON.parse(localStorage.getItem('tokenData'))
+    : null;
+};

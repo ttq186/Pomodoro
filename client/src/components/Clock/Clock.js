@@ -123,6 +123,7 @@ const Clock = () => {
       .split(' ')
       .join('');
     playAlarmSound({ id: alarmSoundValue });
+
     dispatch(toggleClockStart());
     if (choseTask) {
       let { id, target, progress } = choseTask;

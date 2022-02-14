@@ -11,6 +11,7 @@ import {
   USER_SIGNUP_REQUEST,
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_FAIL,
+  USER_TOKEN_HAS_EXPIRED,
   USER_PASSWORD_RESET_FAIL,
   USER_PASSWORD_RESET_SUCCESS,
 } from '../constants/userConstants';
@@ -81,6 +82,7 @@ export const getUserInfo = () => async (dispatch) => {
     if (errorMessage === 'Token has expired!') {
       alert('Your working session has timed out. Please sign in again!');
       localStorage.removeItem('tokenData');
+      dispatch({ type: USER_TOKEN_HAS_EXPIRED });
     }
   }
 };

@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     DB_USERNAME: str
     SECRET_KEY: str
     ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    ACCESS_TOKEN_EXPIRE_MINUTES: float
     GOOGLE_CLIENT_ID: str
     SENDGRID_FROM_EMAIL: str
     SENDGRID_TEMPLATE_ID: str

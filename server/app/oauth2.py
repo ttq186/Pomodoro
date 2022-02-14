@@ -1,15 +1,18 @@
-from typing import Optional
-from jose import JWTError, jwt
 from datetime import datetime, timedelta
+from typing import Optional
+
+from jose import JWTError, jwt
+from jose.exceptions import ExpiredSignatureError
+
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
-from jose.exceptions import ExpiredSignatureError
 from sqlalchemy.orm import Session
 
 from .db import get_db
 from .models import User
 from .schemas import TokenData
 from .config import settings
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 

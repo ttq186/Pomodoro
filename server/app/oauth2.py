@@ -31,11 +31,15 @@ def create_access_token(
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.utcnow() + timedelta(
+            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+        )
 
     to_encode.update({"exp": expire})
     if JWT_SECRET_KEY:
-        encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=ALGORITHM)
+        encoded_jwt = jwt.encode(
+            to_encode, JWT_SECRET_KEY, algorithm=ALGORITHM
+        )
     else:
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
@@ -60,7 +64,8 @@ async def get_current_user(
 
     except ExpiredSignatureError:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired!"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired!",
         )
     except JWTError:
         raise credentials_exception

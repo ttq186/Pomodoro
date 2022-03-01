@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     SENDGRID_FROM_EMAIL: str
     SENDGRID_TEMPLATE_ID: str
     SENDGRID_API_KEY: str
+    PASSWORD_RESET_BASE_URL: str
 
     class Config:
         env_file = ".env"

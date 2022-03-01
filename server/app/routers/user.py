@@ -10,7 +10,7 @@ from ..schemas import UserIn, UserOut, UserUpdate, UserBase
 from ..utils import get_hashed_password, generate_uuid
 from ..oauth2 import SECRET_KEY, create_access_token, get_current_user
 from ..email_service import send_reset_email
-
+from ..config import settings
 
 router = APIRouter(prefix="/api/users", tags=["Users"])
 
@@ -33,7 +33,9 @@ async def get_users(
 
 @router.get("/{id}", response_model=UserOut)
 async def get_user(
-    id: str, db: Session = Depends(get_db), current_user=Depends(get_current_user)
+    id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
     if not current_user.is_admin:
         raise HTTPException(
@@ -44,7 +46,8 @@ async def get_user(
     user_query = db.query(User).filter_by(id=id).first()
     if user_query is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {id} not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {id} not found",
         )
 
     return user_query
@@ -56,7 +59,8 @@ async def create_user(user_in: UserIn, db: Session = Depends(get_db)):
 
     if user_query is not None:
         raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="Email already exists."
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email already exists.",
         )
 
     hashed_password = get_hashed_password(user_in.password)
@@ -117,7 +121,7 @@ async def forgot_password(payload: UserBase, db: Session = Depends(get_db)):
     to_encode = {"id": user_query.id}
     JWT_SECRET_KEY = SECRET_KEY + user_query.password
     reset_token = create_access_token(to_encode, timedelta(15), JWT_SECRET_KEY)
-    reset_link = f"http://localhost:3000/reset-password/{user_query.id}/{reset_token}"
+    reset_link = f"{settings.PASSWORD_RESET_BASE_URL}/reset-password/{user_query.id}/{reset_token}"
     send_reset_email(user_query.email, reset_link)
 
     return {"detail": "Password reset requests successfully!"}

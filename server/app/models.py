@@ -27,7 +27,9 @@ class Task(Base):
     __tablename__ = "task"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(
+        String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+    )
     title = Column(String, nullable=False)
     notes = Column(String)
     is_finished = Column(Boolean, default=False)
@@ -44,7 +46,9 @@ class Timer(Base):
     __tablename__ = "timer"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(
+        String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+    )
     session_time = Column(Integer, default=1500)
     short_break_time = Column(Integer, default=300)
     long_break_time = Column(Integer, default=1200)
@@ -59,7 +63,9 @@ class Summary(Base):
     __tablename__ = "summary"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(
+        String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+    )
     total_time = Column(Integer, default=0)
     total_sessions = Column(Integer, default=0)
     total_finished_tasks = Column(Integer, default=0)

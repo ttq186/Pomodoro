@@ -25,6 +25,3 @@ npm-debug.log*
 #### Server ####
 venv/
 __pycache__/
-# Local Netlify folder
-.netlify
-app2

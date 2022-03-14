@@ -4,12 +4,10 @@ from sqlalchemy.orm import Session
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-from ..schemas import TokenOut, GoogleToken
-from ..models import User
-from ..utils import verify_password, generate_uuid
-from ..db import get_db
-from ..oauth2 import create_access_token
-from ..config import settings
+from app import models, schemas, utils
+from app.api.api_v1 import deps
+from app.core import security
+from app.core.config import settings
 
 
 router = APIRouter(prefix="/api/login", tags=["Authentication"])
@@ -17,15 +15,14 @@ router = APIRouter(prefix="/api/login", tags=["Authentication"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 request = requests.Request()
-GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
 
 
-@router.post("/", response_model=TokenOut)
+@router.post("/", response_model=schemas.TokenOut)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db),
+    db: Session = Depends(deps.get_db),
 ):
-    user = db.query(User).filter_by(email=form_data.username).first()
+    user = db.query(models.User).filter_by(email=form_data.username).first()
     credentials_exception = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="Incorrect email or password. Try again!",
@@ -34,32 +31,34 @@ async def login(
     if user is None:
         raise credentials_exception
 
-    if not verify_password(form_data.password, user.password):
+    if not security.verify_password(form_data.password, user.password):
         raise credentials_exception
 
-    access_token = create_access_token(data={"user_id": user.id})
+    access_token = security.create_access_token(data={"user_id": user.id})
     return {
         "access_token": access_token,
         "token_type": "bearer",
     }
 
 
-@router.post("/google", response_model=TokenOut)
-async def login_via_google(payload: GoogleToken, db: Session = Depends(get_db)):
+@router.post("/google", response_model=schemas.TokenOut)
+async def login_via_google(
+    payload: schemas.GoogleToken, db: Session = Depends(deps.get_db)
+):
     user_data = id_token.verify_oauth2_token(
-        payload.token_id, request, GOOGLE_CLIENT_ID
+        payload.token_id, request, settings.GOOGLE_CLIENT_ID
     )
     user_id = None
-    user_query = db.query(User).filter_by(email=user_data["email"]).first()
+    user_query = db.query(models.User).filter_by(email=user_data["email"]).first()
 
     # if email does not exist, create a new user with empty password
     if user_query is None:
         # avoid duplicating user id
-        new_user_id = generate_uuid()
-        while db.query(User).filter_by(id=new_user_id).first() is not None:
-            new_user_id = generate_uuid()
+        new_user_id = utils.generate_uuid()
+        while db.query(models.User).filter_by(id=new_user_id).first() is not None:
+            new_user_id = utils.generate_uuid()
 
-        new_user = User(id=new_user_id, email=user_data["email"])
+        new_user = models.User(id=new_user_id, email=user_data["email"])
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
@@ -67,15 +66,16 @@ async def login_via_google(payload: GoogleToken, db: Session = Depends(get_db)):
 
     else:
         # if user attempts to sign in with email that has already been created
-        #  without signing in by google, raise error
+        # without signing in by google, raise error
         if user_query.password is not None:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="Looks like an account has been created before without Google sign in method. Try again!",
+                detail="""Looks like an account has been created before \
+                without Google sign in method. Try again!""",
             )
 
         user_id = user_query.id
-    access_token = create_access_token(data={"user_id": user_id})
+    access_token = security.create_access_token(data={"user_id": user_id})
 
     return {
         "access_token": access_token,

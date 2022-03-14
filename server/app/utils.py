@@ -1,17 +1,28 @@
 from uuid import uuid4
-from passlib.context import CryptContext
 
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from app.core.config import settings
 
 
 def generate_uuid() -> str:
     return str(uuid4())
 
 
-def get_hashed_password(password: str) -> str:
-    return pwd_context.hash(password)
+def send_reset_password_email(to_emails, reset_link):
+    message = Mail(
+        from_email=settings.SENDGRID_FROM_EMAIL,
+        to_emails=to_emails,
+        subject="Reset your password",
+    )
+    message.template_id = settings.SENDGRID_TEMPLATE_ID
+    message.dynamic_template_data = {
+        "resetLink": reset_link,
+    }
 
-
-def verify_password(plain_pwd: str, hashed_pwd: str) -> bool:
-    return pwd_context.verify(plain_pwd, hashed_pwd)
+    try:
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        sg.send(message)
+    except Exception as e:
+        print(e)

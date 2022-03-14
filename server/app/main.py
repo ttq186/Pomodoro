@@ -1,17 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import user, task, auth, timer, summary
+from app.api.api_v1.routers import user, task, auth, timer, summary
 
 app = FastAPI()
 
-origins = ["http://localhost", "http://ttq186.xyz", "https://ttq186.xyz", "*"]
+allowed_origins = [
+    "http://localhost",
+    "http://ttq186.xyz",
+    "https://ttq186.xyz",
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 

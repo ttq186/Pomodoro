@@ -13,11 +13,11 @@ import {
 const initialState = {
   isStart: false,
   mode: 'START_SESSION',
-  timeLeft: 10,
+  timeLeft: 1500,
   totalSubSessions: 0,
   timerSetting: {
     sessionTime: 10,
-    shortBreakTime: 5,
+    shortBreakTime: 300,
     longBreakTime: 1200,
     longBreakInterval: 4,
     alarmSound: 'Digital',

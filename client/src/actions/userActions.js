@@ -72,7 +72,7 @@ export const getUserInfo = () => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
 
-    const { data } = await axios.get(`${BASE_URL}/api/users/`, config);
+    const { data } = await axios.get(`${BASE_URL}/api/users/me`, config);
     const userInfo = {
       username: data[0].username,
       email: data[0].email,
@@ -96,7 +96,7 @@ export const updateUserInfo = (updatedUserInfo) => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.put(
-      `${BASE_URL}/api/users/`,
+      `${BASE_URL}/api/users/me`,
       updatedUserInfo,
       config
     );

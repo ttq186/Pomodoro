@@ -21,11 +21,16 @@ async def get_summaries(
     """Retrieve summaries."""
 
     summaries = crud.summary.get_multi(db, skip=skip, limit=limit)
-    if len(summaries) == 0:
-        raise HTTPException(
-            status_code=status.HTTP_200_OK, detail="There aren't any summaries."
-        )
     return summaries
+
+
+@router.get("/me", response_model=schemas.SummaryOut)
+async def get_by_owner(
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+    summary = crud.summary.get_by_owner(db, owner_id=current_user.id)
+    return summary
 
 
 @router.get("/{id}", response_model=schemas.SummaryOut)

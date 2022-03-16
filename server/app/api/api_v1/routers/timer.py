@@ -20,11 +20,20 @@ async def get_timers(
 ):
     """Retrieve timers."""
     timers = crud.timer.get_multi(db, skip=skip, limit=limit)
-    if len(timers) == 0:
-        raise HTTPException(
-            status_code=status.HTTP_200_OK, detail="There aren't any timers."
-        )
     return timers
+
+
+@router.get("/me", response_model=schemas.TimerOut)
+async def get_by_owner1(
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+    timer = crud.timer.get_by_owner(db, owner_id=current_user.id)
+    if timer is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="There aren't any timers."
+        )
+    return timer
 
 
 @router.get("/{id}", response_model=schemas.TimerOut)
@@ -55,6 +64,8 @@ async def update_timer(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
+    """Update a specific timer."""
+
     timer = crud.timer.get(db, id=id)
     if timer is None:
         raise HTTPException(

@@ -7,6 +7,7 @@ app = FastAPI()
 
 allowed_origins = [
     "http://localhost",
+    "http://localhost:3000",
     "http://ttq186.xyz",
     "https://ttq186.xyz",
 ]

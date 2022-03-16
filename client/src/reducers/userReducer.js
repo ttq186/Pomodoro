@@ -65,7 +65,7 @@ export const userReducer = (state = initialState, action) => {
       return { ...state, userInfo: action.payload };
 
     case USER_SIGNUP_REQUEST: {
-      return { ...state };
+      return { ...state, isloggedInSuccess: null };
     }
 
     case USER_SIGNUP_SUCCESS:

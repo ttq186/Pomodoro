@@ -26,11 +26,6 @@ async def get_tasks(
         tasks = crud.task.get_multi_by_owner(
             db, owner_id=current_user.id, skip=skip, limit=limit
         )
-    print(tasks)
-    if len(tasks) == 0:
-        raise HTTPException(
-            status_code=status.HTTP_200_OK, detail="There aren't any tasks."
-        )
     return tasks
 
 

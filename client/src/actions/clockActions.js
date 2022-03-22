@@ -77,7 +77,7 @@ export const updateSummary = (updatedSummary) => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
     const { data } = await axios.put(
-      `${BASE_URL}/api/summary/`,
+      `${BASE_URL}/api/summary/me`,
       updatedSummary,
       config
     );

@@ -30,6 +30,8 @@ async def get_by_owner(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     summary = crud.summary.get_by_owner(db, owner_id=current_user.id)
+    if summary is None:
+        return {}  # Return empty dict to get default values from SummaryOut schema.
     return summary
 
 

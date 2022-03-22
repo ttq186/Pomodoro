@@ -24,15 +24,14 @@ async def get_timers(
 
 
 @router.get("/me", response_model=schemas.TimerOut)
-async def get_by_owner1(
+async def get_by_owner(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
     timer = crud.timer.get_by_owner(db, owner_id=current_user.id)
+
     if timer is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="There aren't any timers."
-        )
+        return {}  # Return an empty dict to get default values from TimerOut schema.
     return timer
 
 
@@ -56,6 +55,29 @@ async def get_timer(
             detail="You don't have this privilege.",
         )
     return timer
+
+
+@router.put("/me", response_model=schemas.TimerOut)
+async def update_timer_by_owner(
+    payload: schemas.TimerUpdate,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+    """Update timer by owner."""
+
+    timer = crud.timer.get_by_owner(db, owner_id=current_user.id)
+    if timer is None:
+        timer = models.Timer(**schemas.TimerUpdate().dict())
+        timer.user_id = current_user.id
+
+    timer_data = jsonable_encoder(timer)
+    update_data = {
+        **timer_data,
+        **payload.dict(exclude_unset=True, exclude={"id, user_id"}),
+    }
+    timer_in = schemas.TimerUpdate(**update_data)
+    updated_timer = crud.timer.update(db, db_obj=timer, obj_in=timer_in)
+    return updated_timer
 
 
 @router.put("/{id}", response_model=schemas.TimerOut)

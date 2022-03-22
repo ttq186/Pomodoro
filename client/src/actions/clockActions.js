@@ -34,7 +34,7 @@ export const updateTimerSetting = (timerSetting) => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
     const { data } = await axios.put(
-      `${BASE_URL}/api/timers/`,
+      `${BASE_URL}/api/timers/me`,
       timerSetting,
       config
     );

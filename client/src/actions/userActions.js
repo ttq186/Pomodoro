@@ -74,8 +74,8 @@ export const getUserInfo = () => async (dispatch) => {
 
     const { data } = await axios.get(`${BASE_URL}/api/users/me`, config);
     const userInfo = {
-      username: data[0].username,
-      email: data[0].email,
+      username: data.username,
+      email: data.email,
     };
     dispatch({ type: USER_GET_USER_INFO, payload: userInfo });
   } catch (error) {

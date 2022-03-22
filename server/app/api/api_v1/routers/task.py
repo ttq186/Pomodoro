@@ -1,10 +1,10 @@
 from typing import List
 
-from fastapi import status, HTTPException, Depends, APIRouter
+from fastapi import status, Depends, APIRouter
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
-from app import crud, schemas, models
+from app import crud, schemas, models, exceptions
 from app.api.api_v1 import deps
 
 
@@ -19,7 +19,6 @@ async def get_tasks(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve tasks by role."""
-
     if crud.user.is_admin(current_user):
         tasks = crud.task.get_multi(db, skip=skip, limit=limit)
     else:
@@ -36,18 +35,11 @@ async def get_task(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve a specific task."""
-
     task = crud.task.get(db, id=id)
     if task is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task with id {id} not found",
-        )
+        raise exceptions.ResourceNotFound(resource_type="Task", id=id)
     if not crud.user.is_admin(current_user) and (task.user_id != current_user.id):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="You don't have this privilege.",
-        )
+        raise exceptions.NotAuthorized()
     return task
 
 
@@ -71,18 +63,12 @@ async def update_task(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Update a specific task."""
-
     task = crud.task.get(db, id=id)
     if task is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task with id {id} not found.",
-        )
+        raise exceptions.ResourceNotFound(resource_type="Task", id=id)
     if not crud.user.is_admin(current_user) and (task.user_id != current_user.id):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="You don't have this privilege.",
-        )
+        raise exceptions.NotAuthorized()
+
     updated_task_data = jsonable_encoder(task)
     update_data = {
         **updated_task_data,
@@ -99,17 +85,10 @@ async def delete_task(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Remove a specific task."""
-
     task = crud.task.get(db, id=id)
     if task is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task with id {id} not found",
-        )
+        raise exceptions.ResourceNotFound(resource_type="Task", id=id)
     if not crud.user.is_admin(current_user) and (task.user_id != current_user.id):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="You don't have this privilege.",
-        )
+        raise exceptions.NotAuthorized()
     task = crud.task.remove(db, id=id)
     return task

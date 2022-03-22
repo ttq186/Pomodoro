@@ -1,10 +1,10 @@
 from typing import List
 
-from fastapi import status, HTTPException, Depends, APIRouter
+from fastapi import Depends, APIRouter
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
-from app import crud, models, schemas
+from app import crud, models, schemas, exceptions
 from app.api.api_v1 import deps
 
 
@@ -42,18 +42,11 @@ async def get_timer(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve a specific timer."""
-
     timer = crud.timer.get(db, id=id)
     if timer is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Timer with id {id} not found",
-        )
+        raise exceptions.ResourceNotFound(resource_type="Timer", id=id)
     if not crud.user.is_admin(current_user) and (timer.user_id != current_user.id):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="You don't have this privilege.",
-        )
+        raise exceptions.NotAuthorized()
     return timer
 
 
@@ -64,7 +57,6 @@ async def update_timer_by_owner(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Update timer by owner."""
-
     timer = crud.timer.get_by_owner(db, owner_id=current_user.id)
     if timer is None:
         timer = models.Timer(**schemas.TimerUpdate().dict())
@@ -87,18 +79,12 @@ async def update_timer(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Update a specific timer."""
-
     timer = crud.timer.get(db, id=id)
     if timer is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Timer with id {id} not found.",
-        )
+        raise exceptions.ResourceNotFound(resource_type="Timer", id=id)
     if not crud.user.is_admin(current_user) and (timer.user_id != current_user.id):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="You don't have this privilege.",
-        )
+        raise exceptions.NotAuthorized()
+
     timer_data = jsonable_encoder(timer)
     update_data = {**timer_data, **payload.dict(exclude_unset=True, exclude={"id"})}
     timer_in = schemas.TimerUpdate(**update_data)

@@ -57,8 +57,31 @@ async def get_summary(
     return summary
 
 
+@router.put("/me", response_model=schemas.SummaryOut)
+async def update_summary_by_owner(
+    payload: schemas.SummaryUpdate,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+    """Update summary by owner."""
+
+    summary = crud.summary.get_by_owner(db, owner_id=current_user.id)
+    if summary is None:
+        summary = models.Summary(**schemas.SummaryUpdate().dict())
+        summary.user_id = current_user.id
+
+    summary_data = jsonable_encoder(summary)
+    update_data = {
+        **summary_data,
+        **payload.dict(exclude_unset=True, exclude={"id", "user_id"}),
+    }
+    summary_in = schemas.SummaryUpdate(**update_data)
+    updated_summary = crud.summary.update(db, db_obj=summary, obj_in=summary_in)
+    return updated_summary
+
+
 @router.put("/{id}", response_model=schemas.SummaryOut)
-async def update_timer(
+async def update_summary(
     payload: schemas.SummaryUpdate,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -78,6 +101,6 @@ async def update_timer(
         )
     summary_data = jsonable_encoder(summary)
     update_data = {**summary_data, **payload.dict(exclude_unset=True, exclude={"id"})}
-    summary_in = schemas.TimerUpdate(**update_data)
-    updated_timer = crud.summary.update(db, db_obj=summary, obj_in=summary_in)
-    return updated_timer
+    summary_in = schemas.SummaryUpdate(**update_data)
+    updated_summary = crud.summary.update(db, db_obj=summary, obj_in=summary_in)
+    return updated_summary

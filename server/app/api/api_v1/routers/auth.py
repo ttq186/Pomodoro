@@ -1,10 +1,10 @@
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-from app import models, schemas, utils
+from app import models, schemas, utils, exceptions
 from app.api.api_v1 import deps
 from app.core import security
 from app.core.config import settings
@@ -23,16 +23,10 @@ async def login(
     db: Session = Depends(deps.get_db),
 ):
     user = db.query(models.User).filter_by(email=form_data.username).first()
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="Incorrect email or password. Try again!",
-    )
-
     if user is None:
-        raise credentials_exception
-
+        raise exceptions.IncorrectLoginCredentials()
     if not security.verify_password(form_data.password, user.password):
-        raise credentials_exception
+        raise exceptions.IncorrectLoginCredentials()
 
     access_token = security.create_access_token(data={"user_id": user.id})
     return {
@@ -66,13 +60,9 @@ async def login_via_google(
 
     else:
         # if user attempts to sign in with email that has already been created
-        # without signing in by google, raise error
+        # without signing in by google, raise exception
         if user_query.password is not None:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="""Looks like an account has been created before \
-                without Google sign in method. Try again!""",
-            )
+            raise exceptions.AccountCreatedWithOutGoogle()
 
         user_id = user_query.id
     access_token = security.create_access_token(data={"user_id": user_id})

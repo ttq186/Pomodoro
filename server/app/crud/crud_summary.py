@@ -9,7 +9,7 @@ from app.schemas import SummaryCreate, SummaryUpdate
 
 class CRUDSummary(CRUDBase[Summary, SummaryCreate, SummaryUpdate]):
     def get_by_owner(self, db: Session, owner_id: str) -> Optional[Summary]:
-        return db.query(Summary).filter_by(user_id=owner_id)
+        return db.query(Summary).filter_by(user_id=owner_id).first()
 
 
 summary = CRUDSummary(Summary)

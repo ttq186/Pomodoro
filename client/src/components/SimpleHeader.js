@@ -1,7 +1,7 @@
 import { Flex, Image } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
-import Pomodoro from '../assets/icons/pomodoro.svg';
+import PomodoroIcon from '../assets/icons/pomodoro.svg';
 
 const SimpleHeader = () => {
   return (
@@ -16,7 +16,7 @@ const SimpleHeader = () => {
       pb='0.1em'
     >
       <Image
-        src={Pomodoro}
+        src={PomodoroIcon}
         w={{ base: '45px', md: '55px' }}
         h={{ base: '45px', md: '55px' }}
       ></Image>

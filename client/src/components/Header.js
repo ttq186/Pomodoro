@@ -13,7 +13,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Pomodoro from '../assets/icons/pomodoro.svg';
+import PomodoroIcon from '../assets/icons/pomodoro.svg';
 import UserManualModal from './UserManualModal';
 import Report from './Report';
 import Profile from './Profile';
@@ -47,7 +47,7 @@ const Header = () => {
         fontSize={{ base: '22px', md: '24px' }}
       >
         <Image
-          src={Pomodoro}
+          src={PomodoroIcon}
           w={{ base: '45px', md: '55px' }}
           h={{ base: '45px', md: '55px' }}
         ></Image>

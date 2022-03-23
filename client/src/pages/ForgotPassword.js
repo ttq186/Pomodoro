@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -14,13 +15,12 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
-import { resetPassword } from '../actions/userActions';
+import { removeMessageState, resetPassword } from '../actions/userActions';
 import SimpleHeader from '../components/SimpleHeader';
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const { successMessage, errorMessage } = useSelector((state) => state.user);
-
   const {
     handleSubmit,
     register,
@@ -33,7 +33,10 @@ const SignIn = () => {
     dispatch(resetPassword(email));
   };
 
-  document.title = 'Forgot Password';
+  useEffect(() => {
+    document.title = 'Forgot Password';
+    dispatch(removeMessageState());
+  });
 
   return (
     <Box bg='gray.800'>

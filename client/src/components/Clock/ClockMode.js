@@ -6,21 +6,31 @@ import {
   updateTimeLeft,
   toggleClockStart,
 } from '../../actions/clockActions';
+import { secondsToTime } from '../../utils';
 
 const ClockMode = forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const timerSettingState = useSelector((state) => state.clock.timerSetting);
+  const { sessionTime, shortBreakTime, longBreakTime } = timerSettingState;
   const isStart = useSelector((state) => state.clock.isStart);
 
   const handleToggleMode = () => {
     const mode = ref.current.innerText.split(' ').join('_').toUpperCase();
-
-    const time =
-      mode === 'START_SESSION'
-        ? timerSettingState.sessionTime
-        : mode === 'SHORT_BREAK'
-        ? timerSettingState.shortBreakTime
-        : timerSettingState.longBreakTime;
+    let time;
+    switch (mode) {
+      case 'START_SESSION':
+        time = sessionTime;
+        document.title = `${secondsToTime(sessionTime)} - Time to focus`;
+        break;
+      case 'SHORT_BREAK':
+        time = shortBreakTime;
+        document.title = `${secondsToTime(shortBreakTime)} - Time to break`;
+        break;
+      case 'LONG_BREAK':
+        time = longBreakTime;
+        document.title = `${secondsToTime(longBreakTime)} - Time to break`;
+        break;
+    }
 
     if (isStart) {
       const confirm = window.confirm(

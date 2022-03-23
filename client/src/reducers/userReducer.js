@@ -13,6 +13,7 @@ import {
   USER_PASSWORD_RESET_FAIL,
   USER_GET_USER_INFO_FAILED,
   USER_PASSWORD_RESET_SUCCESS,
+  USER_REMOVE_MESSAGE_STATE,
 } from '../constants/userConstants';
 import { getTokenFromLocalStorage } from '../utils';
 
@@ -61,18 +62,21 @@ export const userReducer = (state = initialState, action) => {
 
     case USER_GET_USER_INFO_FAILED:
       return { ...state, isloggedInSuccess: null, isSignedUpSuccess: null };
+
     case USER_UPDATE_USER_INFO:
       return { ...state, userInfo: action.payload };
 
-    case USER_SIGNUP_REQUEST: {
+    case USER_SIGNUP_REQUEST:
       return { ...state, isloggedInSuccess: null };
-    }
 
     case USER_SIGNUP_SUCCESS:
       return { ...state, isSignedUpSuccess: true };
 
     case USER_SIGNUP_FAIL:
       return { ...state, isSignedUpSuccess: false };
+
+    case USER_REMOVE_MESSAGE_STATE:
+      return { ...state, errorMessage: null, successMessage: null };
 
     case USER_PASSWORD_RESET_FAIL:
       return { ...state, errorMessage: action.payload };

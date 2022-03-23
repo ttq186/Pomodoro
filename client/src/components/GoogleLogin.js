@@ -7,7 +7,6 @@ import { loginViaGoogle } from '../actions/userActions';
 
 const GoogleLogin = () => {
   const dispatch = useDispatch();
-
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   const onSuccess = (res) => {

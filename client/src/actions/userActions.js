@@ -2,23 +2,28 @@ import axios from 'axios';
 
 import {
   USER_LOGIN_FAIL,
+  USER_SIGNUP_FAIL,
   USER_GET_USER_INFO,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_REQUEST,
-  USER_UPDATE_USER_INFO,
   USER_SIGNUP_REQUEST,
   USER_SIGNUP_SUCCESS,
-  USER_SIGNUP_FAIL,
+  USER_UPDATE_USER_INFO,
   USER_TOKEN_HAS_EXPIRED,
   USER_PASSWORD_RESET_FAIL,
   USER_PASSWORD_RESET_SUCCESS,
   USER_GET_USER_INFO_FAILED,
+  USER_REMOVE_MESSAGE_STATE,
 } from '../constants/userConstants';
 import { getErrorMessageFromServer, getRequestConfig } from '../utils';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+export const removeMessageState = () => ({
+  type: USER_REMOVE_MESSAGE_STATE,
+});
 
 export const login = (email, password) => async (dispatch) => {
   try {

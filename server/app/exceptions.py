@@ -1,7 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
-
-
-app = FastAPI()
+from fastapi import HTTPException, status
 
 
 class ResourcesNotFound(HTTPException):

@@ -9,8 +9,8 @@ import {
   TagLabel,
   Image,
 } from '@chakra-ui/react';
-import Happy from '../assets/icons/happy.svg';
-import Sad from '../assets/icons/sad.svg';
+import HappyIcon from '../assets/icons/happy.svg';
+import SadIcon from '../assets/icons/sad.svg';
 
 const Summary = () => {
   const { totalTime, totalSessions, totalFinishedTasks } = useSelector(
@@ -37,7 +37,7 @@ const Summary = () => {
         opacity='0.85'
       >
         <Image
-          src={totalTime / 3600 >= 1 ? Happy : Sad}
+          src={totalTime / 3600 >= 1 ? HappyIcon : SadIcon}
           w={{ base: '20px', md: '27px' }}
           h={{ base: '20px', md: '27px' }}
           mr='5px'
@@ -78,7 +78,9 @@ const Summary = () => {
           >
             Session
           </StatLabel>
-          <StatNumber fontSize={{ base: '24px', md: '28px' }}>{totalSessions}</StatNumber>
+          <StatNumber fontSize={{ base: '24px', md: '28px' }}>
+            {totalSessions}
+          </StatNumber>
         </Stat>
 
         <Stat>
@@ -89,7 +91,9 @@ const Summary = () => {
           >
             Task Done
           </StatLabel>
-          <StatNumber fontSize={{ base: '24px', md: '28px' }}>{totalFinishedTasks}</StatNumber>
+          <StatNumber fontSize={{ base: '24px', md: '28px' }}>
+            {totalFinishedTasks}
+          </StatNumber>
         </Stat>
       </StatGroup>
     </Box>

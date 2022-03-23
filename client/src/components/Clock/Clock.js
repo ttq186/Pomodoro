@@ -157,7 +157,6 @@ const Clock = () => {
       switchToStartSessionMode();
       return;
     }
-
     if (choseTask) {
       const { id, target, progress } = choseTask;
       dispatch(updateTaskProgress(id, progress));

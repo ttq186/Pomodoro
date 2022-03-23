@@ -24,6 +24,7 @@ import { updateUserInfo } from '../actions/userActions';
 const Profile = () => {
   const size = useBreakpointValue({ base: 'md', md: 'xl', xl: '2xl' });
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const loginType = useSelector((state) => state.user.tokenData.loginType);
   const userInfo = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
 
@@ -132,6 +133,7 @@ const Profile = () => {
                     type='password'
                     focusBorderColor='gray.500'
                     borderColor='gray.300'
+                    isDisabled={loginType !== 'normal'}
                     {...register('password', {
                       minLength: {
                         value: 8,
@@ -156,6 +158,7 @@ const Profile = () => {
                     type='password'
                     focusBorderColor='gray.500'
                     borderColor='gray.300'
+                    isDisabled={loginType !== 'normal'}
                     {...register('confirmPassword', {
                       minLength: {
                         value: 8,

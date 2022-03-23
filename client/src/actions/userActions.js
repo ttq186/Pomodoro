@@ -51,6 +51,28 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
+export const loginViaGoogle = (tokenId) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_LOGIN_REQUEST });
+
+    const config = getRequestConfig();
+
+    const { data } = await axios.post(
+      `${BASE_URL}/api/login/google`,
+      { tokenId },
+      config
+    );
+
+    localStorage.setItem('tokenData', JSON.stringify(data));
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorMessage = getErrorMessageFromServer(error);
+    dispatch({ type: USER_LOGIN_FAIL, payload: errorMessage });
+  }
+};
 export const logout = () => async (dispatch) => {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   dispatch({ type: USER_LOGOUT_REQUEST });
@@ -107,29 +129,6 @@ export const updateUserInfo = (updatedUserInfo) => async (dispatch) => {
     );
     dispatch({ type: USER_UPDATE_USER_INFO, payload: data });
   } catch {}
-};
-
-export const loginViaGoogle = (tokenId) => async (dispatch) => {
-  try {
-    dispatch({ type: USER_LOGIN_REQUEST });
-
-    const config = getRequestConfig();
-
-    const { data } = await axios.post(
-      `${BASE_URL}/api/login/google`,
-      { tokenId },
-      config
-    );
-
-    localStorage.setItem('tokenData', JSON.stringify(data));
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    const errorMessage = getErrorMessageFromServer(error);
-    dispatch({ type: USER_LOGIN_FAIL, payload: errorMessage });
-  }
 };
 
 export const resetPassword = (email) => async (dispatch) => {

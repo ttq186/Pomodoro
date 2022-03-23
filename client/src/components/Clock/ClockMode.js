@@ -30,6 +30,8 @@ const ClockMode = forwardRef((props, ref) => {
         time = longBreakTime;
         document.title = `${secondsToTime(longBreakTime)} - Time to break`;
         break;
+      default:
+        break;
     }
 
     if (isStart) {

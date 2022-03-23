@@ -32,6 +32,7 @@ async def login(
     return {
         "access_token": access_token,
         "token_type": "bearer",
+        "login_type": "normal",
     }
 
 
@@ -66,4 +67,5 @@ async def login_via_google(
     return {
         "access_token": access_token,
         "token_type": "bearer",
+        "login_type": "3rd party",
     }

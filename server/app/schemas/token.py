@@ -8,6 +8,7 @@ class TokenOut(BaseModel):
 
     access_token: str
     token_type: str
+    login_type: str
 
 
 class TokenData(BaseModel):

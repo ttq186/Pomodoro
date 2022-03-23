@@ -119,7 +119,11 @@ const Clock = () => {
       if (!store.getState().clock.isStart) return;
 
       timeLeft--;
-      document.title = `${secondsToTime(timeLeft)} - Time to focus`;
+      if (clockMode === 'START_SESSION') {
+        document.title = `${secondsToTime(timeLeft)} - Time to focus`;
+      } else {
+        document.title = `${secondsToTime(timeLeft)} - Time to break`;
+      }
       dispatch(updateTimeLeft(timeLeft));
       await delay(1000);
     }

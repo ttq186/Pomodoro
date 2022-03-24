@@ -9,9 +9,12 @@ from app.schemas import TaskCreate, TaskUpdate
 
 class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
     def get_multi_by_owner(
-        self, db: Session, *, owner_id: str, skip: int, limit: int
+        self, db: Session, *, owner_id: str, skip: int = 0, limit: int = 0
     ) -> List[Task]:
-        return db.query(Task).filter_by(user_id=owner_id).all()
+        tasks = (
+            db.query(Task).filter_by(user_id=owner_id).offset(skip).limit(limit).all()
+        )
+        return tasks
 
 
 task = CRUDTask(Task)

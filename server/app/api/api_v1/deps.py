@@ -6,7 +6,7 @@ from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from app import crud, models, schemas
+from app import crud, models, schemas, exceptions
 from app.db.session import SessionLocal
 from app.core.config import settings
 
@@ -55,8 +55,5 @@ def get_current_superuser(
     current_user: models.User = Depends(get_current_user),
 ) -> models.User:
     if not crud.user.is_admin(current_user):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have this privilege",
-        )
+        raise exceptions.NotAuthorized()
     return current_user

@@ -65,7 +65,7 @@ async def update_timer_by_owner(
     timer_data = jsonable_encoder(timer)
     update_data = {
         **timer_data,
-        **payload.dict(exclude_unset=True, exclude={"id, user_id"}),
+        **payload.dict(exclude_unset=True, exclude={"id", "user_id"}),
     }
     timer_in = schemas.TimerUpdate(**update_data)
     updated_timer = crud.timer.update(db, db_obj=timer, obj_in=timer_in)
@@ -86,7 +86,10 @@ async def update_timer(
         raise exceptions.NotAuthorized()
 
     timer_data = jsonable_encoder(timer)
-    update_data = {**timer_data, **payload.dict(exclude_unset=True, exclude={"id"})}
+    update_data = {
+        **timer_data,
+        **payload.dict(exclude_unset=True, exclude={"id", "user_id"}),
+    }
     timer_in = schemas.TimerUpdate(**update_data)
     updated_timer = crud.timer.update(db, db_obj=timer, obj_in=timer_in)
     return updated_timer

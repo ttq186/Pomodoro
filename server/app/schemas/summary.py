@@ -7,7 +7,7 @@ from fastapi_camelcase import CamelModel as BaseModel
 class SummaryBase(BaseModel):
     """Shared properties."""
 
-    id: Optional[str] = None
+    id: Optional[str]
     total_time: Optional[int] = Field(default=0, ge=0)
     total_sessions: Optional[int] = Field(default=0, ge=0)
     total_finished_tasks: Optional[int] = Field(default=0, ge=0)

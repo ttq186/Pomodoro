@@ -1,14 +1,13 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
-from ..db.base_class import Base
+
+from app.db.base_class import Base
 
 
 class Timer(Base):
     id = Column(Integer, primary_key=True)
-    user_id = Column(
-        String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False
-    )
+    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     session_time = Column(Integer, default=1500)
     short_break_time = Column(Integer, default=300)
     long_break_time = Column(Integer, default=1200)

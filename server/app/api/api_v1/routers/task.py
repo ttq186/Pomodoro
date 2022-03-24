@@ -72,7 +72,7 @@ async def update_task(
     updated_task_data = jsonable_encoder(task)
     update_data = {
         **updated_task_data,
-        **payload.dict(exclude_unset=True, exclude={"id"}),
+        **payload.dict(exclude_unset=True, exclude={"id", "user_id"}),
     }
     updated_user = crud.task.update(db, db_obj=task, obj_in=update_data)
     return updated_user

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import Field
@@ -11,6 +12,7 @@ class TaskBase(BaseModel):
     title: Optional[str] = None
     notes: Optional[str] = None
     is_finished: Optional[bool] = False
+    finished_at: Optional[datetime] = None
     progress: Optional[int] = Field(ge=0)
     target: Optional[int] = Field(gt=0)
     user_id: Optional[str] = None

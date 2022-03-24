@@ -96,7 +96,7 @@ async def update_user(
         raise exceptions.ResourceNotFound(resource_type="User", id=id)
 
     user_data = jsonable_encoder(user)
-    update_data = {**user_data, **payload.dict(exclude_unset=True)}
+    update_data = {**user_data, **payload.dict(exclude_unset=True, exclude={"id"})}
     user_in = schemas.UserUpdate(**update_data)
     updated_user = crud.user.update(db, db_obj=user, obj_in=user_in)
     return updated_user

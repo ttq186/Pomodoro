@@ -17,5 +17,6 @@ class User(Base):
     )
 
     tasks = relationship("Task", back_populates="user")
+    sessions = relationship("Session", back_populates="user")
     timer = relationship("Timer", back_populates="user", uselist=False)
     summary = relationship("Summary", back_populates="user", uselist=False)

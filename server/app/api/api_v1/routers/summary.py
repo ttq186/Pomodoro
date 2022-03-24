@@ -100,7 +100,10 @@ async def update_summary(
             detail="You don't have this privilege.",
         )
     summary_data = jsonable_encoder(summary)
-    update_data = {**summary_data, **payload.dict(exclude_unset=True, exclude={"id"})}
+    update_data = {
+        **summary_data,
+        **payload.dict(exclude_unset=True, exclude={"id, user_id"}),
+    }
     summary_in = schemas.SummaryUpdate(**update_data)
     updated_summary = crud.summary.update(db, db_obj=summary, obj_in=summary_in)
     return updated_summary

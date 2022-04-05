@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PomodoroIcon from '../assets/icons/pomodoro.svg';
 import UserManualModal from './UserManualModal';
-import Report from './Report';
+import Report from './Report/Report';
 import Profile from './Profile';
 import { logout } from '../actions/userActions';
 

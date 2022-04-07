@@ -13,6 +13,12 @@ class ResourceNotFound(HTTPException):
         super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=detail)
 
 
+class ResourceAlreadyExists(HTTPException):
+    def __init__(self, resource_type: str) -> None:
+        detail = f"{resource_type} already exists!"
+        super().__init__(status_code=status.HTTP_409_CONFLICT, detail=detail)
+
+
 class EmailAlreadyExists(HTTPException):
     def __init__(self) -> None:
         detail = "Email already exists!"

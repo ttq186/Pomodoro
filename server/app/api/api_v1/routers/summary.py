@@ -4,11 +4,24 @@ from fastapi import status, HTTPException, Depends, APIRouter
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
-from app import crud, models, schemas
+from app import crud, models, schemas, exceptions
 from app.api.api_v1 import deps
 
 
 router = APIRouter(prefix="/api/summary", tags=["Summary"])
+
+
+@router.post("/me", response_model=schemas.SummaryOut)
+async def create_summary_by_owner(
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+    """Create summary by owner."""
+    summary = crud.summary.get_by_owner(db, owner_id=current_user.id)
+    if summary is not None:
+        raise exceptions.ResourceAlreadyExists(resource_type="Summary")
+    summary_in = schemas.SummaryInDb()
+    print(summary_in)
 
 
 @router.get("/", response_model=List[schemas.SummaryOut])
@@ -19,7 +32,6 @@ async def get_summaries(
     current_user: models.User = Depends(deps.get_current_superuser),
 ):
     """Retrieve summaries."""
-
     summaries = crud.summary.get_multi(db, skip=skip, limit=limit)
     return summaries
 
@@ -29,9 +41,12 @@ async def get_by_owner(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
+    """Retrieve summary by owner."""
     summary = crud.summary.get_by_owner(db, owner_id=current_user.id)
     if summary is None:
-        return {}  # Return empty dict to get default values from SummaryOut schema.
+        summary_in = schemas.SummaryInDb()
+        summary_in.user_id = current_user.id
+        summary = crud.summary.create(db, obj_in=summary_in)
     return summary
 
 
@@ -42,7 +57,6 @@ async def get_summary(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve a specific summary."""
-
     summary = crud.summary.get(db, id=id)
     if summary is None:
         raise HTTPException(
@@ -64,7 +78,6 @@ async def update_summary_by_owner(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Update summary by owner."""
-
     summary = crud.summary.get_by_owner(db, owner_id=current_user.id)
     if summary is None:
         summary = models.Summary(**schemas.SummaryUpdate().dict())
@@ -87,7 +100,6 @@ async def update_summary(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Update a specific summary."""
-
     summary = crud.summary.get(db, id=id)
     if summary is None:
         raise HTTPException(

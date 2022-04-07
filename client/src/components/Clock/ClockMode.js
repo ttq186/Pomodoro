@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { Text } from '@chakra-ui/react';
+
 import {
   switchClockMode,
   updateTimeLeft,

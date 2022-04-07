@@ -7,7 +7,6 @@ from app.db.base_class import Base
 
 class Task(Base):
     id = Column(Integer, primary_key=True)
-    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     title = Column(String, nullable=False)
     notes = Column(String)
     is_finished = Column(Boolean, default=False)
@@ -17,5 +16,7 @@ class Task(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
     finished_at = Column(DateTime(timezone=True))
+    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User", back_populates="tasks")
+    sessions = relationship("Session", back_populates="task")

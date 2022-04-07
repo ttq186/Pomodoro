@@ -24,8 +24,9 @@ import {
   getTasks,
   toggleHasJustFinishedTask,
 } from '../actions/taskListActions';
-import { getSummary, getTimerSetting } from '../actions/clockActions';
-import { getUserInfo } from '../actions/userActions';
+import { getTimerSetting } from '../actions/clockActions';
+import { getSummary } from '../actions/summaryActions';
+import { getUserInfo, getUsers } from '../actions/userActions';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getUserInfo());
+    dispatch(getUsers());
     dispatch(getTasks());
     dispatch(getTimerSetting());
     dispatch(getSummary());

@@ -28,7 +28,7 @@ const handleChooseOption = () => {};
 
 const ReportOverview = () => {
   const { totalTime, totalSessions, totalFinishedTasks } = useSelector(
-    (state) => state.clock.summary
+    (state) => state.summary
   );
   return (
     <>
@@ -55,7 +55,9 @@ const ReportOverview = () => {
             <Box d='flex' justifyContent='space-between'>
               <Image src={Clock} w='40px' />
               <Text fontSize='32px' m='0.3em' color='gray.100'>
-                {totalTime}
+                {(totalTime / 3600).toFixed(1) !== '0.0'
+                  ? `${(totalTime / 3600).toFixed(1)}h`
+                  : '0'}
               </Text>
             </Box>
             <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
@@ -178,7 +180,7 @@ const ReportOverview = () => {
             </Menu>
           </Flex>
         </Flex>
-        <Box h='380px' mt='1em' mb='0.5em'>
+        <Box h='380px' my='1em'>
           <ReportChart />
         </Box>
       </Box>

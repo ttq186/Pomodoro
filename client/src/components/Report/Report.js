@@ -1,5 +1,6 @@
+import { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import {
-  Box,
   Button,
   Modal,
   ModalOverlay,
@@ -12,13 +13,27 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
+
 import ReportOverview from './ReportOverview';
 import ReportRanking from './ReportRanking';
 import ReportTasks from './ReportTasks';
+import ReportMode from './ReportMode';
 
 const Report = () => {
+  const reportMode = useSelector((state) => state.summary.reportMode);
   const size = useBreakpointValue({ base: 'lg', md: '2xl', xl: '4xl' });
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const overviewRef = useRef(null);
+  const finishedTasksRef = useRef(null);
+  const rankingRef = useRef(null);
+
+  const mode = {
+    isOverview: reportMode === 'OVERVIEW' ? true : false,
+    isFinishedTasks: reportMode === 'FINISHED_TASKS' ? true : false,
+    isRanking: reportMode === 'RANKING' ? true : false,
+  };
+
   return (
     <>
       <Button
@@ -34,7 +49,7 @@ const Report = () => {
         Report
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
+      <Modal isOpen={isOpen} onClose={onClose} size={mode.isFinishedTasks ? '4xl' : '2xl'}>
         <ModalOverlay backdropFilter='blur(1px)' />
         <ModalContent>
           <ModalHeader px='1.2em' pt='1.3em'>
@@ -44,22 +59,21 @@ const Report = () => {
               color='gray.600'
               fontSize='18px'
             >
-              <Box
-                border='1px'
-                px='1.5em'
-                borderRadius='4'
-                cursor='pointer'
-                bg='gray.600'
-                color='gray.100'
-              >
-                Overview
-              </Box>
-              <Box border='1px' px='1.5em' borderRadius='4' cursor='pointer'>
-                Finished Tasks
-              </Box>
-              <Box border='1px' px='1.5em' borderRadius='4' cursor='pointer'>
-                Ranking
-              </Box>
+              <ReportMode
+                isActive={mode.isOverview}
+                content='Overview'
+                ref={overviewRef}
+              />
+              <ReportMode
+                isActive={mode.isFinishedTasks}
+                content='Finished Tasks'
+                ref={finishedTasksRef}
+              />
+              <ReportMode
+                isActive={mode.isRanking}
+                content='Ranking'
+                ref={rankingRef}
+              />
             </Flex>
           </ModalHeader>
 
@@ -67,9 +81,13 @@ const Report = () => {
 
           <ModalCloseButton />
           <ModalBody>
-            {/* <ReportTasks /> */}
-            {/* <ReportRanking /> */}
-            <ReportOverview />
+            {mode.isOverview ? (
+              <ReportOverview />
+            ) : mode.isFinishedTasks ? (
+              <ReportTasks />
+            ) : (
+              <ReportRanking />
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>

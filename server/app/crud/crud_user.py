@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Union, List
 
 from sqlalchemy.orm import Session
 
@@ -11,6 +11,17 @@ from app.schemas import UserCreate, UserUpdate
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         return db.query(User).filter_by(email=email).first()
+
+    def get_multi(
+        self, db: Session, *, skip: int = 0, limit: int = 100, is_admin: bool = False
+    ) -> List[User]:
+        if is_admin:
+            users = db.query(User).offset(skip).limit(limit).all()
+        else:
+            users = (
+                db.query(User).filter_by(is_admin=False).offset(skip).limit(limit).all()
+            )
+        return users
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
         new_user_data = obj_in.dict()

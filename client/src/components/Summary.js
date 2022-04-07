@@ -9,12 +9,13 @@ import {
   TagLabel,
   Image,
 } from '@chakra-ui/react';
+
 import HappyIcon from '../assets/icons/happy.svg';
 import SadIcon from '../assets/icons/sad.svg';
 
 const Summary = () => {
   const { totalTime, totalSessions, totalFinishedTasks } = useSelector(
-    (state) => state.clock.summary
+    (state) => state.summary
   );
 
   return (

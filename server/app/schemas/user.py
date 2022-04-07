@@ -4,6 +4,8 @@ from typing import Optional
 from pydantic import EmailStr
 from fastapi_camelcase import CamelModel as BaseModel
 
+from app.schemas.summary import SummaryOut
+
 
 class UserBase(BaseModel):
     """Shared Properties."""
@@ -42,4 +44,4 @@ class UserInDb(UserInDbBase):
 class UserOut(UserInDbBase):
     """Properties to return to client."""
 
-    pass
+    summary: Optional[SummaryOut]

@@ -28,10 +28,12 @@ async def get_by_owner(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
+    """Retrieve timer by owner."""
     timer = crud.timer.get_by_owner(db, owner_id=current_user.id)
-
     if timer is None:
-        return {}  # Return an empty dict to get default values from TimerOut schema.
+        timer_in = schemas.TimerInDb()
+        timer_in.user_id = current_user.id
+        timer = crud.timer.create(db, obj_in=timer_in)
     return timer
 
 

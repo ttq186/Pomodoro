@@ -7,9 +7,9 @@ import useSound from 'use-sound';
 import {
   toggleClockStart,
   updateTimeLeft,
-  updateSummary,
   switchClockMode,
 } from '../../actions/clockActions';
+import { updateSummary } from '../../actions/summaryActions';
 import {
   toggleHasJustFinishedTask,
   unChooseTask,
@@ -31,6 +31,7 @@ const Clock = () => {
 
   const isSignedIn = useSelector((state) => state.user.tokenData);
   const clockState = useSelector((state) => state.clock);
+  const summaryState = useSelector((state) => state.summary);
   const choseTask = useSelector((state) => state.taskList.choseTask);
   const timerSetting = clockState.timerSetting;
   const { sessionTime, shortBreakTime, longBreakTime, longBreakInterval } =
@@ -92,8 +93,8 @@ const Clock = () => {
   };
 
   const handleUpdateSummary = () => {
-    const newTotalTime = clockState.summary.totalTime + sessionTime;
-    const newTotalSessions = clockState.summary.totalSessions + 1;
+    const newTotalTime = summaryState.totalTime + sessionTime;
+    const newTotalSessions = summaryState.totalSessions + 1;
     dispatch(
       updateSummary({
         totalTime: newTotalTime,
@@ -104,14 +105,12 @@ const Clock = () => {
 
   const startCountdown = async (timeLeft) => {
     dispatch(toggleClockStart());
-
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     // delay 0.5s for smoother clock toggling state
     if (timeLeft > 0) await delay(500);
 
     while (timeLeft > 0) {
       playClockTickingSound();
-
       if (timeLeft === 1 && clockMode === 'START_SESSION') {
         handleUpdateSummary();
       }
@@ -170,13 +169,13 @@ const Clock = () => {
         dispatch(toggleHasJustFinishedTask());
         dispatch(updateTaskFinish(id));
         const updatedSummary = {
-          totalFinishedTasks: clockState.summary.totalFinishedTasks + 1,
+          totalFinishedTasks: summaryState.totalFinishedTasks + 1,
         };
         dispatch(updateSummary(updatedSummary));
       }
     }
     const isLongBreakMode =
-      store.getState().clock.totalSubSessions % longBreakInterval === 0;
+      store.getState().summary.totalSubSessions % longBreakInterval === 0;
 
     if (isLongBreakMode) {
       switchToLongBreakMode();

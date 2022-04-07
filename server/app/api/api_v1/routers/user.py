@@ -29,10 +29,12 @@ async def get_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_superuser),
+    current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     """Retrieve users."""
-    users = crud.user.get_multi(db, skip=skip, limit=limit)
+    users = crud.user.get_multi(
+        db, skip=skip, limit=limit, is_admin=crud.user.is_admin(current_user)
+    )
     if len(users) == 0:  # Double check here
         raise exceptions.ResourcesNotFound(resource_type="Users")
     return users

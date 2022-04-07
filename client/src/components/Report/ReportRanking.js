@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import {
   Box,
   Text,
@@ -12,6 +13,11 @@ import {
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons';
 
 const ReportRanking = () => {
+  const userList = useSelector((state) => state.user.userList);
+  const userListAfterSort = userList.sort(
+    (user1, user2) => user2.summary.totalTime - user1.summary.totalTime
+  );
+
   return (
     <>
       <Text
@@ -28,38 +34,23 @@ const ReportRanking = () => {
           <Tr>
             <Th w='5%'>#</Th>
             <Th w='80%'>USER</Th>
-            <Th w='15%'>TIME</Th>
+            <Th w='15%' px='0' textAlign='center'>TOTAL TIME</Th>
           </Tr>
         </Thead>
         <Tbody color='gray.600'>
-          <Tr color='gray.600'>
-            <Td>1</Td>
-            <Td fontWeight='bold'>Thanh Quang</Td>
-            <Td fontWeight='bold' fontSize='20px'>
-              60.5h
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>1</Td>
-            <Td fontWeight='bold'>Thanh Quang</Td>
-            <Td fontWeight='bold' fontSize='20px'>
-              60.5h
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>1</Td>
-            <Td fontWeight='bold'>Thanh Quang</Td>
-            <Td fontWeight='bold' fontSize='20px'>
-              60.5h
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>1</Td>
-            <Td fontWeight='bold'>Thanh Quang</Td>
-            <Td fontWeight='bold' fontSize='20px'>
-              60.5h
-            </Td>
-          </Tr>
+          {userListAfterSort?.map((user, index) => (
+            <Tr color='gray.600' key={user.id}>
+              <Td>{index + 1}</Td>
+              <Td fontWeight='bold'>
+                {user.username ? user.username : user.email.split('@')[0]}
+              </Td>
+              <Td fontWeight='bold' fontSize='20px'>
+                {(user.summary.totalTime / 3600).toFixed(1) !== '0.0'
+                  ? `${(user.summary.totalTime / 3600).toFixed(1)}h`
+                  : '0h'}
+              </Td>
+            </Tr>
+          ))}
         </Tbody>
       </Table>
 

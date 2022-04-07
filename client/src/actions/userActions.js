@@ -6,6 +6,7 @@ import {
   USER_GET_USER_INFO,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
+  USER_GET_USER_LIST,
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_REQUEST,
   USER_SIGNUP_REQUEST,
@@ -33,13 +34,11 @@ export const login = (email, password) => async (dispatch) => {
     const formData = new FormData();
     formData.append('username', email);
     formData.append('password', password);
-
     const { data } = await axios.post(
       `${BASE_URL}/api/login/`,
       formData,
       config
     );
-
     localStorage.setItem('tokenData', JSON.stringify(data));
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -54,9 +53,7 @@ export const login = (email, password) => async (dispatch) => {
 export const loginViaGoogle = (tokenId) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
-
     const config = getRequestConfig();
-
     const { data } = await axios.post(
       `${BASE_URL}/api/login/google`,
       { tokenId },
@@ -92,6 +89,16 @@ export const signUp = (email, password) => async (dispatch) => {
   } catch {
     dispatch({ type: USER_SIGNUP_FAIL });
   }
+};
+
+export const getUsers = () => async (dispatch) => {
+  try {
+    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
+    const config = getRequestConfig(tokenData.accessToken);
+
+    const { data } = await axios.get(`${BASE_URL}/api/users/`, config);
+    dispatch({ type: USER_GET_USER_LIST, payload: data });
+  } catch {}
 };
 
 export const getUserInfo = () => async (dispatch) => {

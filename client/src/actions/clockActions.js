@@ -2,10 +2,7 @@ import axios from 'axios';
 
 import {
   CLOCK_SWITCH_MODE,
-  CLOCK_GET_SUMMARY,
   CLOCK_TOGGLE_START,
-  CLOCK_UPDATE_SUMMARY,
-  CLOCK_GET_SUMMARY_FAIL,
   CLOCK_UPDATE_TIME_LEFT,
   CLOCK_GET_TIMER_SETTING,
   CLOCK_UPDATE_TIMER_SETTING,
@@ -55,36 +52,4 @@ export const getTimerSetting = () => async (dispatch) => {
   } catch {
     dispatch({ type: CLOCK_GET_TIMER_SETTING_FAIL });
   }
-};
-
-export const getSummary = () => async (dispatch) => {
-  try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-    const { data } = await axios.get(`${BASE_URL}/api/summary/me`, config);
-    const { totalTime, totalSessions, totalFinishedTasks } = data;
-    dispatch({
-      type: CLOCK_GET_SUMMARY,
-      payload: { totalTime, totalSessions, totalFinishedTasks },
-    });
-  } catch {
-    dispatch({ type: CLOCK_GET_SUMMARY_FAIL });
-  }
-};
-
-export const updateSummary = (updatedSummary) => async (dispatch) => {
-  try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-    const { data } = await axios.put(
-      `${BASE_URL}/api/summary/me`,
-      updatedSummary,
-      config
-    );
-
-    dispatch({
-      type: CLOCK_UPDATE_SUMMARY,
-      payload: data,
-    });
-  } catch {}
 };

@@ -4,6 +4,7 @@ import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_GET_USER_INFO,
+  USER_GET_USER_LIST,
   USER_LOGOUT_REQUEST,
   USER_LOGOUT_SUCCESS,
   USER_SIGNUP_REQUEST,
@@ -56,6 +57,9 @@ export const userReducer = (state = initialState, action) => {
 
     case USER_LOGOUT_SUCCESS:
       return { ...initialState, tokenData: null };
+
+    case USER_GET_USER_LIST:
+      return { ...state, userList: action.payload };
 
     case USER_GET_USER_INFO:
       return { ...state, userInfo: action.payload };

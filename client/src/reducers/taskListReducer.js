@@ -105,7 +105,6 @@ export const taskListReducer = (state = initialState, action) => {
       const justFinishedTask = state.tasks.find(
         (item) => item.id === action.payload.id
       );
-
       const otherTasks = state.tasks.filter(
         (item) => item.id !== action.payload.id
       );

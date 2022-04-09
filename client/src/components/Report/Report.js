@@ -49,7 +49,7 @@ const Report = () => {
         Report
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size={mode.isFinishedTasks ? '4xl' : '2xl'}>
+      <Modal isOpen={isOpen} onClose={onClose} size={mode.isFinishedTasks ? '3xl' : '2xl'}>
         <ModalOverlay backdropFilter='blur(1px)' />
         <ModalContent>
           <ModalHeader px='1.2em' pt='1.3em'>

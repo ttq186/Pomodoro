@@ -13,7 +13,6 @@ import { updateSummary } from '../../actions/summaryActions';
 import {
   toggleHasJustFinishedTask,
   unChooseTask,
-  updateTaskFinish,
   updateTaskProgress,
 } from '../../actions/taskListActions';
 import ClockModal from '../../components/Clock/ClockModal';
@@ -162,17 +161,17 @@ const Clock = () => {
     }
     if (choseTask) {
       const { id, target, progress } = choseTask;
-      dispatch(updateTaskProgress(id, progress));
-
+      const payload = { progress: progress + 1 };
       if (target === progress + 1) {
         dispatch(unChooseTask());
         dispatch(toggleHasJustFinishedTask());
-        dispatch(updateTaskFinish(id));
+        payload.isFinished = true;
         const updatedSummary = {
           totalFinishedTasks: summaryState.totalFinishedTasks + 1,
         };
         dispatch(updateSummary(updatedSummary));
       }
+      dispatch(updateTaskProgress(id, payload));
     }
     const isLongBreakMode =
       store.getState().summary.totalSubSessions % longBreakInterval === 0;

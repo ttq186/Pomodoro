@@ -105,34 +105,16 @@ export const getTasks = () => async (dispatch) => {
   }
 };
 
-export const updateTaskProgress =
-  (taskId, currentProgress) => async (dispatch) => {
-    try {
-      const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-      const config = getRequestConfig(tokenData.accessToken);
-
-      const { data } = await axios.put(
-        `${BASE_URL}/api/tasks/${taskId}`,
-        { progress: currentProgress + 1 },
-        config
-      );
-      dispatch({ type: TASKLIST_UPDATE_TASK_PROGRESS, payload: data });
-    } catch {}
-  };
-
-export const updateTaskFinish = (taskId) => async (dispatch) => {
+export const updateTaskProgress = (taskId, payload) => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.put(
       `${BASE_URL}/api/tasks/${taskId}`,
-      { isFinished: true },
+      payload,
       config
     );
-    dispatch({
-      type: TASKLIST_UPDATE_TASK_FINISH,
-      payload: data,
-    });
+    dispatch({ type: TASKLIST_UPDATE_TASK_PROGRESS, payload: data });
   } catch {}
 };

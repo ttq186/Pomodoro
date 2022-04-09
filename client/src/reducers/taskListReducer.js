@@ -101,17 +101,6 @@ export const taskListReducer = (state = initialState, action) => {
       };
     }
 
-    case TASKLIST_UPDATE_TASK_FINISH: {
-      const justFinishedTask = state.tasks.find(
-        (item) => item.id === action.payload.id
-      );
-      const otherTasks = state.tasks.filter(
-        (item) => item.id !== action.payload.id
-      );
-
-      return { ...state, tasks: [justFinishedTask, ...otherTasks] };
-    }
-
     case TASKLIST_REMOVE_TASK: {
       const newTasks = state.tasks.filter((item) => item.id !== action.payload);
       return { ...state, tasks: newTasks };

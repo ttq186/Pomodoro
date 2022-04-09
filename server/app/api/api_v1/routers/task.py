@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from fastapi import status, Depends, APIRouter
@@ -69,6 +70,8 @@ async def update_task(
     if not crud.user.is_admin(current_user) and (task.user_id != current_user.id):
         raise exceptions.NotAuthorized()
 
+    if payload.is_finished:
+        payload.finished_at = datetime.now()
     updated_task_data = jsonable_encoder(task)
     update_data = {
         **updated_task_data,

@@ -12,9 +12,10 @@ class TaskBase(BaseModel):
     title: Optional[str] = None
     notes: Optional[str] = None
     is_finished: Optional[bool] = False
-    finished_at: Optional[datetime] = None
     progress: Optional[int] = Field(ge=0)
     target: Optional[int] = Field(gt=0)
+    created_at: Optional[datetime] = None
+    finished_at: Optional[datetime] = None
     user_id: Optional[str] = None
 
 

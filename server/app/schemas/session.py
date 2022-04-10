@@ -9,8 +9,9 @@ class SessionBase(BaseModel):
     """Shared properties."""
 
     id: Optional[str]
-    length: Optional[int] = Field(ge=0)
+    length: Optional[int] = Field(gt=0)
     finished_at: Optional[datetime] = None
+    task_id: Optional[str] = None
     user_id: Optional[str]
 
 

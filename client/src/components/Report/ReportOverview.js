@@ -27,9 +27,6 @@ import ReportChart from './ReportChart';
 const handleChooseOption = () => {};
 
 const ReportOverview = () => {
-  const { totalTime, totalSessions, totalFinishedTasks } = useSelector(
-    (state) => state.summary
-  );
   return (
     <>
       <Box>
@@ -55,9 +52,7 @@ const ReportOverview = () => {
             <Box d='flex' justifyContent='space-between'>
               <Image src={Clock} w='40px' />
               <Text fontSize='32px' m='0.3em' color='gray.100'>
-                {(totalTime / 3600).toFixed(1) !== '0.0'
-                  ? `${(totalTime / 3600).toFixed(1)}h`
-                  : '0'}
+                40
               </Text>
             </Box>
             <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
@@ -74,7 +69,7 @@ const ReportOverview = () => {
             <Box d='flex' justifyContent='space-between'>
               <Image src={Session} w='40px' />
               <Text fontSize='32px' m='0.3em' color='gray.100'>
-                {totalSessions}
+                100
               </Text>
             </Box>
             <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
@@ -91,7 +86,7 @@ const ReportOverview = () => {
             <Box d='flex' justifyContent='space-between'>
               <Image src={Task} w='40px' />
               <Text fontSize='32px' m='0.3em' color='gray.100'>
-                {totalFinishedTasks}
+                12
               </Text>
             </Box>
             <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>

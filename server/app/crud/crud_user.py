@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.security import get_hashed_password, verify_password
 from app.crud.base import CRUDBase
-from app.models import User, Summary
+from app.models import User
 from app.schemas import UserCreate, UserUpdate
 
 
@@ -23,7 +23,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
                 db.query(User)
                 .join(User.summary, isouter=True)
                 .filter(User.is_admin == False)  # noqa
-                .order_by(nulls_last(desc(Summary.total_time)))
+                # .order_by(nulls_last(desc(Summary.total_time)))
                 .offset(skip)
                 .limit(limit)
                 .all()

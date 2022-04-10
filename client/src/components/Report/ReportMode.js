@@ -1,8 +1,8 @@
 import { forwardRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Box } from '@chakra-ui/react';
 
-import { switchReportMode } from '../../actions/summaryActions';
+import { switchReportMode } from '../../actions/reportActions';
 
 const ReportMode = forwardRef((props, ref) => {
   const dispatch = useDispatch();

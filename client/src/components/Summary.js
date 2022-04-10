@@ -14,9 +14,9 @@ import HappyIcon from '../assets/icons/happy.svg';
 import SadIcon from '../assets/icons/sad.svg';
 
 const Summary = () => {
-  const { totalTime, totalSessions, totalFinishedTasks } = useSelector(
-    (state) => state.summary
-  );
+  // const { totalTime, totalSessions, totalFinishedTasks } = useSelector(
+  //   (state) => state.summary
+  // );
 
   return (
     <Box
@@ -38,7 +38,7 @@ const Summary = () => {
         opacity='0.85'
       >
         <Image
-          src={totalTime / 3600 >= 1 ? HappyIcon : SadIcon}
+          src={4000 / 3600 >= 1 ? HappyIcon : SadIcon}
           w={{ base: '20px', md: '27px' }}
           h={{ base: '20px', md: '27px' }}
           mr='5px'
@@ -51,7 +51,7 @@ const Summary = () => {
           fontWeight='600'
           fontSize={{ base: '13px', md: '16px' }}
         >
-          Your's Progress
+          Today Progress
         </TagLabel>
       </Tag>
 
@@ -65,9 +65,9 @@ const Summary = () => {
             Total
           </StatLabel>
           <StatNumber fontSize={{ base: '24px', md: '28px' }}>
-            {(totalTime / 3600).toFixed(1) !== '0.0'
+            {/* {(totalTime / 3600).toFixed(1) !== '0.0'
               ? `${(totalTime / 3600).toFixed(1)}h`
-              : '0h'}
+              : '0h'} */}
           </StatNumber>
         </Stat>
 
@@ -80,7 +80,7 @@ const Summary = () => {
             Session
           </StatLabel>
           <StatNumber fontSize={{ base: '24px', md: '28px' }}>
-            {totalSessions}
+            {/* {totalSessions} */}
           </StatNumber>
         </Stat>
 
@@ -93,7 +93,7 @@ const Summary = () => {
             Task Done
           </StatLabel>
           <StatNumber fontSize={{ base: '24px', md: '28px' }}>
-            {totalFinishedTasks}
+            {/* {totalFinishedTasks} */}
           </StatNumber>
         </Stat>
       </StatGroup>

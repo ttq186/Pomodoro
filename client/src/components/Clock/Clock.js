@@ -9,7 +9,7 @@ import {
   updateTimeLeft,
   switchClockMode,
 } from '../../actions/clockActions';
-import { updateSummary } from '../../actions/summaryActions';
+// import { updateSummary } from '../../actions/summaryActions';
 import {
   toggleHasJustFinishedTask,
   unChooseTask,
@@ -91,16 +91,16 @@ const Clock = () => {
     }
   };
 
-  const handleUpdateSummary = () => {
-    const newTotalTime = summaryState.totalTime + sessionTime;
-    const newTotalSessions = summaryState.totalSessions + 1;
-    dispatch(
-      updateSummary({
-        totalTime: newTotalTime,
-        totalSessions: newTotalSessions,
-      })
-    );
-  };
+  // const handleUpdateSummary = () => {
+  //   const newTotalTime = summaryState.totalTime + sessionTime;
+  //   const newTotalSessions = summaryState.totalSessions + 1;
+  //   dispatch(
+  //     updateSummary({
+  //       totalTime: newTotalTime,
+  //       totalSessions: newTotalSessions,
+  //     })
+  //   );
+  // };
 
   const startCountdown = async (timeLeft) => {
     dispatch(toggleClockStart());
@@ -111,7 +111,7 @@ const Clock = () => {
     while (timeLeft > 0) {
       playClockTickingSound();
       if (timeLeft === 1 && clockMode === 'START_SESSION') {
-        handleUpdateSummary();
+        // handleUpdateSummary();
       }
       // Stop countdown if stop button is clicked
       if (!store.getState().clock.isStart) return;
@@ -166,10 +166,10 @@ const Clock = () => {
         dispatch(unChooseTask());
         dispatch(toggleHasJustFinishedTask());
         payload.isFinished = true;
-        const updatedSummary = {
-          totalFinishedTasks: summaryState.totalFinishedTasks + 1,
-        };
-        dispatch(updateSummary(updatedSummary));
+        // const updatedSummary = {
+        //   totalFinishedTasks: summaryState.totalFinishedTasks + 1,
+        // };
+        // dispatch(updateSummary(updatedSummary));
       }
       dispatch(updateTaskProgress(id, payload));
     }

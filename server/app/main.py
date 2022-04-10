@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.api_v1.routers import user, task, auth, timer, summary, session
+from app.api.api_v1.routers import user, task, auth, timer, session
 
 app = FastAPI(
     title="Pomodoro App",
@@ -28,5 +28,4 @@ app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(task.router)
 app.include_router(timer.router)
-app.include_router(summary.router)
 app.include_router(session.router)

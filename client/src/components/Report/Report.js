@@ -20,7 +20,7 @@ import ReportTasks from './ReportTasks';
 import ReportMode from './ReportMode';
 
 const Report = () => {
-  const reportMode = useSelector((state) => state.summary.reportMode);
+  const reportMode = useSelector((state) => state.report.reportMode);
   const size = useBreakpointValue({ base: 'lg', md: '2xl', xl: '4xl' });
   const { isOpen, onOpen, onClose } = useDisclosure();
 

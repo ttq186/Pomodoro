@@ -1,5 +1,6 @@
 from typing import List
 
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
@@ -12,7 +13,12 @@ class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
         self, db: Session, *, owner_id: str, skip: int = 0, limit: int = 0
     ) -> List[Task]:
         tasks = (
-            db.query(Task).filter_by(user_id=owner_id).offset(skip).limit(limit).all()
+            db.query(Task)
+            .filter_by(user_id=owner_id)
+            .order_by(desc(Task.created_at))
+            .offset(skip)
+            .limit(limit)
+            .all()
         )
         return tasks
 

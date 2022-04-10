@@ -7,7 +7,6 @@ import {
   TASKLIST_UNCHOOSE_TASK,
   TASKLIST_SUBMIT_ADD_TASK,
   TASKLIST_TOGGLE_ADD_TASK,
-  TASKLIST_UPDATE_TASK_FINISH,
   TASKLIST_CANCEL_MODIFY_TASK,
   TASKLIST_SUBMIT_MODIFY_TASK,
   TASKLIST_UPDATE_TASK_PROGRESS,
@@ -20,6 +19,7 @@ const initialState = {
   isModifyTask: false,
   hasJustFinishedTask: false,
   tasks: [],
+  finishedTasksWithPage: [],
   modifiedTask: null,
 };
 

@@ -6,7 +6,6 @@ import {
   USER_GET_USER_INFO,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
-  USER_GET_USER_LIST,
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_REQUEST,
   USER_SIGNUP_REQUEST,
@@ -14,9 +13,11 @@ import {
   USER_UPDATE_USER_INFO,
   USER_TOKEN_HAS_EXPIRED,
   USER_PASSWORD_RESET_FAIL,
-  USER_PASSWORD_RESET_SUCCESS,
   USER_GET_USER_INFO_FAILED,
   USER_REMOVE_MESSAGE_STATE,
+  USER_GET_USER_LIST_BY_PAGE,
+  USER_PASSWORD_RESET_SUCCESS,
+  USER_GET_USER_LIST_BY_PAGE_FAILED,
 } from '../constants/userConstants';
 import { getErrorMessageFromServer, getRequestConfig } from '../utils';
 
@@ -91,14 +92,19 @@ export const signUp = (email, password) => async (dispatch) => {
   }
 };
 
-export const getUsers = () => async (dispatch) => {
+export const getUsersByPage = (page, size) => async (dispatch) => {
   try {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
 
-    const { data } = await axios.get(`${BASE_URL}/api/users/`, config);
-    dispatch({ type: USER_GET_USER_LIST, payload: data });
-  } catch {}
+    const { data } = await axios.get(
+      `${BASE_URL}/api/users/?skip=${(page - 1) * size}&limit=${size}`,
+      config
+    );
+    dispatch({ type: USER_GET_USER_LIST_BY_PAGE, payload: data });
+  } catch {
+    dispatch({ type: USER_GET_USER_LIST_BY_PAGE_FAILED });
+  }
 };
 
 export const getUserInfo = () => async (dispatch) => {

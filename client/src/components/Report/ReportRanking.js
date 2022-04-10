@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Text,
@@ -13,27 +13,26 @@ import {
 } from '@chakra-ui/react';
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons';
 
+import { getUsersByPage } from '../../actions/userActions';
+
 const ReportRanking = () => {
+  const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const userList = useSelector((state) => state.user.userList);
+  const userListByPage = useSelector((state) => state.user.userListByPage);
   const PAGE_SIZE = 8;
-  const MAX_PAGE = Math.ceil(userList.length / PAGE_SIZE);
-  const userListAfterSort = userList.sort(
+  const userListByPageAfterSort = userListByPage.sort(
     (user1, user2) => user2.summary?.totalTime - user1.summary?.totalTime
-  );
-  const userListWithPageAfterSort = userListAfterSort.slice(
-    (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE
   );
 
   const handleSwitchPrevPage = () => {
     if (page === 1) return;
+    dispatch(getUsersByPage(page - 1, PAGE_SIZE));
     setPage(page - 1);
   };
 
   const handleSwitchNextPage = () => {
-    console.log(MAX_PAGE);
-    if (page === MAX_PAGE) return;
+    if (userListByPage.length < PAGE_SIZE || userListByPage.length == 0) return;
+    dispatch(getUsersByPage(page + 1, PAGE_SIZE));
     setPage(page + 1);
   };
 
@@ -58,14 +57,22 @@ const ReportRanking = () => {
             </Th>
           </Tr>
         </Thead>
-        <Tbody color='gray.600'>
-          {userListWithPageAfterSort?.map((user, index) => (
-            <Tr color='gray.600' key={user.id}>
-              <Td>{index + 1 + (page - 1) * PAGE_SIZE}</Td>
+        <Tbody>
+          {userListByPageAfterSort?.map((user, index) => (
+            <Tr color='gray.700' key={user.id}>
+              <Td color='gray.600' px='0' textAlign='center'>
+                {index + 1 + (page - 1) * PAGE_SIZE}
+              </Td>
               <Td fontWeight='bold'>
                 {user.username ? user.username : user.email.split('@')[0]}
               </Td>
-              <Td fontWeight='bold' fontSize='20px'>
+              <Td
+                fontWeight='bold'
+                fontSize='20px'
+                color='gray.600'
+                px='0'
+                textAlign='center'
+              >
                 {!user.summary
                   ? '0h'
                   : (user.summary.totalTime / 3600).toFixed(1) !== '0.0'

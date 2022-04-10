@@ -4,7 +4,6 @@ import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_GET_USER_INFO,
-  USER_GET_USER_LIST,
   USER_LOGOUT_REQUEST,
   USER_LOGOUT_SUCCESS,
   USER_SIGNUP_REQUEST,
@@ -13,8 +12,10 @@ import {
   USER_TOKEN_HAS_EXPIRED,
   USER_PASSWORD_RESET_FAIL,
   USER_GET_USER_INFO_FAILED,
-  USER_PASSWORD_RESET_SUCCESS,
   USER_REMOVE_MESSAGE_STATE,
+  USER_GET_USER_LIST_BY_PAGE,
+  USER_PASSWORD_RESET_SUCCESS,
+  USER_GET_USER_LIST_BY_PAGE_FAILED,
 } from '../constants/userConstants';
 import { getTokenFromLocalStorage } from '../utils';
 
@@ -24,6 +25,7 @@ const initialState = {
     username: null,
     email: '@',
   },
+  userListByPage: [],
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -58,8 +60,11 @@ export const userReducer = (state = initialState, action) => {
     case USER_LOGOUT_SUCCESS:
       return { ...initialState, tokenData: null };
 
-    case USER_GET_USER_LIST:
-      return { ...state, userList: action.payload };
+    case USER_GET_USER_LIST_BY_PAGE:
+      return { ...state, userListByPage: action.payload };
+
+    case USER_GET_USER_LIST_BY_PAGE_FAILED:
+      return { ...state, userListByPage: [] };
 
     case USER_GET_USER_INFO:
       return { ...state, userInfo: action.payload };

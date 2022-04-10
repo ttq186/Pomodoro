@@ -54,13 +54,7 @@ const TaskList = () => {
         </ScaleFade>
       ) : modifiedTask ? (
         <ScaleFade initialScale={0.9} in={true}>
-          <TaskForm
-            id={modifiedTask.id}
-            title={modifiedTask.title}
-            target={modifiedTask.target}
-            progress={modifiedTask.progress}
-            notes={modifiedTask.notes}
-          />
+          <TaskForm {...modifiedTask} />
         </ScaleFade>
       ) : (
         <SlideFade offsetY='-20px' in={true}>
@@ -82,16 +76,7 @@ const TaskList = () => {
             }}
           >
             {taskListState.tasks.map((item) => (
-              <TaskItem
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                notes={item.notes}
-                progress={item.progress}
-                target={item.target}
-                isDisabled={item.isDisabled}
-                isFinished={item.isFinished}
-              />
+              <TaskItem key={item.id} {...item} />
             ))}
           </Box>
         </SlideFade>

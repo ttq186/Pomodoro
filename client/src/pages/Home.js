@@ -26,7 +26,7 @@ import {
 } from '../actions/taskListActions';
 import { getTimerSetting } from '../actions/clockActions';
 import { getSummary } from '../actions/summaryActions';
-import { getUserInfo, getUsers } from '../actions/userActions';
+import { getUserInfo, getUsersByPage } from '../actions/userActions';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -35,6 +35,8 @@ const Home = () => {
   );
   const loading = useSelector((state) => state.user.loading);
   const tokenData = useSelector((state) => state.user.tokenData);
+  const DEFAULT_PAGE = 1;
+  const PAGE_SIZE = 8;
 
   const handleCloseButtonClick = () => {
     dispatch(toggleHasJustFinishedTask());
@@ -42,7 +44,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getUserInfo());
-    dispatch(getUsers());
+    dispatch(getUsersByPage(DEFAULT_PAGE, PAGE_SIZE));
     dispatch(getTasks());
     dispatch(getTimerSetting());
     dispatch(getSummary());

@@ -2,6 +2,7 @@ import {
   REPORT_ADD_SESSION,
   REPORT_GET_SESSIONS,
   REPORT_SWITCH_REPORT_MODE,
+  REPORT_UPDATE_TOTAL_SUB_SESSIONS,
 } from '../constants/reportConstants';
 
 const initialState = {
@@ -24,7 +25,6 @@ export const reportReducer = (state = initialState, action) => {
       const newSessionList = [action.payload, ...state.sessionList];
       return {
         ...state,
-        totalSubSessions: state.totalSubSessions + 1,
         sessionList: newSessionList,
       };
     }
@@ -37,5 +37,11 @@ export const reportReducer = (state = initialState, action) => {
 
     default:
       return state;
+
+    case REPORT_UPDATE_TOTAL_SUB_SESSIONS:
+      return {
+        ...state,
+        totalSubSessions: state.totalSubSessions + 1,
+      };
   }
 };

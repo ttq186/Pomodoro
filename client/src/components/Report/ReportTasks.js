@@ -51,7 +51,6 @@ const ReportTasks = () => {
         </Thead>
         <Tbody fontWeight='bold'>
           {finishedTasksByPage.map((task, index) => {
-            const totalTime = 368;
             return (
               <Tr color='gray.600' key={task.id}>
                 <Td color='gray.600' fontWeight='normal'>
@@ -67,8 +66,8 @@ const ReportTasks = () => {
                   {formatServerDatetime(task.finishedAt)}
                 </Td>
                 <Td fontSize='20px' textAlign='center' px='0.2em'>
-                  {(totalTime / 60).toFixed(1) !== '0.0'
-                    ? `${(totalTime / 60).toFixed(1)}h`
+                  {(task.totalTime / 3600).toFixed(1) !== '0.0'
+                    ? `${(task.totalTime / 3600).toFixed(1)}h`
                     : '0h'}
                 </Td>
               </Tr>

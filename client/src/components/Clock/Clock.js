@@ -14,7 +14,10 @@ import {
   unChooseTask,
   updateTaskProgress,
 } from '../../actions/taskListActions';
-import { addSession } from '../../actions/reportActions';
+import {
+  addSession,
+  updateTotalSubSessions,
+} from '../../actions/reportActions';
 import ClockModal from '../../components/Clock/ClockModal';
 import ClockMode from '../../components/Clock/ClockMode';
 import { secondsToTime } from '../../utils';
@@ -31,9 +34,6 @@ const Clock = () => {
   const isSignedIn = useSelector((state) => state.user.tokenData);
   const clockState = useSelector((state) => state.clock);
   const choseTask = useSelector((state) => state.taskList.choseTask);
-  const totalSubSessions = useSelector(
-    (state) => state.report.totalSubSessions
-  );
   const timerSetting = clockState.timerSetting;
   const { sessionTime, shortBreakTime, longBreakTime, longBreakInterval } =
     timerSetting;
@@ -48,9 +48,6 @@ const Clock = () => {
     isShortBreak: clockMode === 'SHORT_BREAK' ? true : false,
     isLongBreak: clockMode === 'LONG_BREAK' ? true : false,
   };
-  // const isLongBreakMode =
-  //   store.getState().report.totalSubSessions % longBreakInterval === 0;
-
   const [playButtonSound] = useSound(drumKick);
   const [playAlarmSound] = useSound(alarm, {
     sprite: {
@@ -95,17 +92,6 @@ const Clock = () => {
     }
   };
 
-  // const handleUpdateSummary = () => {
-  //   const newTotalTime = summaryState.totalTime + sessionTime;
-  //   const newTotalSessions = summaryState.totalSessions + 1;
-  //   dispatch(
-  //     updateSummary({
-  //       totalTime: newTotalTime,
-  //       totalSessions: newTotalSessions,
-  //     })
-  //   );
-  // };
-
   const startCountdown = async (timeLeft) => {
     dispatch(toggleClockStart());
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -115,7 +101,7 @@ const Clock = () => {
     while (timeLeft > 0) {
       playClockTickingSound();
       if (timeLeft === 1 && clockMode === 'START_SESSION') {
-        // handleUpdateSummary();
+        dispatch(updateTotalSubSessions());
       }
       // Stop countdown if stop button is clicked
       if (!store.getState().clock.isStart) return;

@@ -4,6 +4,7 @@ import {
   REPORT_ADD_SESSION,
   REPORT_GET_SESSIONS,
   REPORT_SWITCH_REPORT_MODE,
+  REPORT_UPDATE_TOTAL_SUB_SESSIONS,
 } from '../constants/reportConstants';
 import { getRequestConfig } from '../utils';
 
@@ -12,6 +13,10 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 export const switchReportMode = (mode) => ({
   type: REPORT_SWITCH_REPORT_MODE,
   payload: mode,
+});
+
+export const updateTotalSubSessions = () => ({
+  type: REPORT_UPDATE_TOTAL_SUB_SESSIONS,
 });
 
 export const addSession = (newSessionInfo) => async (dispatch) => {

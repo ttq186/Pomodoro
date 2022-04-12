@@ -44,4 +44,4 @@ class TaskInDb(TaskInDbBase):
 class TaskOut(TaskInDbBase):
     """Properties to return to client."""
 
-    pass
+    total_time: Optional[int] = Field(ge=0, default=0)

@@ -20,3 +20,10 @@ class Task(Base):
 
     user = relationship("User", back_populates="tasks")
     sessions = relationship("Session", back_populates="task")
+
+    @property
+    def total_time(self) -> int:
+        result = 0
+        for session in self.sessions:
+            result += session.length
+        return result

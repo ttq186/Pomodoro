@@ -25,6 +25,7 @@ import {
   toggleHasJustFinishedTask,
 } from '../actions/taskListActions';
 import { getTimerSetting } from '../actions/clockActions';
+import { getSessions } from '../actions/reportActions';
 import { getUserInfo, getUsersByPage } from '../actions/userActions';
 
 const Home = () => {
@@ -46,6 +47,7 @@ const Home = () => {
     dispatch(getUsersByPage(DEFAULT_PAGE, PAGE_SIZE));
     dispatch(getTasks());
     dispatch(getTimerSetting());
+    dispatch(getSessions());
     // dispatch(getSummary());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

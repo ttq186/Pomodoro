@@ -21,7 +21,7 @@ class TickingSoundEnum(str, Enum):
 class TimerBase(BaseModel):
     """Shared Properties."""
 
-    id: Optional[str]
+    id: Optional[int]
     session_time: Optional[int] = Field(default=1500, gl=0)
     short_break_time: Optional[int] = Field(default=300, gl=0)
     long_break_time: Optional[int] = Field(default=1200, gl=0)

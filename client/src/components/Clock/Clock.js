@@ -9,12 +9,12 @@ import {
   updateTimeLeft,
   switchClockMode,
 } from '../../actions/clockActions';
-// import { updateSummary } from '../../actions/summaryActions';
 import {
   toggleHasJustFinishedTask,
   unChooseTask,
   updateTaskProgress,
 } from '../../actions/taskListActions';
+import { addSession } from '../../actions/reportActions';
 import ClockModal from '../../components/Clock/ClockModal';
 import ClockMode from '../../components/Clock/ClockMode';
 import { secondsToTime } from '../../utils';
@@ -30,8 +30,10 @@ const Clock = () => {
 
   const isSignedIn = useSelector((state) => state.user.tokenData);
   const clockState = useSelector((state) => state.clock);
-  const summaryState = useSelector((state) => state.summary);
   const choseTask = useSelector((state) => state.taskList.choseTask);
+  const totalSubSessions = useSelector(
+    (state) => state.report.totalSubSessions
+  );
   const timerSetting = clockState.timerSetting;
   const { sessionTime, shortBreakTime, longBreakTime, longBreakInterval } =
     timerSetting;
@@ -46,6 +48,8 @@ const Clock = () => {
     isShortBreak: clockMode === 'SHORT_BREAK' ? true : false,
     isLongBreak: clockMode === 'LONG_BREAK' ? true : false,
   };
+  // const isLongBreakMode =
+  //   store.getState().report.totalSubSessions % longBreakInterval === 0;
 
   const [playButtonSound] = useSound(drumKick);
   const [playAlarmSound] = useSound(alarm, {
@@ -154,28 +158,25 @@ const Clock = () => {
   const handleFinishCountdown = () => {
     stopCountdown();
     playClockAlarmSound();
-
     if (clockMode === 'SHORT_BREAK' || clockMode === 'LONG_BREAK') {
       switchToStartSessionMode();
       return;
     }
+    const newSessionInfo = { length: sessionTime };
     if (choseTask) {
       const { id, target, progress } = choseTask;
-      const payload = { progress: progress + 1 };
+      const updatedTaskInfo = { progress: progress + 1 };
+      newSessionInfo.taskId = id;
       if (target === progress + 1) {
         dispatch(unChooseTask());
         dispatch(toggleHasJustFinishedTask());
-        payload.isFinished = true;
-        // const updatedSummary = {
-        //   totalFinishedTasks: summaryState.totalFinishedTasks + 1,
-        // };
-        // dispatch(updateSummary(updatedSummary));
+        updatedTaskInfo.isFinished = true;
       }
-      dispatch(updateTaskProgress(id, payload));
+      dispatch(updateTaskProgress(id, updatedTaskInfo));
     }
+    dispatch(addSession(newSessionInfo));
     const isLongBreakMode =
-      store.getState().summary.totalSubSessions % longBreakInterval === 0;
-
+      store.getState().report.totalSubSessions % longBreakInterval === 0;
     if (isLongBreakMode) {
       switchToLongBreakMode();
     } else {

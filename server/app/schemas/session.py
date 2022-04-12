@@ -8,10 +8,10 @@ from fastapi_camelcase import CamelModel as BaseModel
 class SessionBase(BaseModel):
     """Shared properties."""
 
-    id: Optional[str]
+    id: Optional[int]
     length: Optional[int] = Field(gt=0)
     finished_at: Optional[datetime] = None
-    task_id: Optional[str] = None
+    task_id: Optional[int] = None
     user_id: Optional[str]
 
 

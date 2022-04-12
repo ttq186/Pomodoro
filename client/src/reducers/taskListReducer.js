@@ -19,7 +19,6 @@ const initialState = {
   isModifyTask: false,
   hasJustFinishedTask: false,
   tasks: [],
-  finishedTasksWithPage: [],
   modifiedTask: null,
 };
 

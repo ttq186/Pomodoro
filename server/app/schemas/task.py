@@ -8,7 +8,7 @@ from fastapi_camelcase import CamelModel as BaseModel
 class TaskBase(BaseModel):
     """Shared properties."""
 
-    id: Optional[str] = None
+    id: Optional[int] = None
     title: Optional[str] = None
     notes: Optional[str] = None
     is_finished: Optional[bool] = False

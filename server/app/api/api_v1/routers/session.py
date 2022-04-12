@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from fastapi import status, Depends, APIRouter
@@ -51,6 +52,7 @@ async def create_session(
 ):
     """Create a new session."""
     session_in.user_id = current_user.id
+    session_in.finished_at = datetime.now()
     new_session = crud.session.create(db, obj_in=session_in)
     return new_session
 

@@ -27,6 +27,12 @@ import ReportChart from './ReportChart';
 const handleChooseOption = () => {};
 
 const ReportOverview = () => {
+  const sessionList = useSelector((state) => state.report.sessionList);
+  const taskList = useSelector((state) => state.taskList.tasks);
+  const totalFinishedTasks = taskList.filter((task) => task.isFinished).length;
+  let totalTime = 0;
+  sessionList.forEach((session) => (totalTime += session.length));
+
   return (
     <>
       <Box>
@@ -52,7 +58,7 @@ const ReportOverview = () => {
             <Box d='flex' justifyContent='space-between'>
               <Image src={Clock} w='40px' />
               <Text fontSize='32px' m='0.3em' color='gray.100'>
-                40
+                {totalTime}
               </Text>
             </Box>
             <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
@@ -69,7 +75,7 @@ const ReportOverview = () => {
             <Box d='flex' justifyContent='space-between'>
               <Image src={Session} w='40px' />
               <Text fontSize='32px' m='0.3em' color='gray.100'>
-                100
+                {sessionList.length}
               </Text>
             </Box>
             <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
@@ -86,7 +92,7 @@ const ReportOverview = () => {
             <Box d='flex' justifyContent='space-between'>
               <Image src={Task} w='40px' />
               <Text fontSize='32px' m='0.3em' color='gray.100'>
-                12
+                {totalFinishedTasks}
               </Text>
             </Box>
             <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
@@ -155,7 +161,7 @@ const ReportOverview = () => {
                   h='2em'
                   variant='outline'
                   size='sm'
-                ></Button>
+                />
                 <Box
                   px='20px'
                   fontSize='16px'
@@ -170,7 +176,7 @@ const ReportOverview = () => {
                   h='2em'
                   variant='outline'
                   size='sm'
-                ></Button>
+                />
               </Flex>
             </Menu>
           </Flex>

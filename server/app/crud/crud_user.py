@@ -21,7 +21,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         else:
             users = (
                 db.query(User)
-                .join(User.summary, isouter=True)
+                # .join(User.summary, isouter=True)
                 .filter(User.is_admin == False)  # noqa
                 # .order_by(nulls_last(desc(Summary.total_time)))
                 .offset(skip)

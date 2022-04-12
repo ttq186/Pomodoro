@@ -34,7 +34,6 @@ export const getRequestConfig = (accessToken) => {
       'Content-Type': 'application/json',
     },
   };
-
   if (accessToken) {
     config.headers.Authorization = `bearer ${accessToken}`;
   }
@@ -45,4 +44,14 @@ export const getTokenFromLocalStorage = () => {
   return localStorage.getItem('tokenData')
     ? JSON.parse(localStorage.getItem('tokenData'))
     : null;
+};
+
+export const isToday = (date) => {
+  const today = new Date();
+  const checkDate = new Date(date);
+  return (
+    checkDate.getDate() === today.getDate() &&
+    checkDate.getMonth() === today.getMonth() &&
+    checkDate.getFullYear() === today.getFullYear()
+  );
 };

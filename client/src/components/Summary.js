@@ -12,7 +12,7 @@ import {
 
 import HappyIcon from '../assets/icons/happy.svg';
 import SadIcon from '../assets/icons/sad.svg';
-import { isToday } from '../utils';
+import { isToday } from '../utils/timeUtils';
 
 const Summary = () => {
   const sessionList = useSelector((state) => state.report.sessionList);

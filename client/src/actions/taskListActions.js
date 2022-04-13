@@ -12,10 +12,9 @@ import {
   TASKLIST_CANCEL_MODIFY_TASK,
   TASKLIST_SUBMIT_MODIFY_TASK,
   TASKLIST_UPDATE_TASK_PROGRESS,
-  TASKLIST_GET_FINISHED_TASKS_WITH_PAGE,
   TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK,
 } from '../constants/taskListConstants';
-import { getRequestConfig } from '../utils';
+import { getRequestConfig } from '../utils/serverUtils';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 

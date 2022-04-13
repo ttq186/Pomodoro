@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -18,10 +18,10 @@ import { getUsersByPage } from '../../actions/userActions';
 const ReportRanking = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const userListByPage = useSelector((state) => state.user.userListByPage);
   const PAGE_SIZE = 8;
+  const userListByPage = useSelector((state) => state.user.userListByPage);
   const userListByPageAfterSort = userListByPage.sort(
-    (user1, user2) => user2.summary?.totalTime - user1.summary?.totalTime
+    (user1, user2) => user2.totalTimeThisWeek - user1.totalTimeThisWeek
   );
 
   const handleSwitchPrevPage = () => {
@@ -31,10 +31,15 @@ const ReportRanking = () => {
   };
 
   const handleSwitchNextPage = () => {
-    if (userListByPage.length < PAGE_SIZE || userListByPage.length == 0) return;
+    if (userListByPage.length < PAGE_SIZE || userListByPage.length === 0)
+      return;
     dispatch(getUsersByPage(page + 1, PAGE_SIZE));
     setPage(page + 1);
   };
+
+  useEffect(() => {
+    dispatch(getUsersByPage(page, PAGE_SIZE));
+  }, []);
 
   return (
     <>
@@ -73,10 +78,8 @@ const ReportRanking = () => {
                 px='0'
                 textAlign='center'
               >
-                {!user.summary
-                  ? '0h'
-                  : (user.summary.totalTime / 3600).toFixed(1) !== '0.0'
-                  ? `${(user.summary.totalTime / 3600).toFixed(1)}h`
+                {(user.totalTimeThisWeek / 3600).toFixed(1) !== '0.0'
+                  ? `${(user.totalTimeThisWeek / 3600).toFixed(1)}h`
                   : '0h'}
               </Td>
             </Tr>

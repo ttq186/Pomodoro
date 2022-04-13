@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import uuid4
 
 from sendgrid import SendGridAPIClient
@@ -8,6 +9,12 @@ from app.core.config import settings
 
 def generate_uuid() -> str:
     return str(uuid4())
+
+
+def is_in_curr_week(date: datetime) -> bool:
+    curr_week_number = datetime.now().isocalendar()[1]
+    checked_week_number = date.isocalendar()[1]
+    return checked_week_number == curr_week_number
 
 
 def send_reset_password_email(to_emails, reset_link):

@@ -8,7 +8,7 @@ import {
   CLOCK_UPDATE_TIMER_SETTING,
   CLOCK_GET_TIMER_SETTING_FAIL,
 } from '../constants/clockConstants';
-import { getRequestConfig } from '../utils';
+import { getRequestConfig } from '../utils/serverUtils';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 

@@ -19,3 +19,11 @@ class User(Base):
     tasks = relationship("Task", back_populates="user")
     sessions = relationship("Session", back_populates="user")
     timer = relationship("Timer", back_populates="user", uselist=False)
+
+    @property
+    def total_time_this_week(self) -> int:
+        result = 0
+        for session in self.sessions:
+            if utils.is_in_curr_week(session.finished_at):
+                result += session.length
+        return result

@@ -127,30 +127,36 @@ const ReportOverview = () => {
                 size='sm'
                 mr='1em'
                 rightIcon={<ChevronDownIcon />}
+                defaultValue="Week"
               >
-                Day
+                Week
               </MenuButton>
               <MenuList
-                bg='gray.300'
+                bg='gray.200'
                 color='gray.600'
                 border='none'
                 borderRadius='4px'
                 minW='0'
-                w='150px'
+                w='120px'
+                fontSize='14px'
+                fontWeight='bold'
               >
                 <MenuOptionGroup
                   defaultValue='Day'
                   type='radio'
                   onChange={(optionValue) => handleChooseOption(optionValue)}
                 >
-                  <MenuItemOption value='Day' _hover={{ bg: 'gray.400' }}>
-                    Day
-                  </MenuItemOption>
-                  <MenuItemOption value='Week' _hover={{ bg: 'gray.400' }}>
+                  <MenuItemOption
+                    value='Week'
+                    _hover={{ bg: 'gray.300' }}
+                  >
                     Week
                   </MenuItemOption>
-                  <MenuItemOption value='Year' _hover={{ bg: 'gray.400' }}>
-                    Year
+                  <MenuItemOption
+                    value='Month'
+                    _hover={{ bg: 'gray.300' }}
+                  >
+                    Month
                   </MenuItemOption>
                 </MenuOptionGroup>
               </MenuList>

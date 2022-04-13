@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import EmailStr
+from pydantic import Field, EmailStr
 from fastapi_camelcase import CamelModel as BaseModel
 
 
@@ -42,4 +42,4 @@ class UserInDb(UserInDbBase):
 class UserOut(UserInDbBase):
     """Properties to return to client."""
 
-    # summary: Optional[SummaryOut]
+    total_time_this_week: Optional[int] = Field(ge=0, default=0)

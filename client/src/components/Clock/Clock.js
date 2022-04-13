@@ -20,7 +20,7 @@ import {
 } from '../../actions/reportActions';
 import ClockModal from '../../components/Clock/ClockModal';
 import ClockMode from '../../components/Clock/ClockMode';
-import { secondsToTime } from '../../utils';
+import { secondsToTime } from '../../utils/timeUtils';
 import store from '../../store';
 import drumKick from '../../assets/sounds/drum-kick.mp3';
 import alarm from '../../assets/sounds/alarm-sound.mp3';

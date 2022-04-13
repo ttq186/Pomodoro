@@ -8,7 +8,7 @@ import {
   updateTimeLeft,
   toggleClockStart,
 } from '../../actions/clockActions';
-import { secondsToTime } from '../../utils';
+import { secondsToTime } from '../../utils/timeUtils';
 
 const ClockMode = forwardRef((props, ref) => {
   const dispatch = useDispatch();

@@ -6,7 +6,7 @@ import {
   REPORT_SWITCH_REPORT_MODE,
   REPORT_UPDATE_TOTAL_SUB_SESSIONS,
 } from '../constants/reportConstants';
-import { getRequestConfig } from '../utils';
+import { getRequestConfig } from '../utils/serverUtils';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 

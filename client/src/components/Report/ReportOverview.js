@@ -25,9 +25,11 @@ import Clock from '../../assets/icons/clock2.svg';
 import Session from '../../assets/icons/session.svg';
 import Task from '../../assets/icons/task.svg';
 import ReportChart from './ReportChart';
-import { isInNWeekAgo, formatDate } from '../../utils/timeUtils';
-
-const handleChooseOption = () => {};
+import { formatDate } from '../../utils/timeUtils';
+import {
+  classifySessionsByDayInNWeekAgo,
+  classifySessionsByMonthInNYearAgo,
+} from '../../utils/sessionUtils';
 
 const ReportOverview = () => {
   const sessionList = useSelector((state) => state.report.sessionList);
@@ -37,45 +39,46 @@ const ReportOverview = () => {
   sessionList.forEach((session) => (totalTime += session.length));
 
   const [nWeekAgo, setNWeekAgo] = useState(0);
-  const sessionsInNWeekAgo = sessionList.filter((session) =>
-    isInNWeekAgo(session.finishedAt, nWeekAgo)
-  );
-  let sessionsByDayInNWeekAgo = Array(7)
-    .fill()
-    .map(() => ({
-      date: null,
-      totalTime: 0,
-    }));
+  const [nYearAgo, setNYearAgo] = useState(0);
+  const [isReportByWeek, setReportByWeek] = useState(true);
   const firstDayInNWeekAgo = DateTime.local()
     .startOf('week')
     .minus({ days: nWeekAgo * 7 });
-
-  sessionsInNWeekAgo.forEach((session) => {
-    const finishedDate = new Date(session.finishedAt);
-    sessionsByDayInNWeekAgo[finishedDate.getDay()].totalTime += session.length;
-  });
-
-  sessionsByDayInNWeekAgo.forEach((sessionsByDate, index) => {
-    if (index === 0) {
-      sessionsByDate.date = formatDate(
-        firstDayInNWeekAgo.plus({ days: index + 6 }).toString()
-      );
-    } else {
-      sessionsByDate.date = formatDate(
-        firstDayInNWeekAgo.plus({ days: index - 1 }).toString()
-      );
-    }
-    sessionsByDate.totalTime =
-      Math.round((sessionsByDate.totalTime / 60) * 10) / 10;
-  });
+  const currentYear = new Date().getFullYear();
+  const sessionsByDayInNWeekAgo = classifySessionsByDayInNWeekAgo(
+    sessionList,
+    nWeekAgo
+  );
+  const sessionsByMonthInNYearAgo = classifySessionsByMonthInNYearAgo(
+    sessionList,
+    nYearAgo
+  );
 
   const handlePrevBtnClick = () => {
-    setNWeekAgo(nWeekAgo + 1);
+    if (isReportByWeek) {
+      setNWeekAgo(nWeekAgo + 1);
+    } else {
+      setNYearAgo(nYearAgo + 1);
+    }
   };
   const handleNextBtnClick = () => {
-    if (nWeekAgo <= 0) return;
-    setNWeekAgo(nWeekAgo - 1);
+    if (isReportByWeek) {
+      if (nWeekAgo <= 0) return;
+      setNWeekAgo(nWeekAgo - 1);
+    } else {
+      if (nYearAgo <= 0) return;
+      setNYearAgo(nYearAgo - 1);
+    }
   };
+
+  const handleChooseOption = (optionValue) => {
+    if (optionValue === 'Week') {
+      setReportByWeek(true);
+    } else {
+      setReportByWeek(false);
+    }
+  };
+
   return (
     <>
       <Box>
@@ -170,9 +173,8 @@ const ReportOverview = () => {
                 size='sm'
                 mr='1em'
                 rightIcon={<ChevronDownIcon />}
-                defaultValue='Week'
               >
-                Week
+                {isReportByWeek ? 'Week' : 'Year'}
               </MenuButton>
               <MenuList
                 bg='gray.200'
@@ -219,11 +221,13 @@ const ReportOverview = () => {
                   fontWeight='bold'
                   color='gray.600'
                 >
-                  {nWeekAgo === 0
-                    ? 'This Week'
-                    : `~ ${formatDate(firstDayInNWeekAgo.toString())}-${
-                        firstDayInNWeekAgo.c.year
-                      }`}
+                  {isReportByWeek
+                    ? nWeekAgo === 0
+                      ? 'This Week'
+                      : `~ ${formatDate(firstDayInNWeekAgo.toString())}-${
+                          firstDayInNWeekAgo.c.year
+                        }`
+                    : currentYear - nYearAgo}
                 </Box>
                 <Button
                   rightIcon={<ArrowForwardIcon />}
@@ -239,10 +243,15 @@ const ReportOverview = () => {
         </Flex>
         <Box h='380px' my='1em'>
           <ReportChart
-            data={[
-              ...sessionsByDayInNWeekAgo.slice(1),
-              sessionsByDayInNWeekAgo[0],
-            ]}
+            data={
+              isReportByWeek
+                ? [
+                    ...sessionsByDayInNWeekAgo.slice(1),
+                    sessionsByDayInNWeekAgo[0],
+                  ]
+                : sessionsByMonthInNYearAgo
+            }
+            isReportByWeek={isReportByWeek}
           />
         </Box>
       </Box>

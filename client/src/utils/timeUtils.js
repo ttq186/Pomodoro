@@ -43,6 +43,12 @@ export const isInNWeekAgo = (date, n) => {
   return false;
 };
 
+export const isInNYearAgo = (date, n) => {
+  const today = new Date();
+  const checkedDate = new Date(date);
+  return checkedDate.getFullYear() === today.getFullYear() - n;
+};
+
 export const formatDate = (checkedDate) => {
   const dateArr = new Date(checkedDate).toDateString().split(' ');
   const dateAfterFormat = `(${dateArr[0]}) ${dateArr[2]}-${dateArr[1]}`;

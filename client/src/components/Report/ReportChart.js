@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-const ReportChart = ({ data }) => {
+const ReportChart = ({ data, isReportByWeek }) => {
   return (
     <ResponsiveContainer>
       <BarChart
@@ -22,13 +22,16 @@ const ReportChart = ({ data }) => {
       >
         <CartesianGrid strokeDasharray='0' />
         <XAxis
-          dataKey='date'
-          angle='-10'
+          dataKey={isReportByWeek ? 'date' : 'month'}
+          angle={isReportByWeek ? -10 : 0}
           fontSize='13px'
           tickMargin={7}
           interval={0}
         />
-        <YAxis type='number' domain={['auto', (dataMax) => Math.ceil(dataMax) ]} />
+        <YAxis
+          type='number'
+          domain={['auto', (dataMax) => Math.ceil(dataMax)]}
+        />
         <Tooltip />
         <Bar dataKey='totalTime' name='Hours' fill='#A0AEC0' />
       </BarChart>

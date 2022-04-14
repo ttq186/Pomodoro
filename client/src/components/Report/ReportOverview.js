@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -18,11 +19,13 @@ import {
   ArrowBackIcon,
   ArrowForwardIcon,
 } from '@chakra-ui/icons';
+import { DateTime } from 'luxon';
 
 import Clock from '../../assets/icons/clock2.svg';
 import Session from '../../assets/icons/session.svg';
 import Task from '../../assets/icons/task.svg';
 import ReportChart from './ReportChart';
+import { isInNWeekAgo, formatDate } from '../../utils/timeUtils';
 
 const handleChooseOption = () => {};
 
@@ -33,6 +36,46 @@ const ReportOverview = () => {
   let totalTime = 0;
   sessionList.forEach((session) => (totalTime += session.length));
 
+  const [nWeekAgo, setNWeekAgo] = useState(0);
+  const sessionsInNWeekAgo = sessionList.filter((session) =>
+    isInNWeekAgo(session.finishedAt, nWeekAgo)
+  );
+  let sessionsByDayInNWeekAgo = Array(7)
+    .fill()
+    .map(() => ({
+      date: null,
+      totalTime: 0,
+    }));
+  const firstDayInNWeekAgo = DateTime.local()
+    .startOf('week')
+    .minus({ days: nWeekAgo * 7 });
+
+  sessionsInNWeekAgo.forEach((session) => {
+    const finishedDate = new Date(session.finishedAt);
+    sessionsByDayInNWeekAgo[finishedDate.getDay()].totalTime += session.length;
+  });
+
+  sessionsByDayInNWeekAgo.forEach((sessionsByDate, index) => {
+    if (index === 0) {
+      sessionsByDate.date = formatDate(
+        firstDayInNWeekAgo.plus({ days: index + 6 }).toString()
+      );
+    } else {
+      sessionsByDate.date = formatDate(
+        firstDayInNWeekAgo.plus({ days: index - 1 }).toString()
+      );
+    }
+    sessionsByDate.totalTime =
+      Math.round((sessionsByDate.totalTime / 60) * 10) / 10;
+  });
+
+  const handlePrevBtnClick = () => {
+    setNWeekAgo(nWeekAgo + 1);
+  };
+  const handleNextBtnClick = () => {
+    if (nWeekAgo <= 0) return;
+    setNWeekAgo(nWeekAgo - 1);
+  };
   return (
     <>
       <Box>
@@ -58,7 +101,7 @@ const ReportOverview = () => {
             <Box d='flex' justifyContent='space-between'>
               <Image src={Clock} w='40px' />
               <Text fontSize='32px' m='0.3em' color='gray.100'>
-                {totalTime}
+                {(totalTime / 3600).toFixed(1)}
               </Text>
             </Box>
             <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
@@ -127,7 +170,7 @@ const ReportOverview = () => {
                 size='sm'
                 mr='1em'
                 rightIcon={<ChevronDownIcon />}
-                defaultValue="Week"
+                defaultValue='Week'
               >
                 Week
               </MenuButton>
@@ -139,24 +182,25 @@ const ReportOverview = () => {
                 minW='0'
                 w='120px'
                 fontSize='14px'
-                fontWeight='bold'
               >
                 <MenuOptionGroup
-                  defaultValue='Day'
                   type='radio'
+                  defaultValue='Week'
                   onChange={(optionValue) => handleChooseOption(optionValue)}
                 >
                   <MenuItemOption
                     value='Week'
+                    fontWeight='bold'
                     _hover={{ bg: 'gray.300' }}
                   >
                     Week
                   </MenuItemOption>
                   <MenuItemOption
-                    value='Month'
+                    value='Year'
+                    fontWeight='bold'
                     _hover={{ bg: 'gray.300' }}
                   >
-                    Month
+                    Year
                   </MenuItemOption>
                 </MenuOptionGroup>
               </MenuList>
@@ -167,14 +211,19 @@ const ReportOverview = () => {
                   h='2em'
                   variant='outline'
                   size='sm'
+                  onClick={handlePrevBtnClick}
                 />
                 <Box
-                  px='20px'
+                  px='10px'
                   fontSize='16px'
                   fontWeight='bold'
                   color='gray.600'
                 >
-                  Today
+                  {nWeekAgo === 0
+                    ? 'This Week'
+                    : `~ ${formatDate(firstDayInNWeekAgo.toString())}-${
+                        firstDayInNWeekAgo.c.year
+                      }`}
                 </Box>
                 <Button
                   rightIcon={<ArrowForwardIcon />}
@@ -182,13 +231,19 @@ const ReportOverview = () => {
                   h='2em'
                   variant='outline'
                   size='sm'
+                  onClick={handleNextBtnClick}
                 />
               </Flex>
             </Menu>
           </Flex>
         </Flex>
         <Box h='380px' my='1em'>
-          <ReportChart />
+          <ReportChart
+            data={[
+              ...sessionsByDayInNWeekAgo.slice(1),
+              sessionsByDayInNWeekAgo[0],
+            ]}
+          />
         </Box>
       </Box>
     </>

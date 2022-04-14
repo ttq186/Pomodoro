@@ -22,19 +22,29 @@ export const isToday = (date) => {
   );
 };
 
-export const isInCurrWeek = (date) => {
+export const isInNWeekAgo = (date, n) => {
   const checkedDate = new Date(date);
-  const today = new Date();
-  const firstDayOfCurrWeek = new Date(
-    today.setDate(
-      today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1)
+  const today1 = new Date();
+  const today2 = new Date();
+  const firstDayOfNWeekAgo = new Date(
+    today1.setDate(
+      today1.getDate() -
+        today1.getDay() +
+        (today1.getDay() === 0 ? -6 : 1) -
+        n * 7
     )
   );
-  const lastDayOfCurrWeek = new Date(
-    today.setDate(today.getDate() - today.getDay() + 7)
+  const lastDayOfNWeekAgo = new Date(
+    today2.setDate(today2.getDate() - today2.getDay() - (n - 1) * 7)
   );
-  if (checkedDate >= firstDayOfCurrWeek && checkedDate <= lastDayOfCurrWeek) {
+  if (checkedDate >= firstDayOfNWeekAgo && checkedDate <= lastDayOfNWeekAgo) {
     return true;
   }
   return false;
+};
+
+export const formatDate = (checkedDate) => {
+  const dateArr = new Date(checkedDate).toDateString().split(' ');
+  const dateAfterFormat = `(${dateArr[0]}) ${dateArr[2]}-${dateArr[1]}`;
+  return dateAfterFormat;
 };

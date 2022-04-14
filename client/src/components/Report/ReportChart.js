@@ -8,38 +8,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-const data = [
-  {
-    name: '(Wed) 5-Jan',
-    Hours: 3.9,
-  },
-  {
-    name: '(Thu) 6-Jan',
-    Hours: 3,
-  },
-  {
-    name: '(Fri) 7-Jan',
-    Hours: 2,
-  },
-  {
-    name: '(Sat) 8-Jan',
-    Hours: 2.7,
-  },
-  {
-    name: '(Sun) 9-Jan',
-    Hours: 1.9,
-  },
-  {
-    name: '(Mon) 10-Jan',
-    Hours: 2.3,
-  },
-  {
-    name: '(Tue) 11-Jan',
-    Hours: 3.4,
-  },
-];
-
-const ReportChart = () => {
+const ReportChart = ({ data }) => {
   return (
     <ResponsiveContainer>
       <BarChart
@@ -47,21 +16,21 @@ const ReportChart = () => {
         margin={{
           top: 0,
           right: 15,
-          left: -30,
+          left: -20,
           bottom: 10,
         }}
       >
-        <CartesianGrid strokeDasharray='3 3' />
+        <CartesianGrid strokeDasharray='0' />
         <XAxis
-          dataKey='name'
+          dataKey='date'
           angle='-10'
           fontSize='13px'
           tickMargin={7}
           interval={0}
         />
-        <YAxis />
+        <YAxis type='number' domain={['auto', (dataMax) => Math.ceil(dataMax) ]} />
         <Tooltip />
-        <Bar dataKey='Hours' fill='#A0AEC0' />
+        <Bar dataKey='totalTime' name='Hours' fill='#A0AEC0' />
       </BarChart>
     </ResponsiveContainer>
   );

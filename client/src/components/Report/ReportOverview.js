@@ -13,6 +13,7 @@ import {
   MenuList,
   MenuOptionGroup,
   MenuItemOption,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import {
   ChevronDownIcon,
@@ -21,6 +22,7 @@ import {
 } from '@chakra-ui/icons';
 import { DateTime } from 'luxon';
 
+import PaginationButton from '../PaginationButton';
 import Clock from '../../assets/icons/clock2.svg';
 import Session from '../../assets/icons/session.svg';
 import Task from '../../assets/icons/task.svg';
@@ -32,6 +34,7 @@ import {
 } from '../../utils/sessionUtils';
 
 const ReportOverview = () => {
+  const buttonSize = useBreakpointValue({ base: 'xs', lg: 'sm' });
   const sessionList = useSelector((state) => state.report.sessionList);
   const taskList = useSelector((state) => state.taskList.tasks);
   const totalFinishedTasks = taskList.filter((task) => task.isFinished).length;
@@ -84,7 +87,7 @@ const ReportOverview = () => {
       <Box>
         <Tag
           bg='gray.400'
-          fontSize={{ base: '14px', md: '16px' }}
+          fontSize={{ base: '13px', md: '14px', lg: '15px', xl: '16px' }}
           py='4px'
           fontWeight='600'
           borderRadius='sm'
@@ -93,17 +96,25 @@ const ReportOverview = () => {
           Activity Overview
         </Tag>
 
-        <Flex my='0.8em' justifyContent='space-around'>
+        <Flex
+          my='0.8em'
+          justifyContent='space-around'
+          fontSize={{ base: '11px', md: '14px', xl: '16px' }}
+        >
           <Box
             bg='gray.500'
-            w='28%'
+            w={{ base: '30%', lg: '29%', xl: '28%' }}
             px='1em'
             borderRadius='md'
             fontWeight='bold'
           >
             <Box d='flex' justifyContent='space-between'>
-              <Image src={Clock} w='40px' />
-              <Text fontSize='32px' m='0.3em' color='gray.100'>
+              <Image src={Clock} w={{ base: '30px', md: '35', lg: '40px' }} />
+              <Text
+                fontSize={{ base: '28px', md: '30px', lg: '32px' }}
+                m='0.3em'
+                color='gray.100'
+              >
                 {(totalTime / 3600).toFixed(1)}
               </Text>
             </Box>
@@ -113,14 +124,18 @@ const ReportOverview = () => {
           </Box>
           <Box
             bg='gray.500'
-            w='28%'
+            w={{ base: '30%', lg: '29%', xl: '28%' }}
             px='1em'
             borderRadius='md'
             fontWeight='bold'
           >
             <Box d='flex' justifyContent='space-between'>
-              <Image src={Session} w='40px' />
-              <Text fontSize='32px' m='0.3em' color='gray.100'>
+              <Image src={Session} w={{ base: '30px', md: '35', lg: '40px' }} />
+              <Text
+                fontSize={{ base: '28px', md: '30px', lg: '32px' }}
+                m='0.3em'
+                color='gray.100'
+              >
                 {sessionList.length}
               </Text>
             </Box>
@@ -130,14 +145,18 @@ const ReportOverview = () => {
           </Box>
           <Box
             bg='gray.500'
-            w='28%'
+            w={{ base: '30%', lg: '29%', xl: '28%' }}
             px='1em'
             borderRadius='md'
             fontWeight='bold'
           >
             <Box d='flex' justifyContent='space-between'>
-              <Image src={Task} w='40px' />
-              <Text fontSize='32px' m='0.3em' color='gray.100'>
+              <Image src={Task} w={{ base: '30px', md: '35', lg: '40px' }} />
+              <Text
+                fontSize={{ base: '28px', md: '30px', lg: '32px' }}
+                m='0.3em'
+                color='gray.100'
+              >
                 {totalFinishedTasks}
               </Text>
             </Box>
@@ -154,7 +173,7 @@ const ReportOverview = () => {
         <Flex justifyContent='space-between' alignItems='center' pr='1em'>
           <Tag
             bg='gray.400'
-            fontSize={{ base: '14px', md: '16px' }}
+            fontSize={{ base: '13px', md: '14px', lg: '15px', xl: '16px' }}
             py='4px'
             fontWeight='600'
             borderRadius='sm'
@@ -170,7 +189,7 @@ const ReportOverview = () => {
                 variant='customize'
                 bg='gray.300'
                 color='gray.600'
-                size='sm'
+                size={buttonSize}
                 mr='1em'
                 rightIcon={<ChevronDownIcon />}
               >
@@ -207,17 +226,14 @@ const ReportOverview = () => {
                 </MenuOptionGroup>
               </MenuList>
               <Flex justifyContent='center' alignItems='center'>
-                <Button
-                  rightIcon={<ArrowBackIcon />}
-                  pl='6px'
-                  h='2em'
-                  variant='outline'
-                  size='sm'
-                  onClick={handlePrevBtnClick}
+                <PaginationButton
+                  icon={<ArrowBackIcon />}
+                  size={buttonSize}
+                  onClickHandler={handlePrevBtnClick}
                 />
                 <Box
                   px='10px'
-                  fontSize='16px'
+                  fontSize={{ base: '13px', md: '14px', lg: '16px' }}
                   fontWeight='bold'
                   color='gray.600'
                 >
@@ -229,19 +245,16 @@ const ReportOverview = () => {
                         }`
                     : currentYear - nYearAgo}
                 </Box>
-                <Button
-                  rightIcon={<ArrowForwardIcon />}
-                  pl='6px'
-                  h='2em'
-                  variant='outline'
-                  size='sm'
-                  onClick={handleNextBtnClick}
+                <PaginationButton
+                  icon={<ArrowForwardIcon />}
+                  size={buttonSize}
+                  onClickHandler={handleNextBtnClick}
                 />
               </Flex>
             </Menu>
           </Flex>
         </Flex>
-        <Box h='380px' my='1em'>
+        <Box h={{ base: '300px', md: '330px', lg: '340px' }} my='1em'>
           <ReportChart
             data={
               isReportByWeek

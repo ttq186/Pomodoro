@@ -9,13 +9,16 @@ import {
   Table,
   Thead,
   Tbody,
-  Button,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons';
 
 import { getUsersByPage } from '../../actions/userActions';
+import PaginationButton from '../PaginationButton';
 
 const ReportRanking = () => {
+  const buttonSize = useBreakpointValue({ base: 'xs', md: 'sm' });
+  const tableSize = useBreakpointValue({ base: 'sm', md: 'md' });
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 8;
@@ -39,26 +42,36 @@ const ReportRanking = () => {
 
   useEffect(() => {
     dispatch(getUsersByPage(page, PAGE_SIZE));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
       <Text
-        fontSize='xl'
+        fontSize={{ base: '16px', md: 'xl' }}
         fontWeight='bold'
         textAlign='center'
         color='gray.700'
-        mt='0.5em'
+        my={{ base: '0.35em', xl: '0.5em' }}
       >
         Focus time this week
       </Text>
-      <Table textAlign='center'>
+      <Table textAlign='center' size={tableSize}>
         <Thead>
           <Tr>
-            <Th w='5%'>#</Th>
-            <Th w='80%'>USER</Th>
-            <Th w='15%' px='0' textAlign='center'>
-              TOTAL TIME
+            <Th textAlign='center' fontSize={{base: '10px', md: '14px'}}>
+              #
+            </Th>
+            <Th w='75%' fontSize={{ base: '10px', md: '12px' }}>
+              USER
+            </Th>
+            <Th
+              w='20%'
+              px='0'
+              textAlign='center'
+              fontSize={{ base: '10px', md: '12px' }}
+            >
+              TOTAL
             </Th>
           </Tr>
         </Thead>
@@ -68,12 +81,12 @@ const ReportRanking = () => {
               <Td color='gray.600' px='0' textAlign='center'>
                 {index + 1 + (page - 1) * PAGE_SIZE}
               </Td>
-              <Td fontWeight='bold'>
+              <Td fontWeight='bold' fontSize={{ base: '13px', md: '16px' }}>
                 {user.username ? user.username : user.email.split('@')[0]}
               </Td>
               <Td
                 fontWeight='bold'
-                fontSize='20px'
+                fontSize={{ base: '16px', md: '20px' }}
                 color='gray.600'
                 px='0'
                 textAlign='center'
@@ -87,23 +100,29 @@ const ReportRanking = () => {
         </Tbody>
       </Table>
 
-      <Box d='flex' justifyContent='center' alignItems='center' my='1em'>
-        <Button
-          rightIcon={<ArrowBackIcon />}
-          pl='10px'
-          h='2em'
-          variant='outline'
-          onClick={handleSwitchPrevPage}
+      <Box
+        d='flex'
+        justifyContent='center'
+        alignItems='center'
+        my={{ base: '0.5em', md: '1em' }}
+      >
+        <PaginationButton
+          icon={<ArrowBackIcon />}
+          size={buttonSize}
+          onClickHandler={handleSwitchPrevPage}
         />
-        <Box px='20px' fontSize='23px' fontWeight='bold' color='gray.600'>
+        <Box
+          px='20px'
+          fontSize={{ base: '20px', md: '23px' }}
+          fontWeight='bold'
+          color='gray.600'
+        >
           {page}
         </Box>
-        <Button
-          rightIcon={<ArrowForwardIcon />}
-          pl='10px'
-          h='2em'
-          variant='outline'
-          onClick={handleSwitchNextPage}
+        <PaginationButton
+          icon={<ArrowForwardIcon />}
+          size={buttonSize}
+          onClickHandler={handleSwitchNextPage}
         />
       </Box>
     </>

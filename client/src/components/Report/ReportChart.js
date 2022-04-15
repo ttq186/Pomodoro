@@ -1,3 +1,4 @@
+import { calc } from '@chakra-ui/react';
 import {
   BarChart,
   Bar,
@@ -16,20 +17,22 @@ const ReportChart = ({ data, isReportByWeek }) => {
         margin={{
           top: 0,
           right: 15,
-          left: -20,
+          left: -25,
           bottom: 10,
         }}
       >
         <CartesianGrid strokeDasharray='0' />
         <XAxis
           dataKey={isReportByWeek ? 'date' : 'month'}
-          angle={isReportByWeek ? -10 : 0}
-          fontSize='13px'
-          tickMargin={7}
+          angle={isReportByWeek ? -12 : 0}
+          fontSize='calc(8px + 0.28vw)'
+          fontWeight='bold'
+          tickMargin={8}
           interval={0}
         />
         <YAxis
           type='number'
+          fontSize='calc(9px + 0.5vw)'
           domain={['auto', (dataMax) => Math.ceil(dataMax)]}
         />
         <Tooltip />

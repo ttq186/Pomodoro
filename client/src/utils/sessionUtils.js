@@ -31,7 +31,7 @@ export const classifySessionsByDayInNWeekAgo = (sessionList, nWeekAgo) => {
       );
     }
     sessionsByDate.totalTime =
-      Math.round((sessionsByDate.totalTime / 60) * 10) / 10;
+      Math.round((sessionsByDate.totalTime / 3600) * 10) / 10;
   });
   return sessionsByDayInNWeekAgo;
 };
@@ -57,7 +57,7 @@ export const classifySessionsByMonthInNYearAgo = (sessionList, nYearAgo) => {
     const monthName = january.plus({ months: index }).toFormat('LLL');
     sessionsByMonth.month = monthName;
     sessionsByMonth.totalTime =
-      Math.round((sessionsByMonth.totalTime / 60) * 10) / 10;
+      Math.round((sessionsByMonth.totalTime / 3600) * 10) / 10;
   });
   return sessionsByMonthInNYearAgo;
 };

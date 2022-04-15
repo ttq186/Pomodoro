@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "async": "^3.2.2",
     "axios": "^0.24.0",
     "framer-motion": "^4.1.17",
     "history": "^5.2.0",
@@ -20,7 +21,7 @@
     "react-hook-form": "^7.22.5",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
-    "react-scripts": "^5.0.0",
+    "react-scripts": "^5.0.1",
     "recharts": "^2.1.9",
     "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9",
@@ -32,8 +33,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "preinstall": "npx npm-force-resolutions"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -52,13 +52,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "ajv": "^8.11.0",
-    "postcss": "8.2.14"
-  },
-  "resolutions": {
-    "postcss": "8.2.14",
-    "nth-check": "^2.0.1"
   }
 }

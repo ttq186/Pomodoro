@@ -15,8 +15,8 @@ const ReportMode = forwardRef((props, ref) => {
   return props.isActive ? (
     <Box
       border='1px'
-      px='1.5em'
-      borderRadius='4'
+      px={{ base: '0.7em', md: '1.5em' }}
+      borderRadius={{ base: '3', md: '4' }}
       cursor='pointer'
       bg='gray.600'
       color='gray.100'
@@ -26,8 +26,8 @@ const ReportMode = forwardRef((props, ref) => {
   ) : (
     <Box
       border='1px'
-      px='1.5em'
-      borderRadius='4'
+      px={{ base: '0.7em', md: '1.5em' }}
+      borderRadius={{ base: '3', md: '4' }}
       cursor='pointer'
       ref={ref}
       onClick={handleToggleMode}

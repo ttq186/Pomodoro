@@ -29,7 +29,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             )
             users = (
                 db.query(User)
-                .outerjoin(sub_query_stmt, User.id == sub_query_stmt.c.user_id)
+                .join(sub_query_stmt, User.id == sub_query_stmt.c.user_id)
                 .filter(User.is_admin == False)  # noqa
                 .order_by(nulls_last(desc(sub_query_stmt.c.total_time)))
                 .offset(skip)

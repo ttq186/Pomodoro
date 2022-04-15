@@ -134,7 +134,7 @@ const ClockModal = () => {
           color='gray.600'
           mt='7em'
           borderTopRadius='lg'
-          w={{ base: '90%' }}
+          w='90%'
           pb='1em'
         >
           <ModalHeader

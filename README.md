@@ -1,4 +1,4 @@
-# <img src="./client/src/assets/icons/../../../public/pomodoro.png" width='25px'> Pomodoro <img src="./client/src/assets/icons/../../../public/pomodoro.png" width='25px'> 
+# <img src="./client/src/assets/icons/../../../public/pomodoro.png" width='25px'> Pomodoro
 
 ### **A Pomodoro app, built with FastAPI/SQLAlchemy and React/Redux**
 
@@ -11,6 +11,7 @@
 
 ## Features
 - Authenticate with auth2 + JWT token
+- Sign in/sign out/change password
 - Reset password via email with an intuitive email template
 - Test API directly with an interactive API document (SwaggerUI)
 - Applies the pomodoro technique for the countdown timer 

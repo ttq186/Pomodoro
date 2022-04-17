@@ -34,7 +34,7 @@ const Profile = () => {
     getValues,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm(userInfo);
 
   const handleFormSubmit = () => {
     const newUserInfo = {
@@ -44,7 +44,7 @@ const Profile = () => {
       newUserInfo.password = getValues().password;
     }
     dispatch(updateUserInfo(newUserInfo));
-    reset();
+    reset(userInfo);
     onClose();
   };
 

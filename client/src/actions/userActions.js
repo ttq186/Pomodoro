@@ -122,8 +122,13 @@ export const getUserInfo = () => async (dispatch) => {
     };
     dispatch({ type: USER_GET_USER_INFO, payload: userInfo });
   } catch (error) {
+    if (!error.response) {
+      localStorage.removeItem('tokenData');
+      dispatch({ type: USER_TOKEN_HAS_EXPIRED });
+      return;
+    }
     const errorMessage = getErrorMessageFromServer(error);
-    if (!error.response || errorMessage === 'Token has expired!') {
+    if (errorMessage === 'Token has expired!') {
       alert('Your working session has timed out. Please sign in again!');
       localStorage.removeItem('tokenData');
       dispatch({ type: USER_TOKEN_HAS_EXPIRED });

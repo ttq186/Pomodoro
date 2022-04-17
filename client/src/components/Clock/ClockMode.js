@@ -49,7 +49,7 @@ const ClockMode = forwardRef((props, ref) => {
 
   return props.isActive ? (
     <Text
-      w='28%'
+      w={{base: '31%', sm: '28%'}}
       textAlign='center'
       py='4px'
       cursor='pointer'
@@ -61,7 +61,7 @@ const ClockMode = forwardRef((props, ref) => {
     </Text>
   ) : (
     <Text
-      w='28%'
+      w={{base: '31%', sm: '28%'}}
       textAlign='center'
       py='4px'
       cursor='pointer'

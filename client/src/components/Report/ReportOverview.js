@@ -4,8 +4,6 @@ import {
   Box,
   Tag,
   Flex,
-  Image,
-  Text,
   Divider,
   Menu,
   MenuButton,
@@ -32,6 +30,7 @@ import {
   classifySessionsByDayInNWeekAgo,
   classifySessionsByMonthInNYearAgo,
 } from '../../utils/sessionUtils';
+import ActivityOverview from '../ActivityOverview';
 
 const ReportOverview = () => {
   const buttonSize = useBreakpointValue({ base: 'xs', lg: 'sm' });
@@ -87,102 +86,78 @@ const ReportOverview = () => {
       <Box>
         <Tag
           bg='gray.400'
-          fontSize={{ base: '13px', md: '14px', lg: '15px', xl: '16px' }}
+          fontSize={{
+            base: '11px',
+            sm: '13px',
+            md: '14px',
+            lg: '15px',
+            xl: '16px',
+          }}
           py='4px'
           fontWeight='600'
           borderRadius='sm'
-          my='8px'
+          mb={{base: '0', md: '0.8em'}}
+          mt={{base: '0.8em'}}
         >
           Activity Overview
         </Tag>
 
-        <Flex
-          my='0.8em'
-          justifyContent='space-around'
-          fontSize={{ base: '11px', md: '14px', xl: '16px' }}
-        >
-          <Box
-            bg='gray.500'
-            w={{ base: '30%', lg: '29%', xl: '28%' }}
-            px='1em'
-            borderRadius='md'
-            fontWeight='bold'
-          >
-            <Box d='flex' justifyContent='space-between'>
-              <Image src={Clock} w={{ base: '30px', md: '35', lg: '40px' }} />
-              <Text
-                fontSize={{ base: '28px', md: '30px', lg: '32px' }}
-                m='0.3em'
-                color='gray.100'
-              >
-                {(totalTime / 3600).toFixed(1)}
-              </Text>
-            </Box>
-            <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
-              focused hours
-            </Text>
-          </Box>
-          <Box
-            bg='gray.500'
-            w={{ base: '30%', lg: '29%', xl: '28%' }}
-            px='1em'
-            borderRadius='md'
-            fontWeight='bold'
-          >
-            <Box d='flex' justifyContent='space-between'>
-              <Image src={Session} w={{ base: '30px', md: '35', lg: '40px' }} />
-              <Text
-                fontSize={{ base: '28px', md: '30px', lg: '32px' }}
-                m='0.3em'
-                color='gray.100'
-              >
-                {sessionList.length}
-              </Text>
-            </Box>
-            <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
-              finished sessions
-            </Text>
-          </Box>
-          <Box
-            bg='gray.500'
-            w={{ base: '30%', lg: '29%', xl: '28%' }}
-            px='1em'
-            borderRadius='md'
-            fontWeight='bold'
-          >
-            <Box d='flex' justifyContent='space-between'>
-              <Image src={Task} w={{ base: '30px', md: '35', lg: '40px' }} />
-              <Text
-                fontSize={{ base: '28px', md: '30px', lg: '32px' }}
-                m='0.3em'
-                color='gray.100'
-              >
-                {totalFinishedTasks}
-              </Text>
-            </Box>
-            <Text color='gray.200' float='right' mt='-0.5em' mb='0.5em'>
-              finished tasks
-            </Text>
-          </Box>
+        <Flex my='0.8em' justifyContent='space-around'>
+          <ActivityOverview
+            icon={Clock}
+            detail={
+              (totalTime / 3600).toFixed(1) !== '0.0'
+                ? (totalTime / 3600).toFixed(1)
+                : '0'
+            }
+            content='focused hours'
+          />
+          <ActivityOverview
+            icon={Session}
+            detail={sessionList.length}
+            content='finished sessions'
+          />
+          <ActivityOverview
+            icon={Task}
+            detail={totalFinishedTasks}
+            content='finished tasks'
+          />
         </Flex>
       </Box>
 
-      <Divider my='0.5em' />
+      <Divider mt='0.5em' />
 
       <Box>
-        <Flex justifyContent='space-between' alignItems='center' pr='1em'>
+        <Flex
+          justifyContent='space-between'
+          alignItems='center'
+          pr='0.5em'
+          flexDir={{ base: 'column', md: 'row' }}
+        >
           <Tag
             bg='gray.400'
-            fontSize={{ base: '13px', md: '14px', lg: '15px', xl: '16px' }}
+            fontSize={{
+              base: '11px',
+              sm: '13px',
+              md: '14px',
+              lg: '15px',
+              xl: '16px',
+            }}
             py='4px'
             fontWeight='600'
             borderRadius='sm'
-            my='8px'
+          mb='0.8em'
+          mt={{base: '0.8em'}}
+            alignSelf={{ base: 'flex-start', md: 'auto' }}
           >
             Focus Hours
           </Tag>
 
-          <Flex alignItems='center'>
+          <Flex
+            alignItems='center'
+            justifyContent='space-between'
+            alignSelf={{ base: 'flex-end', md: 'auto' }}
+          >
             <Menu closeOnSelect={true} autoSelect={false}>
               <MenuButton
                 as={Button}
@@ -225,33 +200,33 @@ const ReportOverview = () => {
                   </MenuItemOption>
                 </MenuOptionGroup>
               </MenuList>
-              <Flex justifyContent='center' alignItems='center'>
-                <PaginationButton
-                  icon={<ArrowBackIcon />}
-                  size={buttonSize}
-                  onClickHandler={handlePrevBtnClick}
-                />
-                <Box
-                  px='10px'
-                  fontSize={{ base: '13px', md: '14px', lg: '16px' }}
-                  fontWeight='bold'
-                  color='gray.600'
-                >
-                  {isReportByWeek
-                    ? nWeekAgo === 0
-                      ? 'This Week'
-                      : `~ ${formatDate(firstDayInNWeekAgo.toString())}-${
-                          firstDayInNWeekAgo.c.year
-                        }`
-                    : currentYear - nYearAgo}
-                </Box>
-                <PaginationButton
-                  icon={<ArrowForwardIcon />}
-                  size={buttonSize}
-                  onClickHandler={handleNextBtnClick}
-                />
-              </Flex>
             </Menu>
+            <Flex alignItems='center'>
+              <PaginationButton
+                icon={<ArrowBackIcon />}
+                size={buttonSize}
+                onClickHandler={handlePrevBtnClick}
+              />
+              <Box
+                px='10px'
+                fontSize={{ base: '3.2vw', md: '14px', lg: '16px' }}
+                fontWeight='bold'
+                color='gray.600'
+              >
+                {isReportByWeek
+                  ? nWeekAgo === 0
+                    ? 'This Week'
+                    : `~ ${formatDate(firstDayInNWeekAgo.toString())}-${
+                        firstDayInNWeekAgo.c.year
+                      }`
+                  : currentYear - nYearAgo}
+              </Box>
+              <PaginationButton
+                icon={<ArrowForwardIcon />}
+                size={buttonSize}
+                onClickHandler={handleNextBtnClick}
+              />
+            </Flex>
           </Flex>
         </Flex>
         <Box h={{ base: '300px', md: '330px', lg: '340px' }} my='1em'>

@@ -16,16 +16,15 @@ const ReportChart = ({ data, isReportByWeek }) => {
         data={data}
         margin={{
           top: 0,
-          right: 15,
-          left: -25,
+          right: 10,
+          left: -40,
           bottom: 10,
         }}
       >
         <CartesianGrid strokeDasharray='0' />
         <XAxis
           dataKey={isReportByWeek ? 'date' : 'month'}
-          angle={isReportByWeek ? -12 : 0}
-          fontSize='calc(8px + 0.28vw)'
+          fontSize='calc(8px + 0.4vw)'
           fontWeight='bold'
           tickMargin={8}
           interval={0}
@@ -33,6 +32,7 @@ const ReportChart = ({ data, isReportByWeek }) => {
         <YAxis
           type='number'
           fontSize='calc(9px + 0.5vw)'
+          fontWeight='bold'
           domain={['auto', (dataMax) => Math.ceil(dataMax)]}
         />
         <Tooltip />

@@ -21,9 +21,15 @@ import ReportMode from './ReportMode';
 
 const Report = () => {
   const reportMode = useSelector((state) => state.report.reportMode);
-  const size = useBreakpointValue({ base: 'lg', md: 'xl', xl: '2xl' });
+  const size = useBreakpointValue({
+    base: 'lg',
+    sm: 'md',
+    md: 'xl',
+    xl: '2xl',
+  });
   const sizeForReportTask = useBreakpointValue({
     base: 'lg',
+    sm: 'md',
     md: '2xl',
     lg: '3xl',
   });
@@ -66,7 +72,7 @@ const Report = () => {
               justifyContent={{ base: 'space-between', sm: 'space-around' }}
               color='gray.600'
               fontSize={{
-                base: 'calc(8px + 1vw)',
+                base: '3.7vw',
                 sm: '15px',
                 md: '16px',
                 lg: '17px',
@@ -98,6 +104,7 @@ const Report = () => {
             mt={{ base: '-0.8em', md: '-0.5em' }}
           />
           <ModalBody
+            py={{ base: '0', md: '0.6em' }}
             px={
               mode.isOverview
                 ? { base: '0.5em', md: '1.2em' }

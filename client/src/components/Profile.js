@@ -22,11 +22,11 @@ import { useForm } from 'react-hook-form';
 import { updateUserInfo } from '../actions/userActions';
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const size = useBreakpointValue({ base: 'md', md: 'xl', xl: '2xl' });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const loginType = useSelector((state) => state.user.tokenData.loginType);
   const userInfo = useSelector((state) => state.user.userInfo);
-  const dispatch = useDispatch();
 
   const {
     handleSubmit,

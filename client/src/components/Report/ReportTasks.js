@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons';
 
-import { formatServerDatetime } from '../../utils/serverUtils';
+import { formatServerDatetime } from '../../utils/timeUtils';
 import PaginationButton from '../../components/PaginationButton';
 
 const ReportTasks = () => {
@@ -46,7 +46,7 @@ const ReportTasks = () => {
       <Table textAlign='center' size={tableSize}>
         <Thead>
           <Tr>
-            <Th textAlign='center' isNumeric fontSize={{base: '10px', md: '14px'}}>
+            <Th textAlign='center' fontSize={{ base: '10px', md: '14px' }}>
               #
             </Th>
             <Th w='57%' pl='0' fontSize={{ base: '9px', md: '12px' }}>
@@ -86,7 +86,7 @@ const ReportTasks = () => {
                   color='gray.600'
                   fontWeight='normal'
                   textAlign='center'
-                  isNumeric
+                  px='0'
                 >
                   {index + 1 + (page - 1) * PAGE_SIZE}
                 </Td>
@@ -146,7 +146,12 @@ const ReportTasks = () => {
           size={buttonSize}
           onClickHandler={handleSwitchPrevPage}
         />
-        <Box px='20px' fontSize='23px' fontWeight='bold' color='gray.600'>
+        <Box
+          px='20px'
+          fontSize={{ base: '20px', md: '23px' }}
+          fontWeight='bold'
+          color='gray.600'
+        >
           {page}
         </Box>
         <PaginationButton

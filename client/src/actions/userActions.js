@@ -19,7 +19,10 @@ import {
   USER_PASSWORD_RESET_SUCCESS,
   USER_GET_USER_LIST_BY_PAGE_FAILED,
 } from '../constants/userConstants';
-import { getErrorMessageFromServer, getRequestConfig } from '../utils/serverUtils';
+import {
+  getErrorMessageFromServer,
+  getRequestConfig,
+} from '../utils/serverUtils';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -120,7 +123,7 @@ export const getUserInfo = () => async (dispatch) => {
     dispatch({ type: USER_GET_USER_INFO, payload: userInfo });
   } catch (error) {
     const errorMessage = getErrorMessageFromServer(error);
-    if (errorMessage === 'Token has expired!') {
+    if (!error.response || errorMessage === 'Token has expired!') {
       alert('Your working session has timed out. Please sign in again!');
       localStorage.removeItem('tokenData');
       dispatch({ type: USER_TOKEN_HAS_EXPIRED });

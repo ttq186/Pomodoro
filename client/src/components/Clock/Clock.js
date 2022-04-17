@@ -192,7 +192,7 @@ const Clock = () => {
 
   return (
     <Box
-      h={{ base: '240px', sm: '280px', md: '330px', lg: '390px' }}
+      // h={{ base: '240px', sm: '280px', md: '330px', lg: '390px' }}
       w='xl'
       bg='gray.700'
       borderRadius='md'
@@ -208,7 +208,7 @@ const Clock = () => {
         mt={{ base: '20px', md: '30px' }}
         mb='10px'
         fontWeight='500'
-        fontSize={{ base: '11px', md: '16px', lg: '18px' }}
+        fontSize={{ base: '3.3vw', md: '16px', lg: '18px' }}
       >
         <ClockMode
           isActive={mode.isStartSession}
@@ -227,7 +227,7 @@ const Clock = () => {
         />
       </Flex>
       <Center
-        fontSize={{ base: '95px', sm: '120px', md: '130px', lg: '160px' }}
+        fontSize={{ base: 'calc(60px + 9vw)', sm: '120px', md: '130px', lg: '160px' }}
         my='-20px'
       >
         {secondsToTime(clockState.timeLeft)}
@@ -235,20 +235,20 @@ const Clock = () => {
 
       <Button
         variant='customize'
-        fontSize={{ base: '19px', md: '27px' }}
-        textTransform='uppercase'
+        fontSize={{ base: '17px', md: '27px' }}
         w='44%'
         py={{ base: '15px', md: '20px', lg: '26px' }}
-        mt={{ base: '17px', md: '15px' }}
+        mt={{ base: '19px', md: '15px' }}
+        mb='1em'
         borderRadius='sm'
         borderWidth='2px'
-        borderBottom='9px solid #CBD5E0'
+        borderBottom={{base: '6px solid #CBD5E0', md: '9px solid #CBD5E0'}}
         bg='gray.100'
         color='#171923'
         mx='28%'
         _active={{
           borderBottom: '2px solid #fefefe',
-          mt: '22px',
+          mt: {base: '20px', md: '22px'}
         }}
         onClick={handleToggleStart}
       >

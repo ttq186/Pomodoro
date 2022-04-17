@@ -51,6 +51,15 @@ export const isInNYearAgo = (date, n) => {
 
 export const formatDate = (checkedDate) => {
   const dateArr = new Date(checkedDate).toDateString().split(' ');
-  const dateAfterFormat = `(${dateArr[0]}) ${dateArr[2]}-${dateArr[1]}`;
+  const dateAfterFormat =  `${dateArr[2]}-${dateArr[1]}`;
   return dateAfterFormat;
+};
+
+export const formatServerDatetime = (datetime) => {
+  if (!datetime) return 'N/A';
+  const clientDate = new Date(datetime).toLocaleString();
+  const datePart = clientDate.split(',')[0];
+  const dateArr = datePart.split('/');
+  const result = `${dateArr[1]}-${dateArr[0]}-${dateArr[2]}`;
+  return result;
 };

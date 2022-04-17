@@ -1,5 +1,5 @@
 from fastapi import Depends, APIRouter
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -11,9 +11,6 @@ from app.core.config import settings
 
 
 router = APIRouter(prefix="/api/login", tags=["Authentication"])
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
-
 request = requests.Request()
 
 
@@ -58,8 +55,8 @@ async def login_via_google(
         db.refresh(new_user)
         user_id = new_user.id
     else:
-        # if user attempts to sign in with email that has already been created
-        # without signing in by google, raise exception
+        # raise exception if user attempts to sign in with email that has already been
+        # been without signing in by google
         if user.password is not None:
             raise exceptions.AccountCreatedWithOutGoogle()
         user_id = user.id

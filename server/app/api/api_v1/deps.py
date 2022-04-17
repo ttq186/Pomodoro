@@ -10,7 +10,7 @@ from app import crud, models, schemas, exceptions
 from app.db.session import SessionLocal
 from app.core.config import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
 
 def get_db() -> Generator:

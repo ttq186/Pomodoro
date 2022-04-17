@@ -39,17 +39,18 @@ const Summary = () => {
       borderRadius='md'
     >
       <Tag
-        size='lg'
+        size='md'
         bg='gray.800'
         px='13px'
+        py='3px'
         my='5px'
         borderRadius='sm'
         opacity='0.85'
       >
         <Image
           src={totalTimeToday / 3600 >= 1 ? HappyIcon : SadIcon}
-          w={{ base: '20px', md: '27px' }}
-          h={{ base: '20px', md: '27px' }}
+          w={{ base: '20px', md: '25px', lg: '27px' }}
+          h={{ base: '20px', md: '25px', lg: '27px' }}
           mr='5px'
           ml='-5px'
           mt='2px'
@@ -58,7 +59,7 @@ const Summary = () => {
           color='gray.100'
           textTransform='uppercase'
           fontWeight='600'
-          fontSize={{ base: '13px', md: '16px' }}
+          fontSize={{ base: 'calc(6px + 2vw)', md: '14.5px', lg: '16px' }}
         >
           Today Progress
         </TagLabel>

@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 export const timeToSeconds = (time) => {
   const [minutes, seconds] = time.split(':');
   return parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
@@ -22,36 +24,29 @@ export const isToday = (date) => {
   );
 };
 
-export const isInNWeekAgo = (date, n) => {
+export const isInNWeekAgo = (date, nWeekAgo) => {
   const checkedDate = new Date(date);
-  const today1 = new Date();
-  const today2 = new Date();
-  const firstDayOfNWeekAgo = new Date(
-    today1.setDate(
-      today1.getDate() -
-        today1.getDay() +
-        (today1.getDay() === 0 ? -6 : 1) -
-        n * 7
-    )
-  );
-  const lastDayOfNWeekAgo = new Date(
-    today2.setDate(today2.getDate() - today2.getDay() - (n - 1) * 7)
-  );
-  if (checkedDate >= firstDayOfNWeekAgo && checkedDate <= lastDayOfNWeekAgo) {
+  const firstDayInNWeekAgo = DateTime.local()
+    .startOf('week')
+    .minus({ days: nWeekAgo * 7 });
+  const lastDayInNWeekAgo = DateTime.local()
+    .endOf('week')
+    .minus({ days: nWeekAgo * 7 });
+  if (checkedDate >= firstDayInNWeekAgo && checkedDate <= lastDayInNWeekAgo) {
     return true;
   }
   return false;
 };
 
-export const isInNYearAgo = (date, n) => {
+export const isInNYearAgo = (date, nYearAgo) => {
   const today = new Date();
   const checkedDate = new Date(date);
-  return checkedDate.getFullYear() === today.getFullYear() - n;
+  return checkedDate.getFullYear() === today.getFullYear() - nYearAgo;
 };
 
 export const formatDate = (checkedDate) => {
   const dateArr = new Date(checkedDate).toDateString().split(' ');
-  const dateAfterFormat =  `${dateArr[2]}-${dateArr[1]}`;
+  const dateAfterFormat = `${dateArr[2]}-${dateArr[1]}`;
   return dateAfterFormat;
 };
 

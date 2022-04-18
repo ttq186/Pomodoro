@@ -122,7 +122,7 @@ export const getUserInfo = () => async (dispatch) => {
     };
     dispatch({ type: USER_GET_USER_INFO, payload: userInfo });
   } catch (error) {
-    if (!error.response) {
+    if (!error.response || error.response.status === 401) {
       localStorage.removeItem('tokenData');
       dispatch({ type: USER_TOKEN_HAS_EXPIRED });
       return;

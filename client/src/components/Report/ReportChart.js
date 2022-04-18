@@ -1,4 +1,3 @@
-import { calc } from '@chakra-ui/react';
 import {
   BarChart,
   Bar,
@@ -9,7 +8,8 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-const ReportChart = ({ data, isReportByWeek }) => {
+const ReportChart = ({ data, isReportByWeek, chartMargin }) => {
+  console.log(chartMargin)
   return (
     <ResponsiveContainer>
       <BarChart
@@ -17,7 +17,7 @@ const ReportChart = ({ data, isReportByWeek }) => {
         margin={{
           top: 0,
           right: 10,
-          left: -40,
+          left: chartMargin,
           bottom: 10,
         }}
       >

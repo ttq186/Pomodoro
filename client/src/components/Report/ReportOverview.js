@@ -34,6 +34,7 @@ import ActivityOverview from '../ActivityOverview';
 
 const ReportOverview = () => {
   const buttonSize = useBreakpointValue({ base: 'xs', lg: 'sm' });
+  const chartMargin = useBreakpointValue({ base: -30, md: -20, lg: -17 });
   const sessionList = useSelector((state) => state.report.sessionList);
   const taskList = useSelector((state) => state.taskList.tasks);
   const totalFinishedTasks = taskList.filter((task) => task.isFinished).length;
@@ -96,8 +97,8 @@ const ReportOverview = () => {
           py='4px'
           fontWeight='600'
           borderRadius='sm'
-          mb={{base: '0', md: '0.8em'}}
-          mt={{base: '0.8em'}}
+          mb={{ base: '0', md: '0.8em' }}
+          mt={{ base: '0.8em' }}
         >
           Activity Overview
         </Tag>
@@ -146,8 +147,8 @@ const ReportOverview = () => {
             py='4px'
             fontWeight='600'
             borderRadius='sm'
-          mb='0.8em'
-          mt={{base: '0.8em'}}
+            mb='0.8em'
+            mt={{ base: '0.8em' }}
             alignSelf={{ base: 'flex-start', md: 'auto' }}
           >
             Focus Hours
@@ -240,6 +241,7 @@ const ReportOverview = () => {
                 : sessionsByMonthInNYearAgo
             }
             isReportByWeek={isReportByWeek}
+            chartMargin={chartMargin}
           />
         </Box>
       </Box>

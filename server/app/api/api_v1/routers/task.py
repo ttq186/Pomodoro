@@ -71,7 +71,7 @@ async def update_task(
         raise exceptions.NotAuthorized()
 
     if payload.is_finished:
-        payload.finished_at = datetime.now()
+        payload.finished_at = datetime.utcnow()
     updated_task_data = jsonable_encoder(task)
     update_data = {
         **updated_task_data,

@@ -52,7 +52,7 @@ async def create_session(
 ):
     """Create a new session."""
     session_in.user_id = current_user.id
-    session_in.finished_at = datetime.now()
+    session_in.finished_at = datetime.utcnow()
     new_session = crud.session.create(db, obj_in=session_in)
     return new_session
 

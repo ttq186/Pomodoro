@@ -69,13 +69,13 @@ const Home = () => {
           mx='auto'
           flexDir={{ base: 'column-reverse', lg: 'row' }}
           alignItems='center'
+          maxW='1690px'
         >
           <Center
             h='100%'
             w={{ base: '95%', lg: '40%' }}
             maxW={{ base: '420px', sm: '420px', md: '480px', lg: '450px' }}
             maxH='580px'
-            mt={{ base: '1em', lg: '0' }}
           >
             <TaskList />
           </Center>

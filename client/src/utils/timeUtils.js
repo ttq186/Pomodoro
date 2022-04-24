@@ -52,9 +52,9 @@ export const formatDate = (checkedDate) => {
 
 export const formatServerDatetime = (datetime) => {
   if (!datetime) return 'N/A';
-  const clientDate = new Date(datetime).toLocaleString();
-  const datePart = clientDate.split(',')[0];
-  const dateArr = datePart.split('/');
-  const result = `${dateArr[1]}-${dateArr[0]}-${dateArr[2]}`;
+  const formatDate = new Date(datetime);
+  const result = `${formatDate.getDate()}-${
+    formatDate.getMonth() + 1
+  }-${formatDate.getFullYear()}`;
   return result;
 };

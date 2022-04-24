@@ -48,6 +48,10 @@ const Profile = () => {
     onClose();
   };
 
+  const handleCloseButtonClick = () => {
+    reset();
+  };
+
   return (
     <>
       <Button
@@ -75,7 +79,7 @@ const Profile = () => {
           minH='510px'
           mb='10em'
         >
-          <ModalCloseButton />
+          <ModalCloseButton onClick={handleCloseButtonClick} />
           <ModalBody p='0' as={Flex} justifyContent='space-between'>
             <Box
               w='30%'

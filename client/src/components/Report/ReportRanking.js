@@ -59,7 +59,7 @@ const ReportRanking = () => {
       <Table textAlign='center' size={tableSize}>
         <Thead>
           <Tr>
-            <Th textAlign='center' fontSize={{base: '10px', md: '14px'}}>
+            <Th textAlign='center' fontSize={{ base: '10px', md: '14px' }}>
               #
             </Th>
             <Th w='75%' fontSize={{ base: '10px', md: '12px' }}>
@@ -81,7 +81,11 @@ const ReportRanking = () => {
               <Td color='gray.600' px='0' textAlign='center'>
                 {index + 1 + (page - 1) * PAGE_SIZE}
               </Td>
-              <Td fontWeight='bold' fontSize={{ base: '13px', md: '16px' }}>
+              <Td
+                fontWeight='bold'
+                fontSize={{ base: '13px', md: '16px' }}
+                textTransform='capitalize'
+              >
                 {user.username ? user.username : user.email.split('@')[0]}
               </Td>
               <Td

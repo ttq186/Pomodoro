@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Flex, Center, Button } from '@chakra-ui/react';
+import { Box, Flex, Text, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import useSound from 'use-sound';
 
@@ -191,13 +191,7 @@ const Clock = () => {
   };
 
   return (
-    <Box
-      // h={{ base: '240px', sm: '280px', md: '330px', lg: '390px' }}
-      w='xl'
-      bg='gray.700'
-      borderRadius='md'
-      pos='relative'
-    >
+    <Box w='xl' bg='gray.700' borderRadius='md' pos='relative'>
       <ClockModal />
 
       <Flex
@@ -206,7 +200,6 @@ const Clock = () => {
         justify='space-around'
         align='center'
         mt={{ base: '20px', md: '30px' }}
-        mb='10px'
         fontWeight='500'
         fontSize={{ base: '3.3vw', md: '16px', lg: '18px' }}
       >
@@ -226,29 +219,33 @@ const Clock = () => {
           ref={longBreakRef}
         />
       </Flex>
-      <Center
-        fontSize={{ base: 'calc(60px + 9vw)', sm: '120px', md: '130px', lg: '160px' }}
-        my='-20px'
+      <Text
+        fontSize={{
+          base: 'calc(60px + 9vw)',
+          sm: '120px',
+          md: '130px',
+          lg: '160px',
+        }}
+        textAlign='center'
       >
         {secondsToTime(clockState.timeLeft)}
-      </Center>
+      </Text>
 
       <Button
         variant='customize'
         fontSize={{ base: '17px', md: '27px' }}
         w='44%'
         py={{ base: '15px', md: '20px', lg: '26px' }}
-        mt={{ base: '19px', md: '15px' }}
         mb='1em'
         borderRadius='sm'
         borderWidth='2px'
-        borderBottom={{base: '6px solid #CBD5E0', md: '9px solid #CBD5E0'}}
+        borderBottom={{ base: '6px solid #CBD5E0', md: '9px solid #CBD5E0' }}
         bg='gray.100'
         color='#171923'
         mx='28%'
         _active={{
           borderBottom: '2px solid #fefefe',
-          mt: {base: '20px', md: '22px'}
+          mt: { base: '1px', md: '7px' },
         }}
         onClick={handleToggleStart}
       >

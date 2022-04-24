@@ -9,7 +9,6 @@ import {
 } from 'recharts';
 
 const ReportChart = ({ data, isReportByWeek, chartMargin }) => {
-  console.log(chartMargin)
   return (
     <ResponsiveContainer>
       <BarChart
@@ -33,7 +32,7 @@ const ReportChart = ({ data, isReportByWeek, chartMargin }) => {
           type='number'
           fontSize='calc(9px + 0.5vw)'
           fontWeight='bold'
-          domain={['auto', (dataMax) => Math.ceil(dataMax)]}
+          domain={[0, (dataMax) => Math.ceil(dataMax + 0.5)]}
         />
         <Tooltip />
         <Bar dataKey='totalTime' name='Hours' fill='#A0AEC0' />

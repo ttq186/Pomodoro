@@ -18,9 +18,12 @@ import ReportOverview from './ReportOverview';
 import ReportRanking from './ReportRanking';
 import ReportTasks from './ReportTasks';
 import ReportMode from './ReportMode';
+import { useNavigate } from 'react-router-dom';
 
 const Report = () => {
+  const navigate = useNavigate();
   const reportMode = useSelector((state) => state.report.reportMode);
+  const isSignedIn = useSelector((state) => state.user.tokenData);
   const size = useBreakpointValue({
     base: 'lg',
     sm: 'md',
@@ -45,13 +48,22 @@ const Report = () => {
     isRanking: reportMode === 'RANKING' ? true : false,
   };
 
+  const handleReportBtnClick = () => {
+    if (!isSignedIn) {
+      alert('Oops, you need to sign in to use this feature!');
+      navigate('/signin');
+      return;
+    }
+    onOpen();
+  };
+
   return (
     <>
       <Button
         mr={{ base: '0.8em', sm: '1em' }}
         variant='customize'
         bg='gray.600'
-        onClick={onOpen}
+        onClick={handleReportBtnClick}
         size='sm'
         px={{ base: '0.5em', md: '1.2em' }}
         fontSize={{ base: '14px', sm: '16px' }}

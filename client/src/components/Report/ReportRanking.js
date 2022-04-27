@@ -26,6 +26,9 @@ const ReportRanking = () => {
   const userListByPageAfterSort = userListByPage.sort(
     (user1, user2) => user2.totalTimeThisWeek - user1.totalTimeThisWeek
   );
+  const userRanking = userListByPageAfterSort.filter(
+    (user) => user.totalTimeThisWeek !== 0
+  );
 
   const handleSwitchPrevPage = () => {
     if (page === 1) return;
@@ -76,7 +79,7 @@ const ReportRanking = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {userListByPageAfterSort?.map((user, index) => (
+          {userRanking.map((user, index) => (
             <Tr color='gray.700' key={user.id}>
               <Td color='gray.600' px='0' textAlign='center'>
                 {index + 1 + (page - 1) * PAGE_SIZE}

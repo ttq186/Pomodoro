@@ -36,7 +36,8 @@ const SignIn = () => {
   useEffect(() => {
     document.title = 'Forgot Password';
     dispatch(removeMessageState());
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box bg='gray.800'>

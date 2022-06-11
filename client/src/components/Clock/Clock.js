@@ -1,31 +1,31 @@
-import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Box, Flex, Text, Button } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import useSound from 'use-sound';
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Box, Flex, Text, Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import useSound from "use-sound";
 
 import {
   toggleClockStart,
   updateTimeLeft,
   switchClockMode,
-} from '../../actions/clockActions';
+} from "../../actions/clockActions";
 import {
   toggleHasJustFinishedTask,
   unChooseTask,
   updateTaskProgress,
-} from '../../actions/taskListActions';
+} from "../../actions/taskListActions";
 import {
   addSession,
   updateTotalSubSessions,
-} from '../../actions/reportActions';
-import ClockModal from '../../components/Clock/ClockModal';
-import ClockMode from '../../components/Clock/ClockMode';
-import { secondsToTime } from '../../utils/timeUtils';
-import store from '../../store';
-import drumKick from '../../assets/sounds/drum-kick.mp3';
-import alarm from '../../assets/sounds/alarm-sound.mp3';
-import ticking from '../../assets/sounds/ticking-sound.mp3';
-import noneSound from '../../assets/sounds/none-sound.mp3';
+} from "../../actions/reportActions";
+import ClockModal from "../../components/Clock/ClockModal";
+import ClockMode from "../../components/Clock/ClockMode";
+import { secondsToTime } from "../../utils/timeUtils";
+import store from "../../store";
+import drumKick from "../../assets/sounds/drum-kick.mp3";
+import alarm from "../../assets/sounds/alarm-sound.mp3";
+import ticking from "../../assets/sounds/ticking-sound.mp3";
+import noneSound from "../../assets/sounds/none-sound.mp3";
 
 const Clock = () => {
   const dispatch = useDispatch();
@@ -44,9 +44,9 @@ const Clock = () => {
   const longBreakRef = useRef(null);
 
   const mode = {
-    isStartSession: clockMode === 'START_SESSION' ? true : false,
-    isShortBreak: clockMode === 'SHORT_BREAK' ? true : false,
-    isLongBreak: clockMode === 'LONG_BREAK' ? true : false,
+    isStartSession: clockMode === "START_SESSION" ? true : false,
+    isShortBreak: clockMode === "SHORT_BREAK" ? true : false,
+    isLongBreak: clockMode === "LONG_BREAK" ? true : false,
   };
   const [playButtonSound] = useSound(drumKick);
   const [playAlarmSound] = useSound(alarm, {
@@ -73,9 +73,9 @@ const Clock = () => {
 
   useEffect(() => {
     const timeByMode =
-      clockMode === 'START_SESSION'
+      clockMode === "START_SESSION"
         ? sessionTime
-        : clockMode === 'SHORT_BREAK'
+        : clockMode === "SHORT_BREAK"
         ? shortBreakTime
         : longBreakTime;
 
@@ -85,7 +85,7 @@ const Clock = () => {
 
   const playClockTickingSound = () => {
     const tickingSoundValue = timerSetting.tickingSound.toLowerCase();
-    if (tickingSoundValue === 'none') {
+    if (tickingSoundValue === "none") {
       playTickingNoneSound({ id: tickingSoundValue });
     } else {
       playTickingSound({ id: tickingSoundValue });
@@ -100,14 +100,14 @@ const Clock = () => {
 
     while (timeLeft > 0) {
       playClockTickingSound();
-      if (timeLeft === 1 && clockMode === 'START_SESSION') {
+      if (timeLeft === 1 && clockMode === "START_SESSION") {
         dispatch(updateTotalSubSessions());
       }
       // Stop countdown if stop button is clicked
       if (!store.getState().clock.isStart) return;
 
       timeLeft--;
-      if (clockMode === 'START_SESSION') {
+      if (clockMode === "START_SESSION") {
         document.title = `${secondsToTime(timeLeft)} - Time to focus`;
       } else {
         document.title = `${secondsToTime(timeLeft)} - Time to break`;
@@ -121,30 +121,30 @@ const Clock = () => {
   const playClockAlarmSound = () => {
     let alarmSoundValue = timerSetting.alarmSound
       .toLowerCase()
-      .split(' ')
-      .join('');
+      .split(" ")
+      .join("");
     playAlarmSound({ id: alarmSoundValue });
   };
 
   const switchToStartSessionMode = () => {
-    dispatch(switchClockMode({ mode: 'START_SESSION', time: sessionTime }));
+    dispatch(switchClockMode({ mode: "START_SESSION", time: sessionTime }));
     document.title = `${secondsToTime(sessionTime)} - Time to focus`;
   };
 
   const switchToShortBreakMode = () => {
-    dispatch(switchClockMode({ mode: 'SHORT_BREAK', time: shortBreakTime }));
+    dispatch(switchClockMode({ mode: "SHORT_BREAK", time: shortBreakTime }));
     document.title = `${secondsToTime(shortBreakTime)} - Time to break`;
   };
 
   const switchToLongBreakMode = () => {
-    dispatch(switchClockMode({ mode: 'LONG_BREAK', time: longBreakTime }));
+    dispatch(switchClockMode({ mode: "LONG_BREAK", time: longBreakTime }));
     document.title = `${secondsToTime(longBreakTime)} - Time to break`;
   };
 
   const handleFinishCountdown = () => {
     stopCountdown();
     playClockAlarmSound();
-    if (clockMode === 'SHORT_BREAK' || clockMode === 'LONG_BREAK') {
+    if (clockMode === "SHORT_BREAK" || clockMode === "LONG_BREAK") {
       switchToStartSessionMode();
       return;
     }
@@ -177,8 +177,8 @@ const Clock = () => {
 
   const handleToggleStart = async () => {
     if (!isSignedIn) {
-      alert('Oops, you need to sign in to use this feature!');
-      navigate('/signin');
+      alert("Oops, you need to sign in to use this feature!");
+      navigate("/signin");
       return;
     }
 
@@ -191,65 +191,65 @@ const Clock = () => {
   };
 
   return (
-    <Box w='xl' bg='gray.700' borderRadius='md' pos='relative'>
+    <Box w="xl" bg="gray.700" borderRadius="md" pos="relative">
       <ClockModal />
 
       <Flex
-        w={{ base: '85%', md: '90%' }}
-        mx='auto'
-        justify='space-around'
-        align='center'
-        mt={{ base: '20px', md: '30px' }}
-        fontWeight='500'
-        fontSize={{ base: '3.3vw', md: '16px', lg: '18px' }}
+        w={{ base: "85%", md: "90%" }}
+        mx="auto"
+        justify="space-around"
+        align="center"
+        mt={{ base: "20px", md: "30px" }}
+        fontWeight="500"
+        fontSize={{ base: "3.3vw", sm: '14.5px', md: "16px", lg: "18px" }}
       >
         <ClockMode
           isActive={mode.isStartSession}
-          content='Start Session'
+          content="Start Session"
           ref={startSessionRef}
         />
         <ClockMode
           isActive={mode.isShortBreak}
-          content='Short Break'
+          content="Short Break"
           ref={shortBreakRef}
         />
         <ClockMode
           isActive={mode.isLongBreak}
-          content='Long Break'
+          content="Long Break"
           ref={longBreakRef}
         />
       </Flex>
       <Text
         fontSize={{
-          base: 'calc(60px + 9vw)',
-          sm: '120px',
-          md: '130px',
-          lg: '160px',
+          base: "calc(60px + 9vw)",
+          sm: "120px",
+          md: "130px",
+          lg: "160px",
         }}
-        textAlign='center'
+        textAlign="center"
       >
         {secondsToTime(clockState.timeLeft)}
       </Text>
 
       <Button
-        variant='customize'
-        fontSize={{ base: '17px', md: '27px' }}
-        w='44%'
-        py={{ base: '15px', md: '20px', lg: '26px' }}
-        mb='1em'
-        borderRadius='sm'
-        borderWidth='2px'
-        borderBottom={{ base: '6px solid #CBD5E0', md: '9px solid #CBD5E0' }}
-        bg='gray.100'
-        color='#171923'
-        mx='28%'
+        variant="customize"
+        fontSize={{ base: "17px", md: "27px" }}
+        w="44%"
+        py={{ base: "15px", md: "20px", lg: "26px" }}
+        mb="1em"
+        borderRadius="sm"
+        borderWidth="2px"
+        borderBottom={{ base: "6px solid #CBD5E0", md: "9px solid #CBD5E0" }}
+        bg="gray.100"
+        color="#171923"
+        mx="28%"
         _active={{
-          borderBottom: '2px solid #fefefe',
-          mt: { base: '1px', md: '7px' },
+          borderBottom: "2px solid #fefefe",
+          mt: { base: "1px", md: "7px" },
         }}
         onClick={handleToggleStart}
       >
-        {clockState.isStart ? 'STOP' : 'START'}
+        {clockState.isStart ? "STOP" : "START"}
       </Button>
     </Box>
   );

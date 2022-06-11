@@ -74,7 +74,7 @@ const Summary = () => {
           >
             Total
           </StatLabel>
-          <StatNumber fontSize={{ base: '24px', md: '28px' }}>
+          <StatNumber fontSize={{ base: '22px', md: '28px' }}>
             {(totalTimeToday / 3600).toFixed(1) !== '0.0'
               ? `${(totalTimeToday / 3600).toFixed(1)}h`
               : '0h'}
@@ -89,7 +89,7 @@ const Summary = () => {
           >
             Session
           </StatLabel>
-          <StatNumber fontSize={{ base: '24px', md: '28px' }}>
+          <StatNumber fontSize={{ base: '22px', md: '28px' }}>
             {finishedSessionsToday.length}
           </StatNumber>
         </Stat>
@@ -102,7 +102,7 @@ const Summary = () => {
           >
             Task Done
           </StatLabel>
-          <StatNumber fontSize={{ base: '24px', md: '28px' }}>
+          <StatNumber fontSize={{ base: '22px', md: '28px' }}>
             {finishedTasksToday.length}
           </StatNumber>
         </Stat>

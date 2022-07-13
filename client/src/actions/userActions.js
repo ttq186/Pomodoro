@@ -39,7 +39,7 @@ export const login = (email, password) => async (dispatch) => {
     formData.append('username', email);
     formData.append('password', password);
     const { data } = await axios.post(
-      `${BASE_URL}/api/login/`,
+      `${BASE_URL}/api/login`,
       formData,
       config
     );
@@ -87,7 +87,7 @@ export const signUp = (email, password) => async (dispatch) => {
     dispatch({ type: USER_SIGNUP_REQUEST });
 
     const config = getRequestConfig();
-    await axios.post(`${BASE_URL}/api/users/`, { email, password }, config);
+    await axios.post(`${BASE_URL}/api/users`, { email, password }, config);
 
     dispatch({ type: USER_SIGNUP_SUCCESS });
   } catch {

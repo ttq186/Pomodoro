@@ -27,16 +27,8 @@ class SessionUpdate(SessionBase):
     pass
 
 
-class SessionInDbBase(SessionBase):
-    class Config:
-        orm_mode = True
-
-
-class SessionInDb(SessionInDbBase):
-    pass
-
-
-class SessionOut(SessionInDbBase):
+class SessionOut(SessionBase):
     """Properties to return to client."""
 
-    pass
+    class Config:
+        orm_mode = True

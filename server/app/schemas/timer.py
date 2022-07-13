@@ -43,18 +43,8 @@ class TimerUpdate(TimerBase):
     pass
 
 
-class TimerInDbBase(TimerBase):
-    class Config:
-        orm_mode = True
-
-
-class TimerInDb(TimerInDbBase):
-    """Additional properties stored in DB."""
-
-    pass
-
-
-class TimerOut(TimerInDbBase):
+class TimerOut(TimerBase):
     """Properties to return to client."""
 
-    pass
+    class Config:
+        orm_more = True

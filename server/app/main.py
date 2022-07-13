@@ -3,16 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.api_v1.routers import user, task, auth, timer, session
 
-app = FastAPI(
-    title="Pomodoro App",
-    version="1.0.0"
-)
+app = FastAPI(title="Pomodoro App", version="1.0.0")
 
 allowed_origins = [
     "http://localhost",
     "http://localhost:3000",
-    "http://ttq186.xyz",
-    "https://ttq186.xyz",
+    "http://pomodoro.ttq186.dev",
 ]
 
 app.add_middleware(

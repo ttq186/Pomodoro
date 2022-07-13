@@ -2,7 +2,7 @@
 
 ### **A Pomodoro app, built with FastAPI/SQLAlchemy and React/Redux**
 
-### Click here for [live demo](https://ttq186.xyz)
+### Click here for [live demo](https://pomodoro.ttq186.dev)
 <img src="./client/src/assets/pomodoro-demo.png">
 
 ## Description

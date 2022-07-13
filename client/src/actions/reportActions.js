@@ -25,7 +25,7 @@ export const addSession = (newSessionInfo) => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.post(
-      `${BASE_URL}/api/sessions/`,
+      `${BASE_URL}/api/sessions`,
       newSessionInfo,
       config
     );
@@ -41,7 +41,7 @@ export const getSessions = () => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
 
-    const { data } = await axios.get(`${BASE_URL}/api/sessions/`, config);
+    const { data } = await axios.get(`${BASE_URL}/api/sessions`, config);
     dispatch({
       type: REPORT_GET_SESSIONS,
       payload: data,

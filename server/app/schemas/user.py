@@ -28,18 +28,10 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
-class UserInDbBase(UserBase):
-    class Config:
-        orm_mode = True
-
-
-class UserInDb(UserInDbBase):
-    """Additional properties stored in DB."""
-
-    password: str
-
-
-class UserOut(UserInDbBase):
+class UserOut(UserBase):
     """Properties to return to client."""
 
     total_time_this_week: Optional[int] = Field(ge=0, default=0)
+
+    class Config:
+        orm_mode = True

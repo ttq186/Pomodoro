@@ -50,7 +50,7 @@ export const submitAddTask = (taskInfo) => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.post(
-      `${BASE_URL}/api/tasks/`,
+      `${BASE_URL}/api/tasks`,
       taskInfo,
       config
     );
@@ -97,7 +97,7 @@ export const getTasks = () => async (dispatch) => {
     const tokenData = JSON.parse(localStorage.getItem('tokenData'));
     const config = getRequestConfig(tokenData.accessToken);
 
-    const { data } = await axios.get(`${BASE_URL}/api/tasks/`, config);
+    const { data } = await axios.get(`${BASE_URL}/api/tasks`, config);
     dispatch({ type: TASKLIST_GET_DATA, payload: data });
   } catch {
     dispatch({ type: TASKLIST_GET_DATA_FAIL });

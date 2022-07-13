@@ -32,16 +32,10 @@ class TaskUpdate(TaskBase):
     pass
 
 
-class TaskInDbBase(TaskBase):
-    class Config:
-        orm_mode = True
-
-
-class TaskInDb(TaskInDbBase):
-    pass
-
-
-class TaskOut(TaskInDbBase):
+class TaskOut(TaskBase):
     """Properties to return to client."""
 
     total_time: Optional[int] = Field(ge=0, default=0)
+
+    class Config:
+        orm_mode = True

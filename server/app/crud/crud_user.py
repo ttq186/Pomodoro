@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, Union, List
 from sqlalchemy import desc, func, nulls_last
 from sqlalchemy.orm import Session
 
-from app.core.security import get_hashed_password, verify_password
+from app.core.security import get_hashed_password
 from app.crud.base import CRUDBase
 from app.models import User, Session as SessionModel
 from app.schemas import UserCreate, UserUpdate
@@ -14,7 +14,12 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return db.query(User).filter_by(email=email).first()
 
     def get_multi(
-        self, db: Session, *, skip: int = 0, limit: int = 100, is_admin: bool = False
+        self,
+        db: Session,
+        *,
+        skip: int = 0,
+        limit: Optional[int] = None,
+        is_admin: bool = False
     ) -> List[User]:
         if is_admin:
             users = db.query(User).offset(skip).limit(limit).all()
@@ -59,14 +64,6 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             hashed_password = get_hashed_password(update_data["password"])
             update_data["password"] = hashed_password
         return super().update(db, db_obj=db_obj, obj_in=update_data)
-
-    def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:
-        user_query = self.get_by_email(db, email=email)
-        if user_query is None:
-            return None
-        if verify_password(password, user_query.password):
-            return None
-        return user_query
 
     def is_admin(self, user: User) -> bool:
         return user.is_admin

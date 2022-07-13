@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Any, List
+from typing import Any, List, Optional
 
 from fastapi import Depends, APIRouter
 from fastapi.encoders import jsonable_encoder
@@ -24,11 +24,11 @@ async def get_user_me(
     return current_user
 
 
-@router.get("/", response_model=List[schemas.UserOut])
+@router.get("", response_model=List[schemas.UserOut])
 async def get_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
-    limit: int = 10e6,
+    limit: Optional[int] = None,
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     """Retrieve users."""
@@ -53,7 +53,7 @@ async def get_user(
     return user
 
 
-@router.post("/", response_model=schemas.UserOut)
+@router.post("", response_model=schemas.UserOut)
 async def create_user(user_in: schemas.UserCreate, db: Session = Depends(deps.get_db)):
     """Create a new user."""
     user = crud.user.get_by_email(db, email=user_in.email)

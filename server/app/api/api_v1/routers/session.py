@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from fastapi import status, Depends, APIRouter
 from fastapi.encoders import jsonable_encoder
@@ -12,11 +12,11 @@ from app.api.api_v1 import deps
 router = APIRouter(prefix="/api/sessions", tags=["Sessions"])
 
 
-@router.get("/", response_model=List[schemas.SessionOut])
+@router.get("", response_model=List[schemas.SessionOut])
 async def get_sessions(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
-    limit: int = 100,
+    limit: Optional[int] = None,
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve sessions by role."""
@@ -44,7 +44,7 @@ async def get_session(
     return session
 
 
-@router.post("/", response_model=schemas.SessionOut)
+@router.post("", response_model=schemas.SessionOut)
 async def create_session(
     session_in: schemas.SessionCreate,
     db: Session = Depends(deps.get_db),

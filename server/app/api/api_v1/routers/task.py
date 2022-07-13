@@ -12,11 +12,11 @@ from app.api.api_v1 import deps
 router = APIRouter(prefix="/api/tasks", tags=["Tasks"])
 
 
-@router.get("/", response_model=List[schemas.TaskOut])
+@router.get("", response_model=List[schemas.TaskOut])
 async def get_tasks(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
-    limit: int = 10e6,
+    limit: int = None,
     current_user: models.User = Depends(deps.get_current_user),
 ):
     """Retrieve tasks by role."""
@@ -44,7 +44,7 @@ async def get_task(
     return task
 
 
-@router.post("/", response_model=schemas.TaskOut)
+@router.post("", response_model=schemas.TaskOut)
 async def create_task(
     task_in: schemas.TaskCreate,
     db: Session = Depends(deps.get_db),

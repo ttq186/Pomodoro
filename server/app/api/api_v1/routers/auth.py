@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-from app import crud, models, schemas, utils, exceptions
+from app import crud, schemas, utils, exceptions
 from app.api.api_v1 import deps
 from app.core import security
 from app.core.config import settings
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/login", tags=["Authentication"])
 request = requests.Request()
 
 
-@router.post("/", response_model=schemas.TokenOut)
+@router.post("", response_model=schemas.TokenOut)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(deps.get_db),
@@ -46,14 +46,11 @@ async def login_via_google(
     # if email does not exist, create a new user with empty password
     if user is None:
         # avoid duplicating user id
-        new_user_id = utils.generate_uuid()
-        while crud.user.get(db, id=new_user_id) is not None:
-            new_user_id = utils.generate_uuid()
-        new_user = models.User(id=new_user_id, email=user_data.get("email"))
-        db.add(new_user)
-        db.commit()
-        db.refresh(new_user)
-        user_id = new_user.id
+        user_id = utils.generate_uuid()
+        while crud.user.get(db, id=user_id) is not None:
+            user_id = utils.generate_uuid()
+        new_user = schemas.UserCreate(id=user_id, email=user_data.get("email"))
+        new_user = crud.user.create(db, new_user)
     else:
         # raise exception if user attempts to sign in with email that has already been
         # been without signing in by google

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
@@ -10,7 +10,7 @@ from app.schemas import TaskCreate, TaskUpdate
 
 class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
     def get_multi_by_owner(
-        self, db: Session, *, owner_id: str, skip: int = 0, limit: int = 10e6
+        self, db: Session, *, owner_id: str, skip: int = 0, limit: Optional[int] = None
     ) -> List[Task]:
         tasks = (
             db.query(Task)

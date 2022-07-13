@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import Depends, APIRouter
 from fastapi.encoders import jsonable_encoder
@@ -11,11 +11,11 @@ from app.api.api_v1 import deps
 router = APIRouter(prefix="/api/timers", tags=["Timers"])
 
 
-@router.get("/", response_model=List[schemas.TimerOut])
+@router.get("", response_model=List[schemas.TimerOut])
 async def get_timers(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
-    limit: int = 100,
+    limit: Optional[int] = None,
     current_user: models.User = Depends(deps.get_current_superuser),
 ):
     """Retrieve timers."""

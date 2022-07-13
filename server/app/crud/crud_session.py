@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -9,7 +9,7 @@ from app.schemas import SessionCreate, SessionUpdate
 
 class CRUDSession(CRUDBase[SessionModel, SessionCreate, SessionUpdate]):
     def get_multi_by_owner(
-        self, db: Session, *, owner_id: str, skip: int = 0, limit: int = 100
+        self, db: Session, *, owner_id: str, skip: int = 0, limit: Optional[int] = None
     ) -> List[SessionModel]:
         sessions = (
             db.query(SessionModel)

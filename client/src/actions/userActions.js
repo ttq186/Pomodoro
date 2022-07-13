@@ -101,7 +101,7 @@ export const getUsersByPage = (page, size) => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.get(
-      `${BASE_URL}/api/users/?skip=${(page - 1) * size}&limit=${size}`,
+      `${BASE_URL}/api/users?skip=${(page - 1) * size}&limit=${size}`,
       config
     );
     dispatch({ type: USER_GET_USER_LIST_BY_PAGE, payload: data });

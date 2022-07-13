@@ -47,4 +47,4 @@ class TimerOut(TimerBase):
     """Properties to return to client."""
 
     class Config:
-        orm_more = True
+        orm_mode = True

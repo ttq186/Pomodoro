@@ -50,7 +50,7 @@ async def login_via_google(
         while crud.user.get(db, id=user_id) is not None:
             user_id = utils.generate_uuid()
         new_user = schemas.UserCreate(id=user_id, email=user_data.get("email"))
-        new_user = crud.user.create(db, new_user)
+        new_user = crud.user.create(db, obj_in=new_user)
     else:
         # raise exception if user attempts to sign in with email that has already been
         # been without signing in by google

@@ -12,7 +12,7 @@ const initialState = {
   mode: 'START_SESSION',
   timeLeft: 1500,
   timerSetting: {
-    sessionTime: 10,
+    sessionTime: 1500,
     shortBreakTime: 300,
     longBreakTime: 1200,
     longBreakInterval: 4,

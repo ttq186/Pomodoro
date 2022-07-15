@@ -45,7 +45,8 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
         new_user_data = obj_in.dict()
-        new_user_data["password"] = get_hashed_password(new_user_data["password"])
+        if obj_in.password is not None:
+            new_user_data["password"] = get_hashed_password(new_user_data["password"])
         db_obj = User(**new_user_data)
         db.add(db_obj)
         db.commit()

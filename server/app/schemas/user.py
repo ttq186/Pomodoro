@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import Field, EmailStr
 from fastapi_camelcase import CamelModel as BaseModel
+from pydantic import EmailStr, Field
 
 
 class UserBase(BaseModel):

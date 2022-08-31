@@ -1,11 +1,12 @@
-from typing import Any, Dict, Optional, Union, List
+from typing import Any, Dict, List, Optional, Union
 
 from sqlalchemy import desc, func, nulls_last
 from sqlalchemy.orm import Session
 
 from app.core.security import get_hashed_password
 from app.crud.base import CRUDBase
-from app.models import User, Session as SessionModel
+from app.models import Session as SessionModel
+from app.models import User
 from app.schemas import UserCreate, UserUpdate
 
 

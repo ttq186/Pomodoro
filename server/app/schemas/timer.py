@@ -1,8 +1,8 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import Field
 from fastapi_camelcase import CamelModel as BaseModel
+from pydantic import Field
 
 
 class AlarmSoundEnum(str, Enum):

@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union, Optional, Type, TypeVar, Generic
+from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from fastapi.encoders import jsonable_encoder
 from fastapi_camelcase import CamelModel as BaseModel

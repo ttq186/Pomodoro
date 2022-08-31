@@ -1,14 +1,14 @@
 from typing import Generator
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from jose.exceptions import ExpiredSignatureError
-from fastapi import HTTPException, status, Depends
-from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from app import crud, models, schemas, exceptions
-from app.db.session import SessionLocal
+from app import crud, exceptions, models, schemas
 from app.core.config import settings
+from app.db.session import SessionLocal
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 

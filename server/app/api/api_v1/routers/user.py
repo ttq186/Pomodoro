@@ -1,16 +1,15 @@
 from datetime import timedelta
 from typing import Any, List, Optional
 
-from fastapi import Depends, APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy.orm import Session
 from jose import JWTError, jwt
+from sqlalchemy.orm import Session
 
-from app import crud, models, schemas, utils, exceptions
+from app import crud, exceptions, models, schemas, utils
 from app.api.api_v1 import deps
 from app.core import security
 from app.core.config import settings
-
 
 router = APIRouter(prefix="/api/users", tags=["Users"])
 

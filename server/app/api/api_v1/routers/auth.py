@@ -1,14 +1,13 @@
-from fastapi import Depends, APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
-from google.oauth2 import id_token
 from google.auth.transport import requests
+from google.oauth2 import id_token
+from sqlalchemy.orm import Session
 
-from app import crud, schemas, utils, exceptions
+from app import crud, exceptions, schemas, utils
 from app.api.api_v1 import deps
 from app.core import security
 from app.core.config import settings
-
 
 router = APIRouter(prefix="/api/login", tags=["Authentication"])
 request = requests.Request()

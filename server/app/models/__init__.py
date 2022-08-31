@@ -1,4 +1,4 @@
-from .user import User
+from .session import Session
 from .task import Task
 from .timer import Timer
-from .session import Session
+from .user import User

@@ -1,13 +1,12 @@
 from datetime import datetime
 from typing import List, Optional
 
-from fastapi import status, Depends, APIRouter
+from fastapi import APIRouter, Depends, status
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
-from app import crud, schemas, models, exceptions
+from app import crud, exceptions, models, schemas
 from app.api.api_v1 import deps
-
 
 router = APIRouter(prefix="/api/sessions", tags=["Sessions"])
 

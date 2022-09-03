@@ -1,11 +1,8 @@
 import { DateTime } from 'luxon';
-import { isInNWeekAgo, isInNYearAgo, formatDate } from './timeUtils';
+import { formatDate } from './timeUtils';
 
-export const classifySessionsByDayInNWeekAgo = (sessionList, nWeekAgo) => {
-  const sessionsInNWeekAgo = sessionList.filter((session) =>
-    isInNWeekAgo(session.finishedAt, nWeekAgo)
-  );
-  let sessionsByDayInNWeekAgo = Array(7)
+export const classifySessionsByDayInNWeekAgo = (sessions, nWeekAgo) => {
+  let sessionsByDateInNWeekAgo = Array(7)
     .fill()
     .map(() => ({
       date: null,
@@ -15,12 +12,12 @@ export const classifySessionsByDayInNWeekAgo = (sessionList, nWeekAgo) => {
     .startOf('week')
     .minus({ days: nWeekAgo * 7 });
 
-  sessionsInNWeekAgo.forEach((session) => {
+  sessions.forEach((session) => {
     const finishedDate = new Date(session.finishedAt);
-    sessionsByDayInNWeekAgo[finishedDate.getDay()].totalTime += session.length;
+    sessionsByDateInNWeekAgo[finishedDate.getDay()].totalTime += session.length;
   });
 
-  sessionsByDayInNWeekAgo.forEach((sessionsByDate, index) => {
+  sessionsByDateInNWeekAgo.forEach((sessionsByDate, index) => {
     if (index === 0) {
       sessionsByDate.date = formatDate(
         firstDayInNWeekAgo.plus({ days: index + 6 }).toString()
@@ -33,20 +30,17 @@ export const classifySessionsByDayInNWeekAgo = (sessionList, nWeekAgo) => {
     sessionsByDate.totalTime =
       Math.round((sessionsByDate.totalTime / 3600) * 10) / 10;
   });
-  return sessionsByDayInNWeekAgo;
+  return [...sessionsByDateInNWeekAgo.slice(1), sessionsByDateInNWeekAgo[0]];
 };
 
-export const classifySessionsByMonthInNYearAgo = (sessionList, nYearAgo) => {
-  const sessionsInNYearAgo = sessionList.filter((session) =>
-    isInNYearAgo(session.finishedAt, nYearAgo)
-  );
+export const classifySessionsByMonthInNYearAgo = (sessions) => {
   let sessionsByMonthInNYearAgo = Array(12)
     .fill()
     .map(() => ({
       month: null,
       totalTime: 0,
     }));
-  sessionsInNYearAgo.forEach((session) => {
+  sessions.forEach((session) => {
     const finishedDate = new Date(session.finishedAt);
     sessionsByMonthInNYearAgo[finishedDate.getMonth()].totalTime +=
       session.length;

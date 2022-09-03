@@ -116,11 +116,7 @@ export const getUserInfo = () => async (dispatch) => {
     const config = getRequestConfig(tokenData.accessToken);
 
     const { data } = await axios.get(`${BASE_URL}/api/users/me`, config);
-    const userInfo = {
-      username: data.username,
-      email: data.email,
-    };
-    dispatch({ type: USER_GET_USER_INFO, payload: userInfo });
+    dispatch({ type: USER_GET_USER_INFO, payload: data });
   } catch (error) {
     if (!error.response || error.response.status === 401) {
       localStorage.removeItem('tokenData');

@@ -67,7 +67,7 @@ const SignIn = () => {
           ) : (
             <Box
               alignSelf='center'
-              mb={{base: '10vh', sm: '3em'}}
+              mb={{ base: '10vh', sm: '3em' }}
               w={{ base: '90%', sm: '385px' }}
               minH={{ base: '400px', sm: '465px' }}
               bg='#fff'
@@ -103,7 +103,12 @@ const SignIn = () => {
               )}
               <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <FormControl isInvalid={errors.email}>
-                  <FormLabel htmlFor='email' fontSize='18px' fontWeight='600' d='inline-block'>
+                  <FormLabel
+                    htmlFor='email'
+                    fontSize='18px'
+                    fontWeight='600'
+                    d='inline-block'
+                  >
                     Email
                     <span style={{ color: '#E53E5E', marginLeft: '3px' }}>
                       *
@@ -170,7 +175,7 @@ const SignIn = () => {
                   w='100%'
                   borderRadius='5px'
                   my={{ base: '1em', sm: '1.3em' }}
-                  fontSize={{base: '16px', sm: '18px'}}
+                  fontSize={{ base: '16px', sm: '18px' }}
                 >
                   Sign In
                 </Button>

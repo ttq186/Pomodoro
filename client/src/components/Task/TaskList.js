@@ -33,7 +33,7 @@ const TaskList = () => {
   };
 
   return (
-    <Box bg='gray.700' w='xl' py='0.8em' borderRadius='sm'>
+    <Box bg='gray.700' w='xl' py='1em' borderRadius='md'>
       <Flex
         color='gray.300'
         align='center'

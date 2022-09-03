@@ -29,7 +29,6 @@ async def get_by_owner(
 ):
     """Retrieve timer by owner."""
     timer = crud.timer.get_by_owner(db, owner_id=current_user.id)
-    print(timer)
     if timer is None:
         timer_in = schemas.TimerCreate(user_id=current_user.id)
         timer = crud.timer.create(db, obj_in=timer_in)

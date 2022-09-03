@@ -1,14 +1,13 @@
 import {
-  REPORT_ADD_SESSION,
-  REPORT_GET_SESSIONS,
   REPORT_SWITCH_REPORT_MODE,
+  REPORT_GET_SESSIONS_IN_PERIOD,
   REPORT_UPDATE_TOTAL_SUB_SESSIONS,
 } from '../constants/reportConstants';
 
 const initialState = {
   reportMode: 'OVERVIEW',
   totalSubSessions: 0,
-  sessionList: [],
+  sessionsInPeriod: [],
 };
 
 export const reportReducer = (state = initialState, action) => {
@@ -21,27 +20,19 @@ export const reportReducer = (state = initialState, action) => {
       };
     }
 
-    case REPORT_ADD_SESSION: {
-      const newSessionList = [action.payload, ...state.sessionList];
+    case REPORT_GET_SESSIONS_IN_PERIOD:
       return {
         ...state,
-        sessionList: newSessionList,
+        sessionsInPeriod: action.payload,
       };
-    }
-
-    case REPORT_GET_SESSIONS:
-      return {
-        ...state,
-        sessionList: action.payload,
-      };
-
-    default:
-      return state;
 
     case REPORT_UPDATE_TOTAL_SUB_SESSIONS:
       return {
         ...state,
         totalSubSessions: state.totalSubSessions + 1,
       };
+
+    default:
+      return state;
   }
 };

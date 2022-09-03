@@ -1,6 +1,7 @@
 import {
   USER_LOGIN_FAIL,
   USER_SIGNUP_FAIL,
+  USER_ADD_SESSION,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_GET_USER_INFO,
@@ -24,6 +25,11 @@ const initialState = {
   userInfo: {
     username: null,
     email: '@',
+    totalTimeThisWeek: 0,
+    totalTime: 0,
+    totalSessions: 0,
+    totalTimeToday: 0,
+    totalSessionsToday: 0,
   },
   userListByPage: [],
 };
@@ -67,13 +73,13 @@ export const userReducer = (state = initialState, action) => {
       return { ...state, userListByPage: [] };
 
     case USER_GET_USER_INFO:
-      return { ...state, userInfo: action.payload };
+      return { ...state, userInfo: { ...state.userInfo, ...action.payload } };
 
     case USER_GET_USER_INFO_FAILED:
       return { ...state, isloggedInSuccess: null, isSignedUpSuccess: null };
 
     case USER_UPDATE_USER_INFO:
-      return { ...state, userInfo: action.payload };
+      return { ...state, userInfo: { ...state.userInfo, ...action.payload } };
 
     case USER_SIGNUP_REQUEST:
       return { ...state, isloggedInSuccess: null };
@@ -97,8 +103,21 @@ export const userReducer = (state = initialState, action) => {
       return {
         tokenData: null,
         userInfo: {
+          ...state.userInfo,
           username: null,
           email: '@',
+        },
+      };
+
+    case USER_ADD_SESSION:
+      return {
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          totalTimeToday: state.userInfo.totalTimeToday + action.payload.length,
+          totalTime: state.userInfo.totalTime + action.payload.length,
+          totalSessions: state.userInfo.totalSessions + 1,
+          totalSessionsToday: state.userInfo.totalSessionsToday + 1,
         },
       };
 

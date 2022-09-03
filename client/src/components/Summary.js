@@ -15,18 +15,12 @@ import SadIcon from '../assets/icons/sad.svg';
 import { isToday } from '../utils/timeUtils';
 
 const Summary = () => {
-  const sessionList = useSelector((state) => state.report.sessionList);
+  const userInfo = useSelector((state) => state.user.userInfo);
   const taskList = useSelector((state) => state.taskList.tasks);
-  const finishedSessionsToday = sessionList.filter((session) =>
-    isToday(session.finishedAt)
-  );
-  const finishedTasksToday = taskList.filter(
+  const totalFinishedTasksToday = taskList.filter(
     (task) => task.isFinished && isToday(task.finishedAt)
-  );
-  let totalTimeToday = 0;
-  finishedSessionsToday.forEach(
-    (session) => (totalTimeToday += session.length)
-  );
+  ).length;
+
   return (
     <Box
       bg='gray.700'
@@ -48,7 +42,7 @@ const Summary = () => {
         opacity='0.85'
       >
         <Image
-          src={totalTimeToday / 3600 >= 1 ? HappyIcon : SadIcon}
+          src={userInfo.totalFocusHoursToday >= 1 ? HappyIcon : SadIcon}
           w={{ base: '20px', md: '25px', lg: '27px' }}
           h={{ base: '20px', md: '25px', lg: '27px' }}
           mr='5px'
@@ -75,8 +69,8 @@ const Summary = () => {
             Total
           </StatLabel>
           <StatNumber fontSize={{ base: '22px', md: '28px' }}>
-            {(totalTimeToday / 3600).toFixed(1) !== '0.0'
-              ? `${(totalTimeToday / 3600).toFixed(1)}h`
+            {(userInfo.totalTimeToday / 3600).toFixed(1) !== '0.0'
+              ? `${(userInfo.totalTimeToday / 3600).toFixed(1)}h`
               : '0h'}
           </StatNumber>
         </Stat>
@@ -90,7 +84,7 @@ const Summary = () => {
             Session
           </StatLabel>
           <StatNumber fontSize={{ base: '22px', md: '28px' }}>
-            {finishedSessionsToday.length}
+            {userInfo.totalSessionsToday}
           </StatNumber>
         </Stat>
 
@@ -103,7 +97,7 @@ const Summary = () => {
             Task Done
           </StatLabel>
           <StatNumber fontSize={{ base: '22px', md: '28px' }}>
-            {finishedTasksToday.length}
+            {totalFinishedTasksToday}
           </StatNumber>
         </Stat>
       </StatGroup>

@@ -14,6 +14,30 @@ export const secondsToTime = (seconds) => {
   return minutes + ':' + secondsLeft;
 };
 
+export const getFirstAndLastDateInNWeekAgo = (nWeekAgo) => {
+  const firstDateInNWeekAgo = DateTime.local()
+    .startOf('week')
+    .minus({ days: nWeekAgo * 7 })
+    .toISODate();
+  const lastDateInNWeekAgo = DateTime.local()
+    .endOf('week')
+    .minus({ days: nWeekAgo * 7 })
+    .toISODate();
+  return [firstDateInNWeekAgo, lastDateInNWeekAgo];
+};
+
+export const getFirstAndLastDateInNYearAgo = (nYearAgo) => {
+  const firstDateInNYearAgo = DateTime.local()
+    .minus({ years: nYearAgo })
+    .startOf('year')
+    .toISODate();
+  const lastDateInNYearAgo = DateTime.local()
+    .minus({ years: nYearAgo })
+    .endOf('year')
+    .toISODate();
+  return [firstDateInNYearAgo, lastDateInNYearAgo];
+};
+
 export const isToday = (date) => {
   const today = new Date();
   const checkDate = new Date(date);
@@ -22,26 +46,6 @@ export const isToday = (date) => {
     checkDate.getMonth() === today.getMonth() &&
     checkDate.getFullYear() === today.getFullYear()
   );
-};
-
-export const isInNWeekAgo = (date, nWeekAgo) => {
-  const checkedDate = new Date(date);
-  const firstDayInNWeekAgo = DateTime.local()
-    .startOf('week')
-    .minus({ days: nWeekAgo * 7 });
-  const lastDayInNWeekAgo = DateTime.local()
-    .endOf('week')
-    .minus({ days: nWeekAgo * 7 });
-  if (checkedDate >= firstDayInNWeekAgo && checkedDate <= lastDayInNWeekAgo) {
-    return true;
-  }
-  return false;
-};
-
-export const isInNYearAgo = (date, nYearAgo) => {
-  const today = new Date();
-  const checkedDate = new Date(date);
-  return checkedDate.getFullYear() === today.getFullYear() - nYearAgo;
 };
 
 export const formatDate = (checkedDate) => {

@@ -19,11 +19,8 @@ async def login(
     db: Session = Depends(deps.get_db),
 ):
     user = crud.user.get_by_email(db, email=form_data.username)
-    if user is None:
+    if user is None or not security.verify_password(form_data.password, user.password):
         raise exceptions.IncorrectLoginCredentials()
-    if not security.verify_password(form_data.password, user.password):
-        raise exceptions.IncorrectLoginCredentials()
-
     access_token = security.create_access_token(data={"user_id": user.id})
     return {
         "access_token": access_token,

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Tag,
@@ -25,21 +25,28 @@ import Clock from '../../assets/icons/clock2.svg';
 import Session from '../../assets/icons/session.svg';
 import Task from '../../assets/icons/task.svg';
 import ReportChart from './ReportChart';
-import { formatDate } from '../../utils/timeUtils';
+import {
+  formatDate,
+  getFirstAndLastDateInNWeekAgo,
+  getFirstAndLastDateInNYearAgo,
+} from '../../utils/timeUtils';
 import {
   classifySessionsByDayInNWeekAgo,
   classifySessionsByMonthInNYearAgo,
 } from '../../utils/sessionUtils';
 import ActivityOverview from '../ActivityOverview';
+import { getSessionsInPeriod } from '../../actions/reportActions';
 
 const ReportOverview = () => {
+  const dispatch = useDispatch();
   const buttonSize = useBreakpointValue({ base: 'xs', lg: 'sm' });
   const chartMargin = useBreakpointValue({ base: -30, md: -20, lg: -17 });
-  const sessionList = useSelector((state) => state.report.sessionList);
+  const sessionsInPeriod = useSelector(
+    (state) => state.report.sessionsInPeriod
+  );
+  const userInfo = useSelector((state) => state.user.userInfo);
   const taskList = useSelector((state) => state.taskList.tasks);
   const totalFinishedTasks = taskList.filter((task) => task.isFinished).length;
-  let totalTime = 0;
-  sessionList.forEach((session) => (totalTime += session.length));
 
   const [nWeekAgo, setNWeekAgo] = useState(0);
   const [nYearAgo, setNYearAgo] = useState(0);
@@ -49,11 +56,11 @@ const ReportOverview = () => {
     .minus({ days: nWeekAgo * 7 });
   const currentYear = new Date().getFullYear();
   const sessionsByDayInNWeekAgo = classifySessionsByDayInNWeekAgo(
-    sessionList,
+    sessionsInPeriod,
     nWeekAgo
   );
   const sessionsByMonthInNYearAgo = classifySessionsByMonthInNYearAgo(
-    sessionList,
+    sessionsInPeriod,
     nYearAgo
   );
 
@@ -75,12 +82,15 @@ const ReportOverview = () => {
   };
 
   const handleChooseOption = (optionValue) => {
-    if (optionValue === 'Week') {
-      setReportByWeek(true);
-    } else {
-      setReportByWeek(false);
-    }
+    setReportByWeek(optionValue === 'Week');
   };
+
+  useEffect(() => {
+    const [fromDate, toDate] = isReportByWeek
+      ? getFirstAndLastDateInNWeekAgo(nWeekAgo)
+      : getFirstAndLastDateInNYearAgo(nYearAgo);
+    dispatch(getSessionsInPeriod(fromDate, toDate));
+  }, [isReportByWeek, nWeekAgo, nYearAgo]);
 
   return (
     <>
@@ -107,15 +117,15 @@ const ReportOverview = () => {
           <ActivityOverview
             icon={Clock}
             detail={
-              (totalTime / 3600).toFixed(1) !== '0.0'
-                ? (totalTime / 3600).toFixed(1)
+              (userInfo.totalTime / 3600).toFixed(1) !== '0.0'
+                ? (userInfo.totalTime / 3600).toFixed(1)
                 : '0'
             }
             content='focused hours'
           />
           <ActivityOverview
             icon={Session}
-            detail={sessionList.length}
+            detail={userInfo.totalSessions}
             content='finished sessions'
           />
           <ActivityOverview
@@ -234,10 +244,7 @@ const ReportOverview = () => {
           <ReportChart
             data={
               isReportByWeek
-                ? [
-                    ...sessionsByDayInNWeekAgo.slice(1),
-                    sessionsByDayInNWeekAgo[0],
-                  ]
+                ? sessionsByDayInNWeekAgo
                 : sessionsByMonthInNYearAgo
             }
             isReportByWeek={isReportByWeek}

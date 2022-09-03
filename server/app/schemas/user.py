@@ -31,7 +31,11 @@ class UserUpdate(UserBase):
 class UserOut(UserBase):
     """Properties to return to client."""
 
-    total_time_this_week: Optional[int] = Field(ge=0, default=0)
+    total_time_this_week: Optional[float] = Field(ge=0, default=0)
+    total_time: Optional[float]
+    total_sessions: Optional[int]
+    total_time_today: Optional[float]
+    total_sessions_today: Optional[int]
 
     class Config:
         orm_mode = True

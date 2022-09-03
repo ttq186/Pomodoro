@@ -13,6 +13,8 @@ router = APIRouter(prefix="/api/sessions", tags=["Sessions"])
 
 @router.get("", response_model=List[schemas.SessionOut])
 async def get_sessions(
+    from_date: str,
+    to_date: str,
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: Optional[int] = None,
@@ -23,7 +25,12 @@ async def get_sessions(
         sessions = crud.session.get_multi(db, skip=skip, limit=limit)
     else:
         sessions = crud.session.get_multi_by_owner(
-            db, owner_id=current_user.id, skip=skip, limit=limit
+            db,
+            owner_id=current_user.id,
+            from_date=from_date,
+            to_date=to_date,
+            skip=skip,
+            limit=limit,
         )
     return sessions
 
@@ -77,7 +84,7 @@ async def update_session(
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_task(
+async def delete_session(
     id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_superuser),

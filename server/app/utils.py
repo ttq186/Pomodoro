@@ -17,6 +17,10 @@ def is_in_curr_week(date: datetime) -> bool:
     return checked_week_number == curr_week_number
 
 
+def is_in_today(date: datetime) -> bool:
+    return date.date() == datetime.now().date()
+
+
 def send_reset_password_email(to_emails, reset_link):
     message = Mail(
         from_email=settings.SENDGRID_FROM_EMAIL,

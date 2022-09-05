@@ -34,6 +34,7 @@ const Home = () => {
   );
   const loading = useSelector((state) => state.user.loading);
   const tokenData = useSelector((state) => state.user.tokenData);
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   const handleCloseButtonClick = () => {
     dispatch(toggleHasJustFinishedTask());
@@ -43,7 +44,6 @@ const Home = () => {
     dispatch(getUserInfo());
     dispatch(getTasks());
     dispatch(getTimerSetting());
-    // dispatch(getSessions());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenData]);
 

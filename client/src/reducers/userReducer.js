@@ -18,10 +18,10 @@ import {
   USER_PASSWORD_RESET_SUCCESS,
   USER_GET_USER_LIST_BY_PAGE_FAILED,
 } from '../constants/userConstants';
-import { getTokenFromLocalStorage } from '../utils/serverUtils';
+import { getTokenDataFromLocalStorage } from '../utils/serverUtils';
 
 const initialState = {
-  tokenData: getTokenFromLocalStorage(),
+  tokenData: getTokenDataFromLocalStorage(),
   userInfo: {
     username: null,
     email: '@',
@@ -39,7 +39,7 @@ export const userReducer = (state = initialState, action) => {
     case USER_LOGIN_REQUEST:
       return {
         ...initialState,
-        tokenData: getTokenFromLocalStorage(),
+        tokenData: getTokenDataFromLocalStorage(),
         loading: true,
       };
 

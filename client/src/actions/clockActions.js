@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import {
   CLOCK_SWITCH_MODE,
   CLOCK_TOGGLE_START,
@@ -8,9 +6,7 @@ import {
   CLOCK_UPDATE_TIMER_SETTING,
   CLOCK_GET_TIMER_SETTING_FAIL,
 } from '../constants/clockConstants';
-import { getRequestConfig } from '../utils/serverUtils';
-
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+import { apiClient } from '../apiClient';
 
 export const switchClockMode = ({ mode, time }) => ({
   type: CLOCK_SWITCH_MODE,
@@ -28,13 +24,7 @@ export const updateTimeLeft = (timeLeft) => ({
 
 export const updateTimerSetting = (timerSetting) => async (dispatch) => {
   try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-    const { data } = await axios.put(
-      `${BASE_URL}/api/timers/me`,
-      timerSetting,
-      config
-    );
+    const { data } = await apiClient.put('/timers/me', timerSetting);
 
     dispatch({
       type: CLOCK_UPDATE_TIMER_SETTING,
@@ -45,9 +35,7 @@ export const updateTimerSetting = (timerSetting) => async (dispatch) => {
 
 export const getTimerSetting = () => async (dispatch) => {
   try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-    const { data } = await axios.get(`${BASE_URL}/api/timers/me`, config);
+    const { data } = await apiClient.get('/timers/me');
     dispatch({ type: CLOCK_GET_TIMER_SETTING, payload: data });
   } catch {
     dispatch({ type: CLOCK_GET_TIMER_SETTING_FAIL });

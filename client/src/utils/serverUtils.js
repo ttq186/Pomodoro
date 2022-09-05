@@ -5,20 +5,9 @@ export const getErrorMessageFromServer = (error) => {
   return errorMessage;
 };
 
-export const getRequestConfig = (accessToken) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  if (accessToken) {
-    config.headers.Authorization = `bearer ${accessToken}`;
-  }
-  return config;
-};
-
-export const getTokenFromLocalStorage = () => {
-  return localStorage.getItem('tokenData')
+export const getTokenDataFromLocalStorage = () => {
+  const tokenData = localStorage.getItem('tokenData')
     ? JSON.parse(localStorage.getItem('tokenData'))
     : null;
+  return tokenData
 };

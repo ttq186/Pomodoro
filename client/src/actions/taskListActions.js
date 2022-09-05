@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import {
   TASKLIST_GET_DATA,
   TASKLIST_CHOOSE_TASK,
@@ -14,9 +12,7 @@ import {
   TASKLIST_UPDATE_TASK_PROGRESS,
   TASKLIST_TOGGLE_HAS_JUST_FINISHED_TASK,
 } from '../constants/taskListConstants';
-import { getRequestConfig } from '../utils/serverUtils';
-
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+import { apiClient } from '../apiClient';
 
 export const toggleAddTask = () => ({
   type: TASKLIST_TOGGLE_ADD_TASK,
@@ -46,15 +42,7 @@ export const toggleHasJustFinishedTask = () => ({
 
 export const submitAddTask = (taskInfo) => async (dispatch) => {
   try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-
-    const { data } = await axios.post(
-      `${BASE_URL}/api/tasks`,
-      taskInfo,
-      config
-    );
-
+    const { data } = await apiClient.post('/tasks', taskInfo);
     dispatch({
       type: TASKLIST_SUBMIT_ADD_TASK,
       payload: data,
@@ -64,14 +52,10 @@ export const submitAddTask = (taskInfo) => async (dispatch) => {
 
 export const submitModifyTask = (taskInfo) => async (dispatch) => {
   try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-
-    const { data } = await axios.put(
-      `${BASE_URL}/api/tasks/${taskInfo.id}`,
-      { ...taskInfo, isFinished: false },
-      config
-    );
+    const { data } = await apiClient.put(`/tasks/${taskInfo.id}`, {
+      ...taskInfo,
+      isFinished: false,
+    });
     dispatch({
       type: TASKLIST_SUBMIT_MODIFY_TASK,
       payload: data,
@@ -81,10 +65,7 @@ export const submitModifyTask = (taskInfo) => async (dispatch) => {
 
 export const removeTask = (id) => async (dispatch) => {
   try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-
-    await axios.delete(`${BASE_URL}/api/tasks/${id}`, config);
+    await apiClient.delete(`/tasks/${id}`);
     dispatch({
       type: TASKLIST_REMOVE_TASK,
       payload: id,
@@ -94,10 +75,7 @@ export const removeTask = (id) => async (dispatch) => {
 
 export const getTasks = () => async (dispatch) => {
   try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-
-    const { data } = await axios.get(`${BASE_URL}/api/tasks`, config);
+    const { data } = await apiClient.get('/tasks');
     dispatch({ type: TASKLIST_GET_DATA, payload: data });
   } catch {
     dispatch({ type: TASKLIST_GET_DATA_FAIL });
@@ -106,14 +84,7 @@ export const getTasks = () => async (dispatch) => {
 
 export const updateTaskProgress = (taskId, payload) => async (dispatch) => {
   try {
-    const tokenData = JSON.parse(localStorage.getItem('tokenData'));
-    const config = getRequestConfig(tokenData.accessToken);
-
-    const { data } = await axios.put(
-      `${BASE_URL}/api/tasks/${taskId}`,
-      payload,
-      config
-    );
+    const { data } = await apiClient.put(`/tasks/${taskId}`, payload);
     dispatch({ type: TASKLIST_UPDATE_TASK_PROGRESS, payload: data });
   } catch {}
 };

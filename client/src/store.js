@@ -14,6 +14,6 @@ const reducer = combineReducers({
   report: reportReducer,
 });
 
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
+const store = createStore(reducer, applyMiddleware(thunk));
 
 export default store;

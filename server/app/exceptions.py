@@ -62,3 +62,9 @@ class IncorrectLoginCredentials(HTTPException):
     def __init__(self) -> None:
         detail = "Incorrect email or password. Try again!"
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=detail)
+
+
+class InvalidRefreshToken(HTTPException):
+    def __init__(self) -> None:
+        detail = "Invalid refresh token. Try again!"
+        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=detail)

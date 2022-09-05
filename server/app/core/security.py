@@ -9,29 +9,18 @@ from app.core.config import settings
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def create_access_token(
+def create_token(
     data: dict,
     expires_delta: Optional[timedelta] = None,
     JWT_SECRET_KEY: Optional[str] = None,
 ):
-    to_encode = data.copy()
-
-    if expires_delta is not None:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(
-            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-        )
-
-    to_encode.update({"exp": expire})
-    if JWT_SECRET_KEY is not None:
-        encoded_jwt = jwt.encode(
-            to_encode, JWT_SECRET_KEY, algorithm=settings.ALGORITHM
-        )
-    else:
-        encoded_jwt = jwt.encode(
-            to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
-        )
+    expire = datetime.utcnow() + (
+        expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
+    data.update({"exp": expire})
+    encoded_jwt = jwt.encode(
+        data, JWT_SECRET_KEY or settings.SECRET_KEY, algorithm=settings.ALGORITHM
+    )
     return encoded_jwt
 
 

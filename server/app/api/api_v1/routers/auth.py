@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
+from jose import jwt
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from sqlalchemy.orm import Session
@@ -9,7 +12,7 @@ from app.api.api_v1 import deps
 from app.core import security
 from app.core.config import settings
 
-router = APIRouter(prefix="/api/login", tags=["Authentication"])
+router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 request = requests.Request()
 
 
@@ -21,9 +24,15 @@ async def login(
     user = crud.user.get_by_email(db, email=form_data.username)
     if user is None or not security.verify_password(form_data.password, user.password):
         raise exceptions.IncorrectLoginCredentials()
-    access_token = security.create_access_token(data={"user_id": user.id})
+    access_token = security.create_token(data={"user_id": user.id})
+    refresh_token = security.create_token(
+        data={"user_id": user.id},
+        expires_delta=timedelta(settings.REFRESH_TOKEN_EXPIRE_MINUTES),
+        JWT_SECRET_KEY=settings.REFRESH_SECRET_KEY,
+    )
     return {
         "access_token": access_token,
+        "refresh_token": refresh_token,
         "token_type": "bearer",
         "login_type": "normal",
     }
@@ -53,9 +62,37 @@ async def login_via_google(
         if user.password is not None:
             raise exceptions.AccountCreatedWithOutGoogle()
         user_id = user.id
-    access_token = security.create_access_token(data={"user_id": user_id})
+    access_token = security.create_token(data={"user_id": user_id})
+    refresh_token = security.create_token(
+        data={"user_id": user.id},
+        expires_delta=timedelta(settings.REFRESH_TOKEN_EXPIRE_MINUTES),
+        JWT_SECRET_KEY=settings.REFRESH_SECRET_KEY,
+    )
     return {
         "access_token": access_token,
+        "refresh_token": refresh_token,
         "token_type": "bearer",
         "login_type": "3rd party",
+    }
+
+
+@router.post("/refresh-token", response_model=schemas.TokenOut)
+async def refresh_access_token(payload: dict):
+    refresh_token = payload["refreshToken"]
+    user_id = None
+    try:
+        token_data = jwt.decode(
+            token=refresh_token,
+            key=settings.REFRESH_SECRET_KEY,
+            algorithms=settings.ALGORITHM,
+        )
+        user_id = token_data["user_id"]
+    except Exception:
+        raise exceptions.InvalidRefreshToken()
+
+    new_access_token = security.create_token(data={"user_id": user_id})
+    return {
+        "access_token": new_access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
     }

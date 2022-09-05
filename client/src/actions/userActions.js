@@ -57,8 +57,6 @@ export const loginViaGoogle = (tokenId) => async (dispatch) => {
   }
 };
 
-export const refreshAccessToken = () => async (dispatch) => {};
-
 export const logout = () => async (dispatch) => {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   dispatch({ type: USER_LOGOUT_REQUEST });

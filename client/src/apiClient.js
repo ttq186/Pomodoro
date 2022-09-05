@@ -10,14 +10,13 @@ export const apiClient = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-const refresh_access_token = async () => {
+const refreshAccessToken = async () => {
   const tokenData = getTokenDataFromLocalStorage();
   if (!tokenData?.refreshToken) return;
 
   const { data } = await apiClient.post('/auth/refresh-token', {
     refreshToken: tokenData.refreshToken,
   });
-  console.log(data);
   localStorage.setItem('tokenData', JSON.stringify({ ...tokenData, ...data }));
   return data.refreshToken;
 };
@@ -39,17 +38,18 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    console.log(error);
-    const error_message = getErrorMessageFromServer(error);
-    if (error_message === 'Token has expired!') {
+    const errorMessage = getErrorMessageFromServer(error);
+    if (errorMessage === 'Token has expired!') {
       const config = error?.config;
       config.sent = true;
-      const new_access_token = await refresh_access_token();
-      config.headers = {
-        ...config.headers,
-        authorization: `bearer ${new_access_token}`,
-      };
-      return apiClient(config);
+      const newAccessToken = await refreshAccessToken();
+      if (newAccessToken) {
+        config.headers = {
+          ...config.headers,
+          authorization: `bearer ${newAccessToken}`,
+        };
+        return apiClient(config);
+      }
     }
     return Promise.reject(error);
   }

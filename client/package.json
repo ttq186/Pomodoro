@@ -52,5 +52,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "terser": "^5.14.2",
+    "nth-check": "^2.0.1"
   }
 }

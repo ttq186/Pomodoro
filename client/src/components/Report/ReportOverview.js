@@ -90,6 +90,7 @@ const ReportOverview = () => {
       ? getFirstAndLastDateInNWeekAgo(nWeekAgo)
       : getFirstAndLastDateInNYearAgo(nYearAgo);
     dispatch(getSessionsInPeriod(fromDate, toDate));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReportByWeek, nWeekAgo, nYearAgo]);
 
   return (

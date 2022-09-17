@@ -34,7 +34,6 @@ const Home = () => {
   );
   const loading = useSelector((state) => state.user.loading);
   const tokenData = useSelector((state) => state.user.tokenData);
-  const userInfo = useSelector((state) => state.user.userInfo);
 
   const handleCloseButtonClick = () => {
     dispatch(toggleHasJustFinishedTask());
@@ -52,7 +51,7 @@ const Home = () => {
   return (
     <Box
       bg='gray.800'
-      h={{ base: 'auto', lg: '100vh' }}
+      h={{ base: 'auto', md: '100vh' }}
       pb={{ base: '100px', md: '100px', lg: '0px' }}
       overflowY='auto'
     >

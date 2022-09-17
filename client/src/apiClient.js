@@ -43,13 +43,15 @@ apiClient.interceptors.response.use(
       const config = error?.config;
       config.sent = true;
       const newAccessToken = await refreshAccessToken();
-      if (newAccessToken) {
-        config.headers = {
-          ...config.headers,
-          authorization: `bearer ${newAccessToken}`,
-        };
-        return apiClient(config);
+      if (!newAccessToken) {
+        localStorage.removeItem('tokenData');
+        return;
       }
+      config.headers = {
+        ...config.headers,
+        authorization: `bearer ${newAccessToken}`,
+      };
+      return apiClient(config);
     }
     return Promise.reject(error);
   }

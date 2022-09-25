@@ -3,6 +3,7 @@ from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
+from fastapi_cache.decorator import cache
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
@@ -15,6 +16,7 @@ router = APIRouter(prefix="/api/users", tags=["Users"])
 
 
 @router.get("/me", response_model=schemas.UserOut)
+@cache(expire=60)
 async def get_user_me(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -24,6 +26,7 @@ async def get_user_me(
 
 
 @router.get("", response_model=List[schemas.UserOut])
+@cache(expire=60)
 async def get_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,

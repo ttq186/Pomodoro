@@ -21,8 +21,8 @@ class CRUDSession(CRUDBase[SessionModel, SessionCreate, SessionUpdate]):
             db.query(SessionModel)
             .filter(SessionModel.user_id == owner_id)
             .filter(
-                (SessionModel.finished_at >= from_date)
-                & (SessionModel.finished_at <= to_date),
+                (SessionModel.finished_at >= f"{from_date} 00:00:00")
+                & (SessionModel.finished_at <= f"{to_date} 23:59:59"),
             )
             .offset(skip)
             .limit(limit)

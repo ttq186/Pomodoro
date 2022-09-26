@@ -61,8 +61,8 @@ const UserManualModal = () => {
                 About Pomodoro
               </Tag>
               <Text color='gray.600' pl='1em'>
-                This web app aplies the Pomodoro technique. It is a famous time
-                management technique developed by Francesco Cirillo in late
+                This web app applies the Pomodoro technique. It is a famous time
+                management technique developed by Francesco Cirillo in the late
                 1980s that can help us increase our productivity. It uses a
                 timer to break work into sessions{' '}
                 <Text as='i'>(typically 25mins)</Text> separated by short breaks{' '}

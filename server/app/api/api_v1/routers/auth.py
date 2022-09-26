@@ -64,7 +64,7 @@ async def login_via_google(
         user_id = user.id
     access_token = security.create_token(data={"user_id": user_id})
     refresh_token = security.create_token(
-        data={"user_id": user.id},
+        data={"user_id": user_id},
         expires_delta=timedelta(settings.REFRESH_TOKEN_EXPIRE_MINUTES),
         JWT_SECRET_KEY=settings.REFRESH_SECRET_KEY,
     )

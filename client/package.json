@@ -55,6 +55,7 @@
   },
   "resolutions": {
     "terser": "^5.14.2",
-    "nth-check": "^2.0.1"
+    "nth-check": "^2.0.1",
+    "d3-color": "^3.1.0"
   }
 }

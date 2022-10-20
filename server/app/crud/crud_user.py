@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional, Union
 
-from sqlalchemy import desc, func, nulls_last
+from sqlalchemy import desc, func, text
 from sqlalchemy.orm import Session
 
 from app.core.security import get_hashed_password
@@ -20,28 +20,40 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         *,
         skip: int = 0,
         limit: Optional[int] = None,
+        is_ranking: bool = False,
         is_admin: bool = False
     ) -> List[User]:
         if is_admin:
             users = db.query(User).offset(skip).limit(limit).all()
-        else:
-            sub_query_stmt = (
-                db.query(
-                    SessionModel.user_id,
-                    func.sum(SessionModel.length).label("total_time"),
-                )
-                .group_by(SessionModel.user_id)
-                .subquery()
-            )
+            return users
+        if not is_ranking:
             users = (
-                db.query(User)
-                .join(sub_query_stmt, User.id == sub_query_stmt.c.user_id)
-                .filter(User.is_admin == False)  # noqa
-                .order_by(nulls_last(desc(sub_query_stmt.c.total_time)))
-                .offset(skip)
-                .limit(limit)
-                .all()
+                db.query(User).filter_by(is_admin=False).offset(skip).limit(limit).all()
             )
+            return users
+
+        sub_query_stmt = (
+            db.query(
+                SessionModel.user_id,
+                func.sum(SessionModel.length).label("total_time_this_week"),
+            )
+            .filter(SessionModel.finished_at >= text("date_trunc('week', now())"))
+            .filter(
+                SessionModel.finished_at
+                < text("date_trunc('week', now() + interval '1 week')")
+            )
+            .group_by(SessionModel.user_id)
+            .subquery()
+        )
+        users = (
+            db.query(User)
+            .join(sub_query_stmt, User.id == sub_query_stmt.c.user_id)
+            .filter(User.is_admin == False)  # noqa
+            .order_by(desc(sub_query_stmt.c.total_time_this_week))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
         return users
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:

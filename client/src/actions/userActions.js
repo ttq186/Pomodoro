@@ -80,7 +80,7 @@ export const signUp = (email, password) => async (dispatch) => {
 export const getUsersByPage = (page, size) => async (dispatch) => {
   try {
     const { data } = await apiClient.get(
-      `/users?skip=${(page - 1) * size}&limit=${size}`
+      `/users?skip=${(page - 1) * size}&limit=${size}&is_ranking=true`
     );
     dispatch({ type: USER_GET_USER_LIST_BY_PAGE, payload: data });
   } catch {

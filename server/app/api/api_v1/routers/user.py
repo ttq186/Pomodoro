@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Any, List, Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
@@ -31,15 +31,24 @@ async def get_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: Optional[int] = None,
+    is_ranking: bool = False,
     current_user: models.User = Depends(deps.get_current_user),
-) -> Any:
+):
     """Retrieve users."""
     users = crud.user.get_multi(
-        db, skip=skip, limit=limit, is_admin=crud.user.is_admin(current_user)
+        db,
+        skip=skip,
+        limit=limit,
+        is_admin=crud.user.is_admin(current_user),
+        is_ranking=is_ranking,
     )
     if len(users) == 0:
         raise exceptions.ResourcesNotFound(resource_type="Users")
-    return users
+    return (
+        [user for user in users if user.total_time_this_week > 0]
+        if is_ranking
+        else users
+    )
 
 
 @router.get("/{id}", response_model=schemas.UserOut)

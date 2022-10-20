@@ -12,9 +12,9 @@ def generate_uuid() -> str:
 
 
 def is_in_curr_week(date: datetime) -> bool:
-    curr_week_number = datetime.now().isocalendar()[1]
-    checked_week_number = date.isocalendar()[1]
-    return checked_week_number == curr_week_number
+    curr_week_number = datetime.now().isocalendar()
+    checked_week_number = date.isocalendar()
+    return curr_week_number[:2] == checked_week_number[:2]
 
 
 def is_in_today(date: datetime) -> bool:

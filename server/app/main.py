@@ -4,7 +4,7 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
 
-from app.api.api_v1.routers import auth, session, task, timer, user
+from app.api.v1.routers import auth, session, task, timer, user
 
 app = FastAPI(title="Pomodoro App", version="1.0.0")
 

@@ -21,7 +21,7 @@ def is_in_today(date: datetime) -> bool:
     return date.date() == datetime.now().date()
 
 
-def send_reset_password_email(to_emails, reset_link):
+def send_reset_password_email(to_emails: str, reset_link: str):
     message = Mail(
         from_email=settings.SENDGRID_FROM_EMAIL,
         to_emails=to_emails,

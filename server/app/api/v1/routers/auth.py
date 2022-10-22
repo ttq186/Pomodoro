@@ -8,7 +8,7 @@ from google.oauth2 import id_token
 from sqlalchemy.orm import Session
 
 from app import crud, exceptions, schemas, utils
-from app.api.api_v1 import deps
+from app.api.v1 import deps
 from app.core import security
 from app.core.config import settings
 

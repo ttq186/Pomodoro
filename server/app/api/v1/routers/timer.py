@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app import crud, exceptions, models, schemas
-from app.api.api_v1 import deps
+from app.api.v1 import deps
 
 router = APIRouter(prefix="/api/timers", tags=["Timers"])
 

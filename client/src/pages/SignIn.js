@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import {
   Box,
   Flex,
@@ -13,14 +13,15 @@ import {
   FormErrorMessage,
   Alert,
   AlertIcon,
-} from '@chakra-ui/react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
+} from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
-import { login } from '../actions/userActions';
-import GoogleLogin from '../components/GoogleLogin';
-import SimpleHeader from '../components/SimpleHeader';
+import { login } from "../actions/userActions";
+import SimpleHeader from "../components/SimpleHeader";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { loginViaGoogle } from "../actions/userActions";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -49,40 +50,40 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    if (tokenData) navigate('/');
+    if (tokenData) navigate("/");
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenData]);
 
-  document.title = 'Sign In';
+  document.title = "Sign In";
 
   return (
-    <Box bg='gray.800'>
+    <Box bg="gray.800">
       <SimpleHeader />
 
-      <ScaleFade initialScale='0.8' in={true}>
-        <Flex h={{ base: '95vh', sm: '90vh' }} justifyContent='center'>
+      <ScaleFade initialScale="0.8" in={true}>
+        <Flex h={{ base: "95vh", sm: "90vh" }} justifyContent="center">
           {loading ? (
-            <Spinner size='xl' color='gray.200' speed='1.5s' mt='20%' />
+            <Spinner size="xl" color="gray.200" speed="1.5s" mt="20%" />
           ) : (
             <Box
-              alignSelf='center'
-              mb={{ base: '10vh', sm: '3em' }}
-              w={{ base: '90%', sm: '385px' }}
-              minH={{ base: '400px', sm: '465px' }}
-              bg='#fff'
-              borderRadius='5px'
-              p={{ base: '1em', sm: '1.4em' }}
-              pt={{ base: '1em', sm: '2em' }}
-              color='gray.700'
+              alignSelf="center"
+              mb={{ base: "10vh", sm: "3em" }}
+              w={{ base: "90%", sm: "385px" }}
+              minH={{ base: "400px", sm: "465px" }}
+              bg="#fff"
+              borderRadius="5px"
+              p={{ base: "1em", sm: "1.4em" }}
+              pt={{ base: "1em", sm: "2em" }}
+              color="gray.700"
             >
               {isloggedInSuccess === false && (
                 <Alert
-                  status='error'
-                  borderRadius='md'
-                  mt={{ base: '0', sm: '-1em' }}
-                  mb='1em'
-                  fontSize='15px'
+                  status="error"
+                  borderRadius="md"
+                  mt={{ base: "0", sm: "-1em" }}
+                  mb="1em"
+                  fontSize="15px"
                 >
                   <AlertIcon />
                   {loginErrorMessage}
@@ -90,43 +91,41 @@ const SignIn = () => {
               )}
               {isSignedUpSuccess === true && (
                 <Alert
-                  status='success'
-                  borderRadius='md'
-                  mt={{ base: '0', md: '-1em' }}
-                  mb='1em'
-                  pl='10px'
-                  fontSize='14px'
+                  status="success"
+                  borderRadius="md"
+                  mt={{ base: "0", md: "-1em" }}
+                  mb="1em"
+                  pl="10px"
+                  fontSize="14px"
                 >
-                  <AlertIcon mr='5px' />
+                  <AlertIcon mr="5px" />
                   Your account has been created successfully!
                 </Alert>
               )}
               <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <FormControl isInvalid={errors.email}>
                   <FormLabel
-                    htmlFor='email'
-                    fontSize='18px'
-                    fontWeight='600'
-                    d='inline-block'
+                    htmlFor="email"
+                    fontSize="18px"
+                    fontWeight="600"
+                    d="inline-block"
                   >
                     Email
-                    <span style={{ color: '#E53E5E', marginLeft: '3px' }}>
-                      *
-                    </span>
+                    <span style={{ color: "#E53E5E", marginLeft: "3px" }}>*</span>
                   </FormLabel>
                   <Input
-                    id='email'
-                    placeholder='Enter your email address'
-                    borderColor='gray.400'
-                    focusBorderColor='gray.600'
-                    {...register('email', {
+                    id="email"
+                    placeholder="Enter your email address"
+                    borderColor="gray.400"
+                    focusBorderColor="gray.600"
+                    {...register("email", {
                       required: {
                         value: true,
-                        message: 'Please fill in this field!',
+                        message: "Please fill in this field!",
                       },
                       pattern: {
                         value: /\S+@\S+\.\S+/,
-                        message: 'Invalid email format!',
+                        message: "Invalid email format!",
                       },
                     })}
                   />
@@ -134,32 +133,30 @@ const SignIn = () => {
                     {errors.email && errors.email.message}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl mt='1.5em' isInvalid={errors.password}>
+                <FormControl mt="1.5em" isInvalid={errors.password}>
                   <FormLabel
-                    htmlFor='password'
-                    fontWeight='600'
-                    d='inline-block'
-                    fontSize='18px'
+                    htmlFor="password"
+                    fontWeight="600"
+                    d="inline-block"
+                    fontSize="18px"
                   >
                     Password
-                    <span style={{ color: '#E53E5E', marginLeft: '3px' }}>
-                      *
-                    </span>
+                    <span style={{ color: "#E53E5E", marginLeft: "3px" }}>*</span>
                   </FormLabel>
                   <Input
-                    id='password'
-                    type='password'
-                    placeholder='Enter your password'
-                    borderColor='gray.400'
-                    focusBorderColor='gray.600'
-                    {...register('password', {
+                    id="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    borderColor="gray.400"
+                    focusBorderColor="gray.600"
+                    {...register("password", {
                       required: {
                         value: true,
-                        message: 'Please fill in this field!',
+                        message: "Please fill in this field!",
                       },
                       minLength: {
                         value: 8,
-                        message: 'Minimum length should be 8',
+                        message: "Minimum length should be 8",
                       },
                     })}
                   />
@@ -168,40 +165,49 @@ const SignIn = () => {
                   </FormErrorMessage>
                 </FormControl>
                 <Button
-                  type='submit'
-                  bg='gray.700'
-                  variant='customize'
-                  color='gray.100'
-                  w='100%'
-                  borderRadius='5px'
-                  my={{ base: '1em', sm: '1.3em' }}
-                  fontSize={{ base: '16px', sm: '18px' }}
+                  type="submit"
+                  bg="gray.700"
+                  variant="customize"
+                  color="gray.100"
+                  w="100%"
+                  borderRadius="5px"
+                  my={{ base: "1em", sm: "1.3em" }}
+                  fontSize={{ base: "16px", sm: "18px" }}
                 >
                   Sign In
                 </Button>
               </form>
 
-              <Flex alignItems='center'>
+              <Flex alignItems="center" mb="1.5em">
                 <Divider />
-                <Text fontWeight='600' mx='0.5em'>
+                <Text fontWeight="600" mx="0.5em">
                   OR
                 </Text>
                 <Divider />
               </Flex>
 
-              <GoogleLogin />
+              <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+                <GoogleLogin
+                  onSuccess={(res) => dispatch(loginViaGoogle(res.credential))}
+                  onError={(err) => console.log(err)}
+                  locale="EN"
+                  cancel_on_tap_outside={false}
+                  useOneTap
+                />
+              </GoogleOAuthProvider>
 
               <Flex
-                justifyContent='space-between'
-                fontSize='16px'
-                px='0.5em'
-                fontWeight='600'
+                justifyContent="space-between"
+                fontSize="16px"
+                px="0.5em"
+                fontWeight="600"
+                mt="1.5em"
               >
-                <Text mt='1em' textAlign='center'>
-                  <Link to='/forgot-password'>Forgot Password?</Link>
+                <Text mt="1em" textAlign="center">
+                  <Link to="/forgot-password">Forgot Password?</Link>
                 </Text>
-                <Text mt='1em' textAlign='center'>
-                  <Link to='/signup'>Sign Up</Link>
+                <Text mt="1em" textAlign="center">
+                  <Link to="/signup">Sign Up</Link>
                 </Text>
               </Flex>
             </Box>

@@ -8,7 +8,7 @@ from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
 from app import crud, exceptions, models, schemas, utils
-from app.api.api_v1 import deps
+from app.api.v1 import deps
 from app.core import security
 from app.core.config import settings
 
@@ -42,13 +42,9 @@ async def get_users(
         is_admin=crud.user.is_admin(current_user),
         is_ranking=is_ranking,
     )
-    if len(users) == 0:
+    if len(users) == 0 and not is_ranking:
         raise exceptions.ResourcesNotFound(resource_type="Users")
-    return (
-        [user for user in users if user.total_time_this_week > 0]
-        if is_ranking
-        else users
-    )
+    return users
 
 
 @router.get("/{id}", response_model=schemas.UserOut)
@@ -116,9 +112,7 @@ async def update_user(
 
 
 @router.post("/forgot-password")
-async def forgot_password(
-    user_in: schemas.UserUpdate, db: Session = Depends(deps.get_db)
-):
+async def forgot_password(user_in: schemas.UserUpdate, db: Session = Depends(deps.get_db)):
     """Send reset password email."""
     user = crud.user.get_by_email(db, email=user_in.email)
     if user is None:

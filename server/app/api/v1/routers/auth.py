@@ -13,11 +13,10 @@ from app.core import security
 from app.core.config import settings
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
-request = requests.Request()
 
 
 @router.post("", response_model=schemas.TokenOut)
-async def login(
+def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(deps.get_db),
 ):
@@ -39,9 +38,8 @@ async def login(
 
 
 @router.post("/google", response_model=schemas.TokenOut)
-async def login_via_google(
-    payload: schemas.GoogleToken, db: Session = Depends(deps.get_db)
-):
+def login_via_google(payload: schemas.GoogleToken, db: Session = Depends(deps.get_db)):
+    request = requests.Request()
     user_data = id_token.verify_oauth2_token(
         payload.token_id, request, settings.GOOGLE_CLIENT_ID
     )
@@ -77,7 +75,7 @@ async def login_via_google(
 
 
 @router.post("/refresh-token", response_model=schemas.TokenOut)
-async def refresh_access_token(payload: dict):
+def refresh_access_token(payload: dict):
     refresh_token = payload["refreshToken"]
     user_id = None
     try:

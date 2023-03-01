@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/timers", tags=["Timers"])
 
 
 @router.get("", response_model=List[schemas.TimerOut])
-async def get_timers(
+def get_timers(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: Optional[int] = None,
@@ -23,7 +23,7 @@ async def get_timers(
 
 
 @router.get("/me", response_model=schemas.TimerOut)
-async def get_by_owner(
+def get_by_owner(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
@@ -36,7 +36,7 @@ async def get_by_owner(
 
 
 @router.get("/{id}", response_model=schemas.TimerOut)
-async def get_timer(
+def get_timer(
     id: str,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -51,7 +51,7 @@ async def get_timer(
 
 
 @router.put("/me", response_model=schemas.TimerOut)
-async def update_timer_by_owner(
+def update_timer_by_owner(
     payload: schemas.TimerUpdate,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -73,7 +73,7 @@ async def update_timer_by_owner(
 
 
 @router.put("/{id}", response_model=schemas.TimerOut)
-async def update_timer(
+def update_timer(
     payload: schemas.TimerUpdate,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),

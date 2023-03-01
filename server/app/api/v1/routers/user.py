@@ -17,7 +17,7 @@ router = APIRouter(prefix="/api/users", tags=["Users"])
 
 @router.get("/me", response_model=schemas.UserOut)
 @cache(expire=60)
-async def get_user_me(
+def get_user_me(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ):
@@ -27,7 +27,7 @@ async def get_user_me(
 
 @router.get("", response_model=List[schemas.UserOut])
 @cache(expire=60)
-async def get_users(
+def get_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: Optional[int] = None,
@@ -48,7 +48,7 @@ async def get_users(
 
 
 @router.get("/{id}", response_model=schemas.UserOut)
-async def get_user(
+def get_user(
     id: str,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_superuser),
@@ -61,7 +61,7 @@ async def get_user(
 
 
 @router.post("", response_model=schemas.UserOut)
-async def create_user(user_in: schemas.UserCreate, db: Session = Depends(deps.get_db)):
+def create_user(user_in: schemas.UserCreate, db: Session = Depends(deps.get_db)):
     """Create a new user."""
     user = crud.user.get_by_email(db, email=user_in.email)
     if user is not None:
@@ -76,7 +76,7 @@ async def create_user(user_in: schemas.UserCreate, db: Session = Depends(deps.ge
 
 
 @router.put("/me", response_model=schemas.UserOut)
-async def update_user_me(
+def update_user_me(
     payload: schemas.UserUpdate,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -93,7 +93,7 @@ async def update_user_me(
 
 
 @router.put("/{id}", response_model=schemas.UserOut)
-async def update_user(
+def update_user(
     id: str,
     payload: schemas.UserUpdate,
     db: Session = Depends(deps.get_db),
@@ -112,7 +112,7 @@ async def update_user(
 
 
 @router.post("/forgot-password")
-async def forgot_password(user_in: schemas.UserUpdate, db: Session = Depends(deps.get_db)):
+def forgot_password(user_in: schemas.UserUpdate, db: Session = Depends(deps.get_db)):
     """Send reset password email."""
     user = crud.user.get_by_email(db, email=user_in.email)
     if user is None:
@@ -130,7 +130,7 @@ async def forgot_password(user_in: schemas.UserUpdate, db: Session = Depends(dep
 
 
 @router.post("/reset-password/{id}/{token}")
-async def reset_password(
+def reset_password(
     id: str,
     token: str,
     user_in: schemas.UserUpdate,

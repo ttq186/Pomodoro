@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/sessions", tags=["Sessions"])
 
 @router.get("", response_model=List[schemas.SessionOut])
 @cache(expire=60)
-async def get_sessions(
+def get_sessions(
     from_date: str,
     to_date: str,
     db: Session = Depends(deps.get_db),
@@ -38,7 +38,7 @@ async def get_sessions(
 
 
 @router.get("/{id}", response_model=schemas.SessionOut)
-async def get_session(
+def get_session(
     id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -53,7 +53,7 @@ async def get_session(
 
 
 @router.post("", response_model=schemas.SessionOut)
-async def create_session(
+def create_session(
     session_in: schemas.SessionCreate,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -66,7 +66,7 @@ async def create_session(
 
 
 @router.put("/{id}", response_model=schemas.SessionOut)
-async def update_session(
+def update_session(
     id: int,
     payload: schemas.SessionUpdate,
     db: Session = Depends(deps.get_db),
@@ -86,7 +86,7 @@ async def update_session(
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_session(
+def delete_session(
     id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_superuser),

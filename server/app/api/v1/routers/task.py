@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/tasks", tags=["Tasks"])
 
 @router.get("", response_model=List[schemas.TaskOut])
 @cache(expire=60)
-async def get_tasks(
+def get_tasks(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = None,
@@ -31,7 +31,7 @@ async def get_tasks(
 
 
 @router.get("/{id}", response_model=schemas.TaskOut)
-async def get_task(
+def get_task(
     id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -46,7 +46,7 @@ async def get_task(
 
 
 @router.post("", response_model=schemas.TaskOut)
-async def create_task(
+def create_task(
     task_in: schemas.TaskCreate,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
@@ -58,7 +58,7 @@ async def create_task(
 
 
 @router.put("/{id}", response_model=schemas.TaskOut)
-async def update_task(
+def update_task(
     id: int,
     payload: schemas.TaskUpdate,
     db: Session = Depends(deps.get_db),
@@ -83,7 +83,7 @@ async def update_task(
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_task(
+def delete_task(
     id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),

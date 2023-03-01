@@ -3,7 +3,6 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, status
 from fastapi.encoders import jsonable_encoder
-from fastapi_cache.decorator import cache
 from sqlalchemy.orm import Session
 
 from app import crud, exceptions, models, schemas
@@ -13,7 +12,6 @@ router = APIRouter(prefix="/api/sessions", tags=["Sessions"])
 
 
 @router.get("", response_model=List[schemas.SessionOut])
-@cache(expire=60)
 def get_sessions(
     from_date: str,
     to_date: str,

@@ -1,8 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware import cors, gzip
-from fastapi_cache import FastAPICache
-from fastapi_cache.backends.redis import RedisBackend
-from redis import asyncio as aioredis
 
 from app.api.v1.routers import auth, session, task, timer, user
 
@@ -22,12 +19,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-async def startup():
-    redis = aioredis.from_url("redis://localhost")
-    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
 
 app.include_router(auth.router)
